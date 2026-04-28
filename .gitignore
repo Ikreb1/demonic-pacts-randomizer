@@ -1,0 +1,11 @@
+node_modules
+dist
+.vite
+*.log
+.DS_Store
+
+# Per-machine Claude Code permission allowlist; not meant to be shared.
+.claude/settings.local.json
+
+# TypeScript incremental build cache.
+tsconfig.tsbuildinfo

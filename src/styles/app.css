@@ -1,0 +1,1160 @@
+:root {
+  --bg: #14181f;
+  --bg-elev: #1c2230;
+  --bg-card: #232a3a;
+  --border: #2c3447;
+  --fg: #e6e9f2;
+  --fg-dim: #8b95a8;
+  --accent: #d2622b;
+  --accent-hot: #ff7a36;
+  --good: #4caf6a;
+  --bad: #e25555;
+  --tier-easy: #4caf6a;
+  --tier-medium: #5d9bd1;
+  --tier-hard: #b76de0;
+  --tier-elite: #d2622b;
+  --tier-master: #e6c75a;
+}
+
+/* Per-region accent colors. Tweak after feedback. */
+[data-region="General"]              { --region-color: #9aa4b8; }
+[data-region="Varlamore"]            { --region-color: #e0a838; }
+[data-region="Karamja"]              { --region-color: #2bb04a; }
+[data-region="Asgarnia"]             { --region-color: #5a8fdf; }
+[data-region="Fremennik Provinces"]  { --region-color: #b07a4d; }
+[data-region="Kandarin"]             { --region-color: #dc4545; }
+[data-region="Kharidian Desert"]     { --region-color: #e8b558; }
+[data-region="Kourend"]              { --region-color: #9ec24a; }
+[data-region="Morytania"]            { --region-color: #3d5fb0; }
+[data-region="Tirannwn"]             { --region-color: #5fdce4; }
+[data-region="Wilderness"]           { --region-color: #6b6f7c; }
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+a {
+  color: var(--accent-hot);
+}
+
+button {
+  font: inherit;
+  color: var(--fg);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+button:hover:not(:disabled) {
+  background: #2d3548;
+}
+button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+  font-weight: 600;
+}
+button.primary:hover:not(:disabled) {
+  background: var(--accent-hot);
+  border-color: var(--accent-hot);
+}
+button.link {
+  background: none;
+  border: none;
+  padding: 0 6px;
+  color: var(--accent-hot);
+  text-decoration: underline;
+}
+button.danger {
+  background: transparent;
+  border-color: var(--bad);
+  color: var(--bad);
+  font-weight: 600;
+}
+button.danger:hover:not(:disabled) {
+  background: var(--bad);
+  border-color: var(--bad);
+  color: white;
+}
+
+input[type='text'] {
+  font: inherit;
+  color: var(--fg);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 10px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.app {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    'header header'
+    'sidebar main';
+  gap: 16px;
+  max-width: 1400px;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.app-header {
+  grid-area: header;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 8px;
+}
+.app-header h1 {
+  margin: 0;
+  font-size: 22px;
+  letter-spacing: 0.5px;
+}
+.tagline {
+  color: var(--fg-dim);
+  margin: 4px 0 0;
+}
+
+.sidebar {
+  grid-area: sidebar;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.main {
+  grid-area: main;
+  min-width: 0;
+}
+
+.panel {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px;
+}
+.panel h2 {
+  margin: 0 0 8px;
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  color: var(--fg-dim);
+}
+.hint {
+  color: var(--fg-dim);
+  font-size: 12px;
+  margin: 4px 0 8px;
+}
+
+.region-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.region {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  user-select: none;
+}
+.region-swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--region-color, var(--fg-dim));
+  flex: 0 0 auto;
+  box-shadow: 0 0 6px color-mix(in srgb, var(--region-color, transparent) 60%, transparent);
+}
+.region-locked .region-swatch {
+  opacity: 0.4;
+  box-shadow: none;
+}
+.region-name {
+  flex: 1 1 auto;
+}
+.region-locked {
+  color: var(--fg-dim);
+}
+.region-starter,
+.region-unlocked {
+  color: var(--fg);
+}
+.badge {
+  margin-left: auto;
+  font-size: 10px;
+  text-transform: uppercase;
+  color: white;
+  padding: 1px 6px;
+  border-radius: 8px;
+  letter-spacing: 0.5px;
+}
+.badge-starter { background: var(--fg-dim); }
+.badge-unlocked { background: var(--good); }
+.region-next {
+  margin-top: 8px;
+  border-top: 1px solid var(--border);
+  padding-top: 8px;
+}
+
+.sync-row {
+  display: flex;
+  gap: 8px;
+  margin: 8px 0;
+}
+.sync-recent {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  margin: 4px 0 8px;
+  font-size: 12px;
+}
+.sync-recent .hint {
+  margin: 0 4px 0 0;
+}
+.sync-recent-pill {
+  display: inline-flex;
+  align-items: center;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0 4px 0 8px;
+  height: 22px;
+}
+.sync-recent-name {
+  text-decoration: none;
+  color: var(--fg);
+  padding: 0 2px;
+  font-size: 12px;
+}
+.sync-recent-name:hover {
+  color: var(--accent-hot);
+}
+.sync-recent-x {
+  color: var(--fg-dim);
+  padding: 0 4px;
+  font-size: 13px;
+  text-decoration: none;
+}
+.sync-recent-x:hover {
+  color: var(--bad);
+}
+.sync-status {
+  min-height: 20px;
+  margin-top: 8px;
+  font-size: 12px;
+}
+.sync-status .ok {
+  color: var(--good);
+}
+.sync-status .err {
+  color: var(--bad);
+}
+.sync-meta {
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--fg-dim);
+}
+.sync-proxy-row {
+  margin-top: 4px;
+}
+.sync-proxy-row .link {
+  text-align: left;
+  text-decoration: none;
+  font-size: 12px;
+  color: var(--fg-dim);
+}
+.sync-proxy-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px;
+  margin: 4px 0;
+}
+.sync-proxy-body .hint { margin: 0; }
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+.tab {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  padding: 10px 16px;
+  color: var(--fg-dim);
+}
+.tab-active {
+  color: var(--fg);
+  border-bottom-color: var(--accent);
+}
+
+.randomizer-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.randomizer-toolbar .hint {
+  margin: 0;
+  flex: 1 1 200px;
+}
+
+.scoreboard {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 16px;
+  margin-bottom: 12px;
+}
+.scoreboard-label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  color: var(--fg-dim);
+}
+.scoreboard-value {
+  font-size: 24px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--fg);
+}
+.scoreboard-positive .scoreboard-value { color: var(--good); }
+.scoreboard-negative .scoreboard-value { color: var(--bad); }
+
+.tier-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+}
+@media (max-width: 1100px) {
+  .tier-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 700px) {
+  .tier-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 480px) {
+  .tier-grid { grid-template-columns: 1fr; }
+}
+.tier-column {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.tier-heading {
+  margin: 0;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+}
+.empty-tier {
+  background: var(--bg-elev);
+  border: 1px dashed var(--border);
+  border-radius: 6px;
+  padding: 16px;
+  font-size: 12px;
+  color: var(--fg-dim);
+  text-align: center;
+}
+.empty-tier-done {
+  border-color: var(--good);
+  color: var(--good);
+}
+
+.task-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.task-card-roll {
+  border-top: 3px solid var(--border);
+}
+.task-card.tier-easy.task-card-roll { border-top-color: var(--tier-easy); }
+.task-card.tier-medium.task-card-roll { border-top-color: var(--tier-medium); }
+.task-card.tier-hard.task-card-roll { border-top-color: var(--tier-hard); }
+.task-card.tier-elite.task-card-roll { border-top-color: var(--tier-elite); }
+.task-card.tier-master.task-card-roll { border-top-color: var(--tier-master); }
+
+.task-card-active {
+  border-color: var(--accent);
+  border-width: 2px;
+  padding: 16px;
+}
+
+.task-tier-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.pill {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  color: var(--fg-dim);
+}
+.pill-easy { color: var(--tier-easy); border-color: var(--tier-easy); }
+.pill-medium { color: var(--tier-medium); border-color: var(--tier-medium); }
+.pill-hard { color: var(--tier-hard); border-color: var(--tier-hard); }
+.pill-elite { color: var(--tier-elite); border-color: var(--tier-elite); }
+.pill-master { color: var(--tier-master); border-color: var(--tier-master); }
+.pill-region {
+  background: transparent;
+  color: var(--region-color, var(--fg-dim));
+  border-color: var(--region-color, var(--border));
+}
+.pill-points { background: transparent; }
+
+.task-name {
+  margin: 0;
+  font-size: 15px;
+}
+.task-desc {
+  margin: 0;
+  color: var(--fg);
+}
+.task-reqs {
+  margin: 0;
+  color: var(--fg-dim);
+  font-size: 12px;
+}
+.task-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.locked-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(210, 98, 43, 0.1);
+  border: 1px solid var(--accent);
+  color: var(--fg);
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+}
+.lock-icon { font-size: 22px; }
+
+.categories .hint { margin-bottom: 12px; }
+.category-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.category-card {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.category-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 12px 14px;
+  text-align: left;
+  border-radius: 0;
+}
+.category-emoji { font-size: 18px; }
+.category-label { font-weight: 600; flex: 1 1 auto; }
+.category-count {
+  background: var(--bg-card);
+  border-radius: 10px;
+  padding: 2px 10px;
+  font-size: 12px;
+  color: var(--fg-dim);
+}
+.category-chev { color: var(--fg-dim); width: 16px; text-align: center; }
+.category-task-list {
+  list-style: none;
+  margin: 0;
+  padding: 8px 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: var(--bg);
+}
+.category-task-list li.is-active .task-card {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(210, 98, 43, 0.25);
+}
+
+@media (max-width: 800px) {
+  .app {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'header'
+      'sidebar'
+      'main';
+  }
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 13, 20, 0.78);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 16px;
+}
+.modal {
+  background: var(--bg-elev);
+  border: 1px solid var(--accent);
+  border-radius: 10px;
+  padding: 20px 22px;
+  max-width: 480px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+}
+.modal h2 {
+  margin: 0;
+  font-size: 18px;
+  color: var(--accent-hot);
+}
+.modal p { margin: 0; }
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 6px;
+}
+.region-choice-list {
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 8px;
+}
+.region-choice-list button {
+  width: 100%;
+  text-align: left;
+  padding: 10px 12px;
+  border-left: 3px solid var(--region-color, var(--border));
+  color: var(--region-color, var(--fg));
+}
+.region-choice-list button:hover {
+  border-color: var(--region-color, var(--accent));
+  background: color-mix(in srgb, var(--region-color, var(--bg-card)) 18%, var(--bg-card));
+}
+
+.modal-wide {
+  max-width: 720px;
+}
+
+.roulette {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.roulette-caption {
+  margin: 0;
+  text-align: center;
+  color: var(--fg-dim);
+  font-size: 13px;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+.roulette-track {
+  position: relative;
+  overflow: hidden;
+  height: 84px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  -webkit-mask-image: linear-gradient(90deg, transparent, black 12%, black 88%, transparent);
+  mask-image: linear-gradient(90deg, transparent, black 12%, black 88%, transparent);
+}
+.roulette-strip {
+  position: absolute;
+  left: 50%;
+  top: 10px;
+  display: flex;
+  gap: 8px;
+  height: 64px;
+  will-change: transform;
+}
+.roulette-tile {
+  flex: 0 0 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--region-color, var(--bg-card)) 22%, var(--bg-card)) 0%,
+    var(--bg-card) 100%
+  );
+  border: 1px solid var(--region-color, var(--border));
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 14px;
+  text-align: center;
+  padding: 0 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--region-color, var(--fg));
+  transition: transform 0.4s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+}
+.roulette-tile-winner {
+  border-color: var(--region-color, var(--accent-hot));
+  box-shadow:
+    0 0 22px color-mix(in srgb, var(--region-color, var(--accent-hot)) 70%, transparent),
+    inset 0 0 0 1px var(--region-color, var(--accent-hot));
+  transform: scale(1.06);
+}
+.roulette-marker {
+  position: absolute;
+  left: 50%;
+  top: -2px;
+  bottom: -2px;
+  width: 3px;
+  background: var(--accent-hot);
+  transform: translateX(-1.5px);
+  box-shadow: 0 0 14px var(--accent-hot);
+  z-index: 2;
+  pointer-events: none;
+}
+.roulette-marker::before,
+.roulette-marker::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  width: 0;
+  height: 0;
+  transform: translateX(-50%);
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+}
+.roulette-marker::before {
+  top: -1px;
+  border-top: 8px solid var(--accent-hot);
+}
+.roulette-marker::after {
+  bottom: -1px;
+  border-bottom: 8px solid var(--accent-hot);
+}
+
+/* ----- Tier card flip ----- */
+.flip-card {
+  perspective: 1200px;
+  display: block;
+  transition: transform 0.45s ease-in, opacity 0.45s ease-in;
+}
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  transform-style: preserve-3d;
+  transition: transform 1s cubic-bezier(.2, .8, .25, 1);
+  transform: rotateY(180deg);
+}
+.flip-card-revealed .flip-card-inner {
+  transform: rotateY(0deg);
+}
+.flip-card-front {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.flip-card-back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: rotateY(180deg);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  background:
+    radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.06), transparent 60%),
+    repeating-linear-gradient(135deg, var(--bg-card) 0 10px, var(--bg-elev) 10px 20px);
+}
+.flip-back-label {
+  font-size: 16px;
+}
+.flip-back-points {
+  font-size: 11px;
+  letter-spacing: 0.6px;
+  color: var(--fg-dim);
+}
+.flip-back-glyph {
+  font-size: 32px;
+  line-height: 1;
+  margin-top: 4px;
+  opacity: 0.55;
+}
+.flip-card-back.tier-easy   { border-color: var(--tier-easy);   color: var(--tier-easy); }
+.flip-card-back.tier-medium { border-color: var(--tier-medium); color: var(--tier-medium); }
+.flip-card-back.tier-hard   { border-color: var(--tier-hard);   color: var(--tier-hard); }
+.flip-card-back.tier-elite  { border-color: var(--tier-elite);  color: var(--tier-elite); }
+.flip-card-back.tier-master {
+  border-color: var(--tier-master);
+  color: var(--tier-master);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--tier-master) 35%, transparent);
+}
+
+/* Master "land" pulse, fires once after the rotate completes. */
+@keyframes flip-master-land {
+  0%   { transform: scale(1);    box-shadow: 0 0 0 transparent; }
+  35%  { transform: scale(1.04); box-shadow: 0 0 28px color-mix(in srgb, var(--tier-master) 70%, transparent); }
+  100% { transform: scale(1);    box-shadow: 0 0 0 transparent; }
+}
+.flip-card-master-land .flip-card-front .task-card {
+  animation: flip-master-land 0.95s ease-out 0.7s 1 both;
+}
+
+/* Picked-tier highlight pulse on Pick this. */
+@keyframes flip-picked-pulse {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.06); }
+  100% { transform: scale(1.02); }
+}
+.flip-card-picked .flip-card-front .task-card {
+  animation: flip-picked-pulse 0.45s ease-out forwards;
+  border-color: var(--accent-hot);
+  box-shadow: 0 0 22px rgba(255, 122, 54, 0.55);
+}
+
+/* Non-picked siblings sweep down/away while the pick is committing. */
+.flip-card-fading {
+  transform: translateY(40px) scale(0.92);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ----- Locked relics strip (compact summary on the Randomizer tab) ----- */
+.locked-relics-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+.relic-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 3px 10px 3px 4px;
+  font-size: 12px;
+  line-height: 1.2;
+}
+/* Reloaded bonus chips get a coloured outline + glow so they read as
+   distinct from the primary tier picks. */
+.relic-chip-bonus {
+  border-color: var(--good);
+  box-shadow: 0 0 6px color-mix(in srgb, var(--good) 35%, transparent);
+}
+.relic-chip-bonus-glyph {
+  margin-right: 3px;
+  filter: drop-shadow(0 0 4px color-mix(in srgb, var(--good) 60%, transparent));
+}
+.relic-chip-tier {
+  color: var(--fg-dim);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+.relic-chip-name {
+  color: var(--fg);
+  font-weight: 600;
+}
+
+/* ----- Relics ----- */
+.relics-tab {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.relic-score-banner {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  background: var(--bg-elev);
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  padding: 10px 16px;
+}
+.relic-tier-section {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 16px;
+}
+.relic-tier-section.relic-tier-locked {
+  border-color: var(--good);
+}
+.relic-tier-section.relic-tier-gated {
+  opacity: 0.7;
+}
+.relic-tier-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+.relic-tier-title {
+  margin: 0;
+  font-size: 16px;
+  letter-spacing: 0.4px;
+}
+.relic-tier-threshold {
+  font-size: 12px;
+  color: var(--fg-dim);
+}
+.relic-tier-locked .relic-tier-threshold b {
+  color: var(--good);
+}
+.relic-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 10px;
+}
+.relic-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease, opacity 0.25s ease;
+}
+.relic-card-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.relic-card-head .relic-card-name {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* Base styling for any relic icon (image or glyph fallback). */
+.relic-icon-img,
+.relic-icon-glyph {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--bg-card);
+  border: 1px solid var(--accent);
+  object-fit: contain;
+  flex: 0 0 auto;
+}
+.relic-icon-glyph {
+  color: var(--accent-hot);
+  font-weight: 700;
+}
+
+/* Larger variant used in the modal & roulette cards — extra glow + radial. */
+.relic-card-icon {
+  padding: 2px;
+  background:
+    radial-gradient(circle at 35% 30%, rgba(255, 122, 54, 0.28), transparent 65%),
+    var(--bg-card);
+  box-shadow:
+    0 0 16px rgba(255, 122, 54, 0.4),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+/* Compact variant used in the locked-relics strip chips. */
+.relic-chip-icon-wrap {
+  box-shadow: 0 0 6px rgba(255, 122, 54, 0.25);
+}
+
+.relic-modal-glyph {
+  display: inline-block;
+  margin-right: 4px;
+  filter: drop-shadow(0 0 6px rgba(255, 122, 54, 0.7));
+}
+.relic-card-name {
+  margin: 0;
+  font-size: 15px;
+}
+.relic-effect {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--fg);
+}
+.relic-effect-p {
+  margin: 0;
+}
+.relic-effect-list,
+.relic-effect-sublist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.relic-effect-list > li,
+.relic-effect-sublist > li {
+  position: relative;
+  padding-left: 22px;
+  margin: 3px 0;
+}
+.relic-effect-list > li::before {
+  content: '✦';
+  position: absolute;
+  left: 4px;
+  top: 0;
+  color: var(--accent-hot);
+  font-size: 12px;
+  line-height: 1.5;
+  text-shadow: 0 0 6px rgba(255, 122, 54, 0.55);
+}
+.relic-effect-sublist {
+  margin-top: 4px;
+}
+.relic-effect-sublist > li {
+  color: var(--fg-dim);
+  padding-left: 18px;
+}
+.relic-effect-sublist > li::before {
+  content: '◆';
+  position: absolute;
+  left: 4px;
+  top: 0;
+  color: var(--fg-dim);
+  font-size: 9px;
+  line-height: 1.7;
+}
+.relic-card-gated {
+  color: var(--fg-dim);
+}
+.relic-card-gated .relic-card-effect {
+  color: var(--fg-dim);
+}
+.relic-card-locked {
+  border-color: var(--good);
+  box-shadow: 0 0 12px rgba(76, 175, 106, 0.35), inset 0 0 0 1px var(--good);
+}
+.relic-card-faded {
+  opacity: 0.4;
+  filter: grayscale(0.5);
+}
+
+/* Modal: chooser screen — pick Random vs. Manual before seeing relics. */
+.relic-choose-mode {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.relic-choose-mode > p {
+  margin: 0 0 4px;
+}
+.relic-choose-mode-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 6px;
+}
+.relic-choose-mode-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 24px 18px;
+  gap: 8px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, background 0.2s ease;
+  color: var(--fg);
+  font: inherit;
+}
+.relic-choose-mode-btn:hover {
+  border-color: var(--accent-hot);
+  background: color-mix(in srgb, var(--accent-hot) 6%, var(--bg-card));
+  box-shadow: 0 0 18px rgba(255, 122, 54, 0.28);
+  transform: translateY(-2px);
+}
+.relic-choose-mode-btn:focus-visible {
+  outline: 2px solid var(--accent-hot);
+  outline-offset: 3px;
+}
+.relic-choose-mode-icon {
+  font-size: 36px;
+  line-height: 1;
+  filter: drop-shadow(0 0 8px rgba(255, 122, 54, 0.55));
+}
+.relic-choose-mode-title {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: var(--accent-hot);
+}
+.relic-choose-mode-desc {
+  font-size: 13px;
+  color: var(--fg-dim);
+  font-weight: 400;
+  line-height: 1.45;
+}
+@media (max-width: 540px) {
+  .relic-choose-mode-options {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Modal: relic choice list (also acts as the roulette surface — the spin
+   cycles through the same cards rather than a separate UI). */
+.relic-choice-list {
+  list-style: none;
+  margin: 4px 0 0;
+  /* Tiny horizontal padding so the winner pulse's scale doesn't visibly
+     clip on the modal edges. */
+  padding: 0 4px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  max-height: 60vh;
+  /* overflow-y: auto alone implies overflow-x: auto in browsers, which made
+     a horizontal scrollbar appear when scaled cards barely overflowed.
+     Pin overflow-x to hidden and reserve a stable gutter for the vertical
+     scrollbar so its appearance doesn't shift card widths. */
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-gutter: stable;
+}
+/* Grouped variant for the Reloaded bonus list — sub-headers per tier. */
+.relic-choice-list-grouped {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.relic-choice-list-grouped > .relic-choice-group > ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+.relic-choice-group-head {
+  margin: 0 0 6px;
+  padding: 0 4px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  color: var(--accent-hot);
+  border-bottom: 1px solid color-mix(in srgb, var(--accent-hot) 35%, var(--border));
+  padding-bottom: 4px;
+}
+.relic-card-tier-tag {
+  display: inline-block;
+  margin-right: 8px;
+  padding: 1px 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--accent-hot) 18%, var(--bg-elev));
+  color: var(--accent-hot);
+  border: 1px solid color-mix(in srgb, var(--accent-hot) 35%, var(--border));
+  vertical-align: middle;
+}
+
+/* Whole-card click target. */
+.relic-card-clickable {
+  cursor: pointer;
+  user-select: none;
+  outline: none;
+}
+.relic-card-clickable:hover:not([aria-disabled='true']):not(.relic-card-highlighted):not(.relic-card-winner):not(.relic-card-selected) {
+  border-color: var(--accent);
+  box-shadow: 0 0 10px rgba(255, 122, 54, 0.18);
+  transform: translateY(-1px);
+}
+.relic-card-clickable:focus-visible {
+  outline: 2px solid var(--accent-hot);
+  outline-offset: 2px;
+}
+.relic-card-clickable[aria-disabled='true'] {
+  cursor: default;
+}
+
+/* Cycling highlight — orange flash as the spin runs through cards. */
+.relic-card-highlighted {
+  border-color: var(--accent-hot);
+  box-shadow: 0 0 18px rgba(255, 122, 54, 0.45), inset 0 0 0 1px var(--accent-hot);
+}
+
+/* Celebration — winner card while the spin "settles". A pulsing green glow
+   that lasts for the celebrate hold so the user can savour the result. */
+@keyframes relic-winner-pulse {
+  0%   { box-shadow: 0 0 22px rgba(76, 175, 106, 0.55), inset 0 0 0 2px var(--good); transform: scale(1.03); }
+  50%  { box-shadow: 0 0 36px rgba(76, 175, 106, 0.85), inset 0 0 0 2px var(--good); transform: scale(1.05); }
+  100% { box-shadow: 0 0 22px rgba(76, 175, 106, 0.55), inset 0 0 0 2px var(--good); transform: scale(1.03); }
+}
+.relic-card-winner {
+  border-color: var(--good);
+  animation: relic-winner-pulse 1.1s ease-in-out infinite;
+}
+
+/* Settled / manually-selected — a subtler green glow that stays put while
+   the user reads + clicks Confirm. */
+.relic-card-selected {
+  border-color: var(--good);
+  box-shadow: 0 0 14px rgba(76, 175, 106, 0.4), inset 0 0 0 1px var(--good);
+}
