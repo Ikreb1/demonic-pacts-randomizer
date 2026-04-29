@@ -1,5 +1,6 @@
 import type { Task } from '../types';
 import { TIER_LABELS, TIER_POINTS } from '../types';
+import { useStore, selectTaskEarnedScore, selectTaskMultiplier } from '../state/store';
 
 interface Props {
   task: Task;
@@ -8,6 +9,9 @@ interface Props {
 }
 
 export function TaskCard({ task, variant = 'list', actions }: Props) {
+  const earned = useStore((s) => selectTaskEarnedScore(task, s));
+  const mult = useStore((s) => selectTaskMultiplier(task, s));
+  const hasBonus = mult > 1;
   return (
     <article className={`task-card task-card-${variant} tier-${task.tier}`}>
       <header className="task-card-head">
@@ -17,6 +21,17 @@ export function TaskCard({ task, variant = 'list', actions }: Props) {
             {task.region}
           </span>
           <span className="pill pill-points">{TIER_POINTS[task.tier]} pts</span>
+          <span
+            className={`pill pill-score${hasBonus ? ' pill-score-bonus' : ''}`}
+            title={
+              hasBonus
+                ? `Early-tier multiplier ×${mult.toFixed(2)} — finish lower-tier tasks to drop it`
+                : 'Score awarded on completion'
+            }
+          >
+            +{earned}
+            {hasBonus && <span className="pill-score-mult"> ×{mult.toFixed(2)}</span>}
+          </span>
         </div>
         <h3 className="task-name">{task.name}</h3>
       </header>

@@ -6,10 +6,10 @@ import {
   selectPendingReloadedPicks,
   selectAvailableBonusRelics,
   relicsForTier,
+  RANDOM_RELIC_BONUS,
 } from '../state/store';
 import { RELIC_TIER_THRESHOLDS, RELIC_TIERS } from '../types';
 import type { Relic, RelicTier } from '../types';
-import { RelicEffect } from './RelicEffect';
 import { RelicIcon } from './RelicIcon';
 
 const SPIN_INTERVALS_MS = [400, 380, 350, 320, 290, 260, 220, 180, 140, 100, 70, 50] as const;
@@ -255,13 +255,17 @@ function ChooseModeScreen({
     <div className="relic-choose-mode">
       <p>{blurb}</p>
       <div className="relic-choose-mode-options">
-        <button type="button" className="relic-choose-mode-btn" onClick={onRandom}>
+        <button type="button" className="relic-choose-mode-btn relic-choose-mode-btn-random" onClick={onRandom}>
+          <span className="relic-choose-mode-bonus">
+            +{RANDOM_RELIC_BONUS.toLocaleString()} score
+          </span>
           <span className="relic-choose-mode-icon" aria-hidden>
             🎲
           </span>
           <span className="relic-choose-mode-title">Random Roll</span>
           <span className="relic-choose-mode-desc">
-            Let fate decide. The wheel spins, lands on a relic, and locks it in. No takebacks.
+            Let fate decide. The wheel spins, lands on a relic, and locks it in. No takebacks —
+            but you pocket a <b>+{RANDOM_RELIC_BONUS.toLocaleString()}</b> score bonus for trusting it.
           </span>
         </button>
         <button type="button" className="relic-choose-mode-btn" onClick={onManual}>
@@ -278,12 +282,13 @@ function ChooseModeScreen({
   );
 }
 
-// Renders the candidate cards. Tier picks all share one tier so the layout
-// is a flat list. Reloaded picks span tiers 1-6, so we group by tier with a
-// sub-header for each so the user can scan by source tier.
+// Renders the candidate cards. Tier picks all share one tier and lay out as
+// a flat list. Reloaded picks span tiers 1-6 with exactly 2 available per
+// tier (3 relics minus the one the player locked at that threshold), so we
+// render a 6-row grid with the tier number as a leading badge.
 function CandidateList({
-  pickKind,
   candidates,
+  pickKind,
   mode,
   highlighted,
   selected,
@@ -311,57 +316,60 @@ function CandidateList({
       .join(' ');
     const interactable = mode === 'manual';
     return (
-      <li key={`${r.tier}/${r.name}`}>
-        <div
-          className={cls}
-          role={interactable ? 'button' : undefined}
-          tabIndex={interactable ? 0 : -1}
-          aria-pressed={isSelected}
-          aria-disabled={!interactable}
-          onClick={interactable ? () => onSelect(r) : undefined}
-          onKeyDown={
-            interactable
-              ? (e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    onSelect(r);
-                  }
+      <div
+        key={`${r.tier}/${r.name}`}
+        className={cls}
+        role={interactable ? 'button' : undefined}
+        tabIndex={interactable ? 0 : -1}
+        aria-pressed={isSelected}
+        aria-disabled={!interactable}
+        onClick={interactable ? () => onSelect(r) : undefined}
+        onKeyDown={
+          interactable
+            ? (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  onSelect(r);
                 }
-              : undefined
-          }
-        >
-          <header className="relic-card-head">
-            <RelicIcon name={r.name} size={56} className="relic-card-icon" />
-            <h4 className="relic-card-name">
-              {pickKind === 'reloaded' && (
-                <span className="relic-card-tier-tag">T{r.tier}</span>
-              )}
-              {r.name}
-            </h4>
-          </header>
-          <RelicEffect text={r.effect} />
-        </div>
-      </li>
+              }
+            : undefined
+        }
+      >
+        <header className="relic-card-head">
+          <RelicIcon name={r.name} size={48} className="relic-card-icon" />
+          <h4 className="relic-card-name">{r.name}</h4>
+        </header>
+      </div>
     );
   };
 
   if (pickKind === 'tier') {
-    return <ul className="relic-choice-list">{candidates.map(renderCard)}</ul>;
+    return (
+      <ul className="relic-choice-list">
+        {candidates.map((r) => (
+          <li key={`${r.tier}/${r.name}`}>{renderCard(r)}</li>
+        ))}
+      </ul>
+    );
   }
 
-  // Reloaded: group by source tier with sub-headers.
   const byTier = new Map<RelicTier, Relic[]>();
   for (const r of candidates) {
     if (!byTier.has(r.tier)) byTier.set(r.tier, []);
     byTier.get(r.tier)!.push(r);
   }
   return (
-    <div className="relic-choice-list relic-choice-list-grouped">
-      {RELIC_TIERS.filter((t) => byTier.has(t)).map((t) => (
-        <section key={t} className="relic-choice-group">
-          <h3 className="relic-choice-group-head">Tier {t}</h3>
-          <ul>{byTier.get(t)!.map(renderCard)}</ul>
-        </section>
+    <div className="relic-choice-list relic-choice-list-grid">
+      {RELIC_TIERS.filter((t) => t < 7 && byTier.has(t)).map((t) => (
+        <div key={t} className="relic-choice-row">
+          <div className="relic-choice-tier-badge" aria-hidden>
+            <span className="relic-choice-tier-label">Tier</span>
+            <span className="relic-choice-tier-number">{t}</span>
+          </div>
+          <div className="relic-choice-row-cards">
+            {byTier.get(t)!.map(renderCard)}
+          </div>
+        </div>
       ))}
     </div>
   );

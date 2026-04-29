@@ -3,6 +3,7 @@ import {
   useStore,
   selectPendingRegionPicks,
   selectNextPickIsForcedKaramja,
+  RANDOM_REGION_BONUS,
 } from '../state/store';
 import { ALWAYS_UNLOCKED, FIRST_FORCED_REGION, REGIONS } from '../types';
 import type { Region } from '../types';
@@ -59,6 +60,10 @@ export function RegionUnlockModal() {
         ) : (
           <>
             <p>Pick a region to permanently add to your roll pool. This choice cannot be undone.</p>
+            <p className="hint region-bonus-hint">
+              🎲 Spin the wheel instead and earn a{' '}
+              <b>+{RANDOM_REGION_BONUS.toLocaleString()}</b> score bonus for letting fate decide.
+            </p>
             <ul className="region-choice-list">
               {lockedChoices.map((r) => (
                 <li key={r}>
@@ -74,7 +79,7 @@ export function RegionUnlockModal() {
                 disabled={lockedChoices.length === 0}
                 onClick={() => setRolling(true)}
               >
-                🎲 Spin the wheel
+                🎲 Spin the wheel (+{RANDOM_REGION_BONUS.toLocaleString()} score)
               </button>
             </div>
           </>

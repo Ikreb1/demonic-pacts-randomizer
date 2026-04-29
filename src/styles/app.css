@@ -163,6 +163,25 @@ input[type='text'] {
   font-size: 12px;
   margin: 4px 0 8px;
 }
+.region-bonus-hint {
+  color: var(--good);
+  font-size: 13px;
+  margin: 2px 0 4px;
+}
+.region-bonus-hint b {
+  color: var(--good);
+}
+.dev-panel-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.dev-panel-status {
+  font-size: 12px;
+  color: var(--accent-hot);
+  font-weight: 600;
+}
 
 .region-list {
   list-style: none;
@@ -441,6 +460,21 @@ input[type='text'] {
   border-color: var(--region-color, var(--border));
 }
 .pill-points { background: transparent; }
+.pill-score {
+  background: transparent;
+  color: var(--good);
+  border-color: color-mix(in srgb, var(--good) 50%, var(--border));
+}
+.pill-score-bonus {
+  color: var(--accent-hot);
+  border-color: color-mix(in srgb, var(--accent-hot) 60%, var(--border));
+  box-shadow: 0 0 8px rgba(255, 122, 54, 0.25);
+}
+.pill-score-mult {
+  margin-left: 4px;
+  font-size: 10px;
+  opacity: 0.85;
+}
 
 .task-name {
   margin: 0;
@@ -929,59 +963,7 @@ input[type='text'] {
   margin: 0;
   font-size: 15px;
 }
-.relic-effect {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  font-size: 13px;
-  line-height: 1.5;
-  color: var(--fg);
-}
-.relic-effect-p {
-  margin: 0;
-}
-.relic-effect-list,
-.relic-effect-sublist {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.relic-effect-list > li,
-.relic-effect-sublist > li {
-  position: relative;
-  padding-left: 22px;
-  margin: 3px 0;
-}
-.relic-effect-list > li::before {
-  content: '✦';
-  position: absolute;
-  left: 4px;
-  top: 0;
-  color: var(--accent-hot);
-  font-size: 12px;
-  line-height: 1.5;
-  text-shadow: 0 0 6px rgba(255, 122, 54, 0.55);
-}
-.relic-effect-sublist {
-  margin-top: 4px;
-}
-.relic-effect-sublist > li {
-  color: var(--fg-dim);
-  padding-left: 18px;
-}
-.relic-effect-sublist > li::before {
-  content: '◆';
-  position: absolute;
-  left: 4px;
-  top: 0;
-  color: var(--fg-dim);
-  font-size: 9px;
-  line-height: 1.7;
-}
 .relic-card-gated {
-  color: var(--fg-dim);
-}
-.relic-card-gated .relic-card-effect {
   color: var(--fg-dim);
 }
 .relic-card-locked {
@@ -1009,6 +991,7 @@ input[type='text'] {
   margin-top: 6px;
 }
 .relic-choose-mode-btn {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1022,6 +1005,25 @@ input[type='text'] {
   transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, background 0.2s ease;
   color: var(--fg);
   font: inherit;
+}
+.relic-choose-mode-btn-random {
+  border-color: color-mix(in srgb, var(--good) 45%, var(--border));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--good) 25%, transparent);
+}
+.relic-choose-mode-bonus {
+  position: absolute;
+  top: -10px;
+  right: 12px;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: var(--good);
+  background: var(--bg-elev);
+  border: 1px solid var(--good);
+  border-radius: 10px;
+  box-shadow: 0 0 10px color-mix(in srgb, var(--good) 40%, transparent);
 }
 .relic-choose-mode-btn:hover {
   border-color: var(--accent-hot);
@@ -1061,9 +1063,9 @@ input[type='text'] {
 .relic-choice-list {
   list-style: none;
   margin: 4px 0 0;
-  /* Tiny horizontal padding so the winner pulse's scale doesn't visibly
-     clip on the modal edges. */
-  padding: 0 4px;
+  /* Padding gives the winner pulse and hover lift room to breathe without
+     being clipped by overflow-y: auto. */
+  padding: 6px 6px;
   display: grid;
   grid-template-columns: 1fr;
   gap: 8px;
@@ -1076,43 +1078,60 @@ input[type='text'] {
   overflow-x: hidden;
   scrollbar-gutter: stable;
 }
-/* Grouped variant for the Reloaded bonus list — sub-headers per tier. */
-.relic-choice-list-grouped {
+/* Reloaded bonus picker: 6 rows of [tier badge | card | card]. The tier
+   number sits in a glowing gutter so it acts as the row label. */
+.relic-choice-list-grid {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-}
-.relic-choice-list-grouped > .relic-choice-group > ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: 1fr;
   gap: 8px;
+  max-height: 78vh;
 }
-.relic-choice-group-head {
-  margin: 0 0 6px;
-  padding: 0 4px;
-  font-size: 12px;
+.relic-choice-row {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: 10px;
+  align-items: stretch;
+}
+.relic-choice-tier-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  background:
+    radial-gradient(circle at 50% 30%, color-mix(in srgb, var(--accent-hot) 22%, transparent), transparent 70%),
+    color-mix(in srgb, var(--accent-hot) 10%, var(--bg-card));
+  border: 1px solid color-mix(in srgb, var(--accent-hot) 45%, var(--border));
+  border-radius: 8px;
+  padding: 4px;
+  box-shadow: inset 0 0 0 1px rgba(255, 122, 54, 0.08);
+}
+.relic-choice-tier-label {
+  font-size: 9px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.7px;
-  color: var(--accent-hot);
-  border-bottom: 1px solid color-mix(in srgb, var(--accent-hot) 35%, var(--border));
-  padding-bottom: 4px;
+  color: color-mix(in srgb, var(--accent-hot) 75%, var(--fg));
 }
-.relic-card-tier-tag {
-  display: inline-block;
-  margin-right: 8px;
-  padding: 1px 6px;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.4px;
-  border-radius: 10px;
-  background: color-mix(in srgb, var(--accent-hot) 18%, var(--bg-elev));
+.relic-choice-tier-number {
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1;
   color: var(--accent-hot);
-  border: 1px solid color-mix(in srgb, var(--accent-hot) 35%, var(--border));
-  vertical-align: middle;
+  text-shadow: 0 0 10px rgba(255, 122, 54, 0.55);
+}
+.relic-choice-row-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+@media (max-width: 540px) {
+  .relic-choice-row {
+    grid-template-columns: 52px 1fr;
+  }
+  .relic-choice-tier-number {
+    font-size: 18px;
+  }
 }
 
 /* Whole-card click target. */
@@ -1143,9 +1162,9 @@ input[type='text'] {
 /* Celebration — winner card while the spin "settles". A pulsing green glow
    that lasts for the celebrate hold so the user can savour the result. */
 @keyframes relic-winner-pulse {
-  0%   { box-shadow: 0 0 22px rgba(76, 175, 106, 0.55), inset 0 0 0 2px var(--good); transform: scale(1.03); }
-  50%  { box-shadow: 0 0 36px rgba(76, 175, 106, 0.85), inset 0 0 0 2px var(--good); transform: scale(1.05); }
-  100% { box-shadow: 0 0 22px rgba(76, 175, 106, 0.55), inset 0 0 0 2px var(--good); transform: scale(1.03); }
+  0%   { box-shadow: 0 0 22px rgba(76, 175, 106, 0.55), inset 0 0 0 2px var(--good); transform: scale(1); }
+  50%  { box-shadow: 0 0 36px rgba(76, 175, 106, 0.85), inset 0 0 0 2px var(--good); transform: scale(1.015); }
+  100% { box-shadow: 0 0 22px rgba(76, 175, 106, 0.55), inset 0 0 0 2px var(--good); transform: scale(1); }
 }
 .relic-card-winner {
   border-color: var(--good);

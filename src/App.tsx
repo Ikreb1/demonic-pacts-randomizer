@@ -4,6 +4,7 @@ import { CategoriesTab } from './components/CategoriesTab';
 import { RegionFilter } from './components/RegionFilter';
 import { SyncPanel } from './components/SyncPanel';
 import { ResetPanel } from './components/ResetPanel';
+import { DevPanel } from './components/DevPanel';
 import { RegionUnlockModal } from './components/RegionUnlockModal';
 import { RelicUnlockModal } from './components/RelicUnlockModal';
 
@@ -22,6 +23,7 @@ export function App() {
       <aside className="sidebar">
         <RegionFilter />
         <SyncPanel />
+        <DevPanel />
         <ResetPanel />
       </aside>
 

@@ -41,6 +41,9 @@ interface PersistedState {
 }
 
 interface StoreState extends PersistedState {
+  // Runtime-only counter for dev/test buttons. Adds to pending region picks
+  // without touching completion counts. Cleared on reload.
+  devExtraPendingRegions: number;
   unlockRegion: (region: Region, viaRandom?: boolean) => void;
   toggleManualComplete: (taskId: number) => void;
   applySync: (completedIds: number[], meta: SyncMeta) => void;
@@ -54,14 +57,15 @@ interface StoreState extends PersistedState {
   abandonActive: () => void;
   lockRelic: (tier: RelicTier, name: string, viaRandom?: boolean) => void;
   lockReloadedRelic: (tier: RelicTier, name: string, viaRandom?: boolean) => void;
+  devQueueRegionPick: () => void;
   resetAll: () => void;
 }
 
 const SCHEMA_VERSION = 5;
 const DEFAULT_PROXY_BASE_URL = 'https://dpl-wikisync-proxy.breki.workers.dev';
 const RECENT_USERNAMES_MAX = 5;
-const RANDOM_REGION_BONUS = 500;
-const RANDOM_RELIC_BONUS = 500;
+export const RANDOM_REGION_BONUS = 500;
+export const RANDOM_RELIC_BONUS = 500;
 
 const EMPTY_LOCKED_RELICS: Record<RelicTier, string | null> = {
   1: null,
@@ -156,6 +160,7 @@ export const useStore = create<StoreState>()(
   persist(
     (set, get) => ({
       ...initialPersisted,
+      devExtraPendingRegions: 0,
 
       unlockRegion: (region, viaRandom = false) => {
         if ((ALWAYS_UNLOCKED as readonly Region[]).includes(region)) return;
@@ -164,11 +169,17 @@ export const useStore = create<StoreState>()(
         const completedSize = new Set([...state.manualComplete, ...state.syncedComplete]).size;
         const earned = REGION_UNLOCK_THRESHOLDS.filter((t) => completedSize >= t).length;
         const used = state.unlockedRegions.length - ALWAYS_UNLOCKED.length;
-        if (used >= earned) return;
+        const dev = state.devExtraPendingRegions;
+        // Natural picks take priority; dev counter is only consumed once
+        // earned slots are exhausted, so the test flow stacks on top of any
+        // real pending picks instead of cancelling them.
+        const consumeDev = used >= earned && dev > 0;
+        if (used >= earned && !consumeDev) return;
         if (used === 0 && region !== FIRST_FORCED_REGION) return;
         set({
           unlockedRegions: dedupeRegions([...state.unlockedRegions, region]),
           score: state.score + (viaRandom ? RANDOM_REGION_BONUS : 0),
+          devExtraPendingRegions: consumeDev ? dev - 1 : dev,
         });
       },
 
@@ -348,8 +359,17 @@ export const useStore = create<StoreState>()(
         });
       },
 
+      devQueueRegionPick: () => {
+        set({ devExtraPendingRegions: get().devExtraPendingRegions + 1 });
+      },
+
       resetAll: () => {
-        set({ ...initialPersisted, lockedRelics: { ...EMPTY_LOCKED_RELICS }, bonusRelics: [] });
+        set({
+          ...initialPersisted,
+          lockedRelics: { ...EMPTY_LOCKED_RELICS },
+          bonusRelics: [],
+          devExtraPendingRegions: 0,
+        });
       },
     }),
     {
@@ -408,6 +428,19 @@ export function selectCompletedCount(state: StoreState): number {
   return new Set([...state.manualComplete, ...state.syncedComplete]).size;
 }
 
+// Score awarded for completing this task right now, with the early-tier
+// multiplier applied. Lets cards preview what they'll earn before pickup.
+export function selectTaskEarnedScore(task: Task, state: StoreState): number {
+  const completed = new Set([...state.manualComplete, ...state.syncedComplete]);
+  const mult = computeEarlyTierMultiplier(task.tier, completed, state.unlockedRegions);
+  return Math.round(TIER_POINTS[task.tier] * mult);
+}
+
+export function selectTaskMultiplier(task: Task, state: StoreState): number {
+  const completed = new Set([...state.manualComplete, ...state.syncedComplete]);
+  return computeEarlyTierMultiplier(task.tier, completed, state.unlockedRegions);
+}
+
 export function selectEarnedRegionSlots(state: StoreState): number {
   const count = selectCompletedCount(state);
   return REGION_UNLOCK_THRESHOLDS.filter((t) => count >= t).length;
@@ -418,7 +451,8 @@ export function selectUsedRegionSlots(state: StoreState): number {
 }
 
 export function selectPendingRegionPicks(state: StoreState): number {
-  return Math.max(0, selectEarnedRegionSlots(state) - selectUsedRegionSlots(state));
+  const natural = Math.max(0, selectEarnedRegionSlots(state) - selectUsedRegionSlots(state));
+  return natural + (state.devExtraPendingRegions ?? 0);
 }
 
 export function selectNextPickIsForcedKaramja(state: StoreState): boolean {
