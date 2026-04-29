@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import type { Region, Task, Tier, Relic, RelicTier } from '../types';
+import type { PlayerLevels } from '../lib/eligibility';
 import {
   ALWAYS_UNLOCKED,
   TIERS,
@@ -37,6 +38,9 @@ interface PersistedState {
   recentUsernames: string[];
   lockedRelics: Record<RelicTier, string | null>;
   bonusRelics: Array<{ tier: RelicTier; name: string }>;
+  // Player skill levels from WikiSync, used to gate task eligibility.
+  // Empty until the user runs WikiSync at least once.
+  playerLevels: PlayerLevels;
   schemaVersion: number;
 }
 
@@ -46,7 +50,7 @@ interface StoreState extends PersistedState {
   devExtraPendingRegions: number;
   unlockRegion: (region: Region, viaRandom?: boolean) => void;
   toggleManualComplete: (taskId: number) => void;
-  applySync: (completedIds: number[], meta: SyncMeta) => void;
+  applySync: (completedIds: number[], meta: SyncMeta, levels?: PlayerLevels) => void;
   clearSync: () => void;
   setProxyBaseUrl: (url: string) => void;
   rememberUsername: (name: string) => void;
@@ -61,7 +65,7 @@ interface StoreState extends PersistedState {
   resetAll: () => void;
 }
 
-const SCHEMA_VERSION = 5;
+const SCHEMA_VERSION = 6;
 const DEFAULT_PROXY_BASE_URL = 'https://dpl-wikisync-proxy.breki.workers.dev';
 const RECENT_USERNAMES_MAX = 5;
 export const RANDOM_REGION_BONUS = 500;
@@ -90,6 +94,7 @@ const initialPersisted: PersistedState = {
   recentUsernames: [],
   lockedRelics: { ...EMPTY_LOCKED_RELICS },
   bonusRelics: [],
+  playerLevels: {},
   schemaVersion: SCHEMA_VERSION,
 };
 
@@ -204,7 +209,7 @@ export const useStore = create<StoreState>()(
         set(next);
       },
 
-      applySync: (completedIds, meta) => {
+      applySync: (completedIds, meta, levels) => {
         const state = get();
         const nextSynced = [...new Set(completedIds)];
         const completed = new Set([...state.manualComplete, ...nextSynced]);
@@ -230,13 +235,16 @@ export const useStore = create<StoreState>()(
           unlockedRegions: nextUnlockedRegions,
           currentRoll: willPend ? null : reconcileRoll(state.currentRoll, regions, completed),
         };
+        // Only overwrite stored levels when the caller passed them — a
+        // plugin import has none, but a WikiSync fetch does.
+        if (levels && Object.keys(levels).length > 0) next.playerLevels = levels;
         if (state.activeTask !== null && completed.has(state.activeTask)) {
           next.activeTask = null;
         }
         set(next);
       },
 
-      clearSync: () => set({ syncedComplete: [], lastSync: null }),
+      clearSync: () => set({ syncedComplete: [], lastSync: null, playerLevels: {} }),
 
       setProxyBaseUrl: (url) => set({ proxyBaseUrl: url.trim() }),
 
@@ -368,6 +376,7 @@ export const useStore = create<StoreState>()(
           ...initialPersisted,
           lockedRelics: { ...EMPTY_LOCKED_RELICS },
           bonusRelics: [],
+          playerLevels: {},
           devExtraPendingRegions: 0,
         });
       },
@@ -388,6 +397,7 @@ export const useStore = create<StoreState>()(
         recentUsernames: state.recentUsernames,
         lockedRelics: state.lockedRelics,
         bonusRelics: state.bonusRelics,
+        playerLevels: state.playerLevels,
         schemaVersion: state.schemaVersion,
       }),
       // Pre-release: any state persisted under an older schema is wiped.

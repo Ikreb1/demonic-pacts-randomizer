@@ -509,6 +509,69 @@ input[type='text'] {
 .lock-icon { font-size: 22px; }
 
 .categories .hint { margin-bottom: 12px; }
+.eligible-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 6px;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* ----- Similar tasks panel (under the locked task) ----- */
+.similar-tasks {
+  margin-top: 14px;
+  padding: 12px 14px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.similar-tasks-head {
+  margin: 0 0 6px;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--accent-hot);
+}
+.similar-tasks-group-head {
+  margin-top: 8px;
+  margin-bottom: 4px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--fg-dim);
+}
+.similar-tasks-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.similar-tasks-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 13px;
+}
+.similar-tasks-name {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.similar-tier-pill,
+.similar-region-pill {
+  flex: 0 0 auto;
+  font-size: 10px;
+  padding: 1px 6px;
+}
 .category-grid {
   display: flex;
   flex-direction: column;

@@ -13,6 +13,7 @@ const WIKISYNC_PATH = '/runelite/player';
 
 export interface WikiSyncResponse {
   league_tasks?: number[];
+  levels?: Record<string, number>;
   [key: string]: unknown;
 }
 
@@ -37,7 +38,7 @@ export function buildPlayerUrl(proxyOrDirect: string, username: string): string 
 export async function fetchCompletion(
   username: string,
   proxyBaseUrl: string = '',
-): Promise<{ completed: number[]; raw: WikiSyncResponse }> {
+): Promise<{ completed: number[]; levels: Record<string, number>; raw: WikiSyncResponse }> {
   const trimmed = username.trim();
   if (!trimmed) throw new WikiSyncError('shape', 'Username is empty.');
 
@@ -77,5 +78,11 @@ export async function fetchCompletion(
     throw new WikiSyncError('shape', 'WikiSync response missing `league_tasks` array.');
   }
   const completed = list.filter((n): n is number => typeof n === 'number' && Number.isFinite(n));
-  return { completed, raw };
+  const levels: Record<string, number> = {};
+  if (raw.levels && typeof raw.levels === 'object') {
+    for (const [k, v] of Object.entries(raw.levels)) {
+      if (typeof v === 'number' && Number.isFinite(v)) levels[k] = v;
+    }
+  }
+  return { completed, levels, raw };
 }

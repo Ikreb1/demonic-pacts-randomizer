@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { RandomizerTab } from './components/RandomizerTab';
 import { CategoriesTab } from './components/CategoriesTab';
+import { EligibleTab } from './components/EligibleTab';
 import { RegionFilter } from './components/RegionFilter';
 import { SyncPanel } from './components/SyncPanel';
 import { ResetPanel } from './components/ResetPanel';
@@ -8,7 +9,7 @@ import { DevPanel } from './components/DevPanel';
 import { RegionUnlockModal } from './components/RegionUnlockModal';
 import { RelicUnlockModal } from './components/RelicUnlockModal';
 
-type TabId = 'randomizer' | 'categories';
+type TabId = 'randomizer' | 'categories' | 'eligible';
 
 export function App() {
   const [tab, setTab] = useState<TabId>('randomizer');
@@ -45,9 +46,19 @@ export function App() {
           >
             Categories
           </button>
+          <button
+            role="tab"
+            aria-selected={tab === 'eligible'}
+            className={tab === 'eligible' ? 'tab tab-active' : 'tab'}
+            onClick={() => setTab('eligible')}
+          >
+            Can Do Now
+          </button>
         </nav>
         <div className="tab-panel" role="tabpanel">
-          {tab === 'randomizer' ? <RandomizerTab /> : <CategoriesTab />}
+          {tab === 'randomizer' && <RandomizerTab />}
+          {tab === 'categories' && <CategoriesTab />}
+          {tab === 'eligible' && <EligibleTab />}
         </div>
       </main>
 

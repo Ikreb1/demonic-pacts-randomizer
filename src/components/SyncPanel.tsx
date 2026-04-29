@@ -3,6 +3,7 @@ import { useStore } from '../state/store';
 import { TASKS_BY_ID } from '../state/store';
 import { fetchCompletion, WikiSyncError } from '../lib/wikisync';
 import { parseTrackerExport, readJsonFile } from '../lib/importTracker';
+import { normalizeWikiSyncLevels } from '../lib/eligibility';
 
 type Status = { kind: 'idle' } | { kind: 'busy' } | { kind: 'ok'; msg: string } | { kind: 'err'; msg: string };
 
@@ -25,8 +26,12 @@ export function SyncPanel() {
   async function onWikiSync() {
     setStatus({ kind: 'busy' });
     try {
-      const { completed } = await fetchCompletion(username, proxyBaseUrl);
-      applySync(completed, { username, at: Date.now(), source: 'wikisync' });
+      const { completed, levels } = await fetchCompletion(username, proxyBaseUrl);
+      applySync(
+        completed,
+        { username, at: Date.now(), source: 'wikisync' },
+        normalizeWikiSyncLevels(levels),
+      );
       rememberUsername(username);
       setStatus({ kind: 'ok', msg: `Synced ${completed.length} completed tasks for ${username}.` });
     } catch (err) {

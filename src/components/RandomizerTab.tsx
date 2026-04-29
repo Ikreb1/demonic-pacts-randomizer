@@ -13,6 +13,7 @@ import type { Tier } from '../types';
 import { TaskCard } from './TaskCard';
 import { FlipCard } from './FlipCard';
 import { LockedRelicsStrip } from './LockedRelicsStrip';
+import { SimilarTasks } from './SimilarTasks';
 import type { Region } from '../types';
 
 const REVEAL_STAGGER_MS = 380;
@@ -119,6 +120,7 @@ export function RandomizerTab() {
             </>
           }
         />
+        <SimilarTasks activeTask={activeTask} />
       </div>
     );
   }
