@@ -17,6 +17,20 @@ describe('isAlwaysSkippedFromRoll', () => {
     expect(isAlwaysSkippedFromRoll(findTask('Complete the Leagues Tutorial'))).toBe(true);
   });
 
+  it('skips OSRS random event tasks (time-gated)', () => {
+    // Random events spawn on the game's schedule, not the player's, so
+    // locking one as your active task can mean waiting hours for a roll
+    // you can't even attempt.
+    expect(isAlwaysSkippedFromRoll(findTask('Complete the Evil Bob random event'))).toBe(true);
+    expect(isAlwaysSkippedFromRoll(findTask('Complete the Maze random event'))).toBe(true);
+    expect(isAlwaysSkippedFromRoll(findTask('Complete the Pillory random event'))).toBe(true);
+    expect(isAlwaysSkippedFromRoll(findTask('Complete the Pinball random event'))).toBe(true);
+    expect(isAlwaysSkippedFromRoll(findTask('Complete the Postie Pete random event'))).toBe(true);
+    expect(isAlwaysSkippedFromRoll(findTask('Complete the Prison Pete random event'))).toBe(true);
+    expect(isAlwaysSkippedFromRoll(findTask('Complete the Surprise Exam random event'))).toBe(true);
+    expect(isAlwaysSkippedFromRoll(findTask('Obtain a Kebab from a random event'))).toBe(true);
+  });
+
   it('does not skip ordinary tasks', () => {
     expect(isAlwaysSkippedFromRoll(findTask('1 Easy Clue Scroll'))).toBe(false);
     expect(isAlwaysSkippedFromRoll(findTask('Reach Level 99 Cooking'))).toBe(false);
@@ -104,6 +118,48 @@ describe('hasUnmetDependency — skill XP milestones gated by 99', () => {
     const parent = findTask('Reach Level 99 Slayer');
     expect(hasUnmetDependency(child, new Set())).toBe(true);
     expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
+  });
+});
+
+describe('hasUnmetDependency — collection log slot chains', () => {
+  it('"Fill 5 Medium Clue Collection Log Slots" is the medium chain root', () => {
+    expect(
+      hasUnmetDependency(findTask('Fill 5 Medium Clue Collection Log Slots'), new Set()),
+    ).toBe(false);
+  });
+
+  it('"Fill 20 Medium Clue Collection Log Slots" requires Fill 5', () => {
+    const child = findTask('Fill 20 Medium Clue Collection Log Slots');
+    const parent = findTask('Fill 5 Medium Clue Collection Log Slots');
+    expect(hasUnmetDependency(child, new Set())).toBe(true);
+    expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
+  });
+
+  it('"Fill 40 Medium Clue Collection Log Slots" requires Fill 20 (not the root)', () => {
+    const child = findTask('Fill 40 Medium Clue Collection Log Slots');
+    const intermediate = findTask('Fill 20 Medium Clue Collection Log Slots');
+    const root = findTask('Fill 5 Medium Clue Collection Log Slots');
+    expect(hasUnmetDependency(child, new Set())).toBe(true);
+    // Only completing the root isn't enough — need the immediate parent.
+    expect(hasUnmetDependency(child, new Set([root.id]))).toBe(true);
+    expect(hasUnmetDependency(child, new Set([intermediate.id]))).toBe(false);
+  });
+
+  it('Hard tier chains through 3 → 15 → 30', () => {
+    const c30 = findTask('Fill 30 Hard Clue Collection Log Slots');
+    const c15 = findTask('Fill 15 Hard Clue Collection Log Slots');
+    const c3 = findTask('Fill 3 Hard Clue Collection Log Slots');
+    expect(hasUnmetDependency(c30, new Set([c3.id]))).toBe(true);
+    expect(hasUnmetDependency(c30, new Set([c15.id]))).toBe(false);
+    expect(hasUnmetDependency(c15, new Set([c3.id]))).toBe(false);
+  });
+
+  it('Master tier (5 → 25) chains correctly with no third step', () => {
+    const c25 = findTask('Fill 25 Master Clue Collection Log Slots');
+    const c5 = findTask('Fill 5 Master Clue Collection Log Slots');
+    expect(hasUnmetDependency(c25, new Set())).toBe(true);
+    expect(hasUnmetDependency(c25, new Set([c5.id]))).toBe(false);
+    expect(hasUnmetDependency(c5, new Set())).toBe(false);
   });
 });
 
