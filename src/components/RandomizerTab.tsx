@@ -6,6 +6,7 @@ import {
   ALL_TASKS_LIST,
   selectCompleted,
   selectPendingRegionPicks,
+  selectRelicScore,
 } from '../state/store';
 import { eligibleByTier } from '../lib/filters';
 import { TIERS, TIER_LABELS, TIER_POINTS } from '../types';
@@ -31,6 +32,7 @@ export function RandomizerTab() {
   const unlockedRegions = useStore((s) => s.unlockedRegions);
   const hasRoll = useStore((s) => s.currentRoll !== null);
   const score = useStore((s) => s.score);
+  const points = useStore(selectRelicScore);
   const currentRoll = useStore((s) => s.currentRoll);
   const pendingRegionPicks = useStore(selectPendingRegionPicks);
 
@@ -87,7 +89,7 @@ export function RandomizerTab() {
     const penalty = 2 * TIER_POINTS[activeTask.tier];
     return (
       <div className="randomizer locked">
-        <Scoreboard score={score} />
+        <Scoreboard score={score} points={points} />
         <LockedRelicsStrip />
         <div className="locked-banner">
           <span className="lock-icon" aria-hidden>🔒</span>
@@ -138,7 +140,7 @@ export function RandomizerTab() {
 
   return (
     <div className="randomizer">
-      <Scoreboard score={score} />
+      <Scoreboard score={score} points={points} />
       <LockedRelicsStrip />
       <div className="randomizer-toolbar">
         <p className="hint">
@@ -189,12 +191,27 @@ export function RandomizerTab() {
   );
 }
 
-function Scoreboard({ score }: { score: number }) {
-  const cls = score > 0 ? 'scoreboard scoreboard-positive' : score < 0 ? 'scoreboard scoreboard-negative' : 'scoreboard';
+function Scoreboard({ score, points }: { score: number; points: number }) {
+  // Score = competitive tally with bonuses, penalties, half-points-on-sync.
+  // Points = raw sum of TIER_POINTS over completed tasks; gates relic
+  // tier unlocks and is the un-modified completion total.
+  const scoreCls =
+    score > 0
+      ? 'scoreboard-cell scoreboard-cell-positive'
+      : score < 0
+        ? 'scoreboard-cell scoreboard-cell-negative'
+        : 'scoreboard-cell';
   return (
-    <div className={cls} aria-live="polite">
-      <span className="scoreboard-label">Score</span>
-      <span className="scoreboard-value">{score.toLocaleString()}</span>
+    <div className="scoreboard" aria-live="polite">
+      <div className={scoreCls}>
+        <span className="scoreboard-label">Score</span>
+        <span className="scoreboard-value">{score.toLocaleString()}</span>
+      </div>
+      <div className="scoreboard-divider" aria-hidden />
+      <div className="scoreboard-cell">
+        <span className="scoreboard-label">Points</span>
+        <span className="scoreboard-value">{points.toLocaleString()}</span>
+      </div>
     </div>
   );
 }

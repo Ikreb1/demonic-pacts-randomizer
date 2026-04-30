@@ -347,14 +347,24 @@ input[type='text'] {
 
 .scoreboard {
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 12px;
+  align-items: stretch;
   background: var(--bg-elev);
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 10px 16px;
   margin-bottom: 12px;
+}
+.scoreboard-cell {
+  flex: 1 1 0;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+.scoreboard-divider {
+  width: 1px;
+  background: var(--border);
+  margin: 0 16px;
 }
 .scoreboard-label {
   font-size: 12px;
@@ -368,8 +378,8 @@ input[type='text'] {
   font-variant-numeric: tabular-nums;
   color: var(--fg);
 }
-.scoreboard-positive .scoreboard-value { color: var(--good); }
-.scoreboard-negative .scoreboard-value { color: var(--bad); }
+.scoreboard-cell-positive .scoreboard-value { color: var(--good); }
+.scoreboard-cell-negative .scoreboard-value { color: var(--bad); }
 
 .tier-grid {
   display: grid;
