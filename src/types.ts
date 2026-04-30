@@ -78,3 +78,33 @@ export const RELIC_TIER_THRESHOLDS: Record<RelicTier, number> = {
   7: 16500,
   8: 28000,
 };
+
+export const PACT_KINDS = ['minor', 'major', 'capstone'] as const;
+export type PactKind = (typeof PACT_KINDS)[number];
+
+export interface Pact {
+  id: string;
+  name: string;
+  kind: PactKind;
+  branch: string;
+  prerequisites: string[];
+  effect: string;
+  // Optional layout hints for hand-curated trees. When absent the renderer
+  // computes positions via BFS depth × branch column.
+  x?: number;
+  y?: number;
+  // OSRS wiki icon code (e.g. "AA", "B1", "H10") — set by
+  // scripts/download-pact-icons.mjs from matching effect text against the
+  // Demonic_Pacts_League/Demonic_Pacts wiki page. Used to render the
+  // node's icon from /pact-icons/Pact_${iconCode}.png.
+  iconCode?: string;
+}
+
+export interface PactsFile {
+  generatedAt: string;
+  sourcePage: string;
+  pacts: Pact[];
+}
+
+export const MAX_PACT_RESETS = 5;
+export const MAX_PACTS_UNLOCKED = 40;

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import type { Region, Task, Tier, Relic, RelicTier } from '../types';
+import type { Region, Task, Tier, Relic, RelicTier, Pact } from '../types';
 import type { PlayerLevels } from '../lib/eligibility';
 import {
   ALWAYS_UNLOCKED,
@@ -10,15 +10,28 @@ import {
   FIRST_FORCED_REGION,
   RELIC_TIERS,
   RELIC_TIER_THRESHOLDS,
+  MAX_PACT_RESETS,
+  MAX_PACTS_UNLOCKED,
 } from '../types';
 import type { RollResult } from '../lib/randomizer';
 import { rollOnePerTier } from '../lib/randomizer';
 import { eligibleByTier } from '../lib/filters';
+import { rollNextPact } from '../lib/pactsRandomizer';
 import tasksFile from '../data/tasks.json';
 import relicsFile from '../data/relics.json';
+import pactsFile from '../data/pacts.json';
 
 const ALL_TASKS: readonly Task[] = (tasksFile as { tasks: Task[] }).tasks;
 const ALL_RELICS: readonly Relic[] = (relicsFile as { relics: Relic[] }).relics;
+const ALL_PACTS: readonly Pact[] = (pactsFile as { pacts: Pact[] }).pacts;
+
+// The center node is auto-unlocked at game start (counts toward the 40-cap)
+// and serves as the starting frontier for rolls. The planner places the
+// center at draw_coord (0,0); we fall back to the first pact if no node is
+// at the origin (defensive — should never happen with real data).
+const CENTER_PACT_ID: string =
+  ALL_PACTS.find((p) => (p.x ?? 0) === 0 && (p.y ?? 0) === 0)?.id ?? ALL_PACTS[0]?.id ?? '';
+const INITIAL_UNLOCKED_PACTS: readonly string[] = CENTER_PACT_ID ? [CENTER_PACT_ID] : [];
 
 export interface SyncMeta {
   username: string;
@@ -41,6 +54,8 @@ interface PersistedState {
   // Player skill levels from WikiSync, used to gate task eligibility.
   // Empty until the user runs WikiSync at least once.
   playerLevels: PlayerLevels;
+  unlockedPactIds: string[];
+  pactResetsUsed: number;
   schemaVersion: number;
 }
 
@@ -61,11 +76,13 @@ interface StoreState extends PersistedState {
   abandonActive: () => void;
   lockRelic: (tier: RelicTier, name: string, viaRandom?: boolean) => void;
   lockReloadedRelic: (tier: RelicTier, name: string, viaRandom?: boolean) => void;
+  rollPact: () => string | null;
+  resetPacts: () => void;
   devQueueRegionPick: () => void;
   resetAll: () => void;
 }
 
-const SCHEMA_VERSION = 6;
+const SCHEMA_VERSION = 7;
 const DEFAULT_PROXY_BASE_URL = 'https://dpl-wikisync-proxy.breki.workers.dev';
 const RECENT_USERNAMES_MAX = 5;
 export const RANDOM_REGION_BONUS = 500;
@@ -95,6 +112,8 @@ const initialPersisted: PersistedState = {
   lockedRelics: { ...EMPTY_LOCKED_RELICS },
   bonusRelics: [],
   playerLevels: {},
+  unlockedPactIds: [...INITIAL_UNLOCKED_PACTS],
+  pactResetsUsed: 0,
   schemaVersion: SCHEMA_VERSION,
 };
 
@@ -229,11 +248,25 @@ export const useStore = create<StoreState>()(
         // Re-evaluate pending-picks against the new region count: any newly
         // auto-unlocked region consumes an earned slot.
         const willPend = pendingPicksFor(completed.size, nextUnlockedRegions.length);
+        // Half-points for sync-newly-completed tasks: anything that just
+        // became complete via this sync (and wasn't already manual/synced
+        // complete) gets ½ × tier points. The locked active task is excluded
+        // — it'll earn full points via markActiveComplete.
+        const previousCompleted = new Set([...state.manualComplete, ...state.syncedComplete]);
+        let bonus = 0;
+        for (const id of nextSynced) {
+          if (previousCompleted.has(id)) continue;
+          if (id === state.activeTask) continue;
+          const task = TASKS_BY_ID.get(id);
+          if (!task) continue;
+          bonus += Math.round(TIER_POINTS[task.tier] * 0.5);
+        }
         const next: Partial<StoreState> = {
           syncedComplete: nextSynced,
           lastSync: meta,
           unlockedRegions: nextUnlockedRegions,
           currentRoll: willPend ? null : reconcileRoll(state.currentRoll, regions, completed),
+          score: state.score + bonus,
         };
         // Only overwrite stored levels when the caller passed them — a
         // plugin import has none, but a WikiSync fetch does.
@@ -367,6 +400,29 @@ export const useStore = create<StoreState>()(
         });
       },
 
+      rollPact: () => {
+        const state = get();
+        // Hard cap: the OSRS league lets you spend at most 40 pact points,
+        // and the auto-unlocked center counts toward that total.
+        if (state.unlockedPactIds.length >= MAX_PACTS_UNLOCKED) return null;
+        const unlocked = new Set(state.unlockedPactIds);
+        const picked = rollNextPact(ALL_PACTS, unlocked);
+        if (picked === null) return null;
+        set({ unlockedPactIds: [...state.unlockedPactIds, picked] });
+        return picked;
+      },
+
+      resetPacts: () => {
+        const state = get();
+        if (state.pactResetsUsed >= MAX_PACT_RESETS) return;
+        // Reset goes back to the starting state — center pre-unlocked, ready
+        // to roll outward again.
+        set({
+          unlockedPactIds: [...INITIAL_UNLOCKED_PACTS],
+          pactResetsUsed: state.pactResetsUsed + 1,
+        });
+      },
+
       devQueueRegionPick: () => {
         set({ devExtraPendingRegions: get().devExtraPendingRegions + 1 });
       },
@@ -377,6 +433,8 @@ export const useStore = create<StoreState>()(
           lockedRelics: { ...EMPTY_LOCKED_RELICS },
           bonusRelics: [],
           playerLevels: {},
+          unlockedPactIds: [...INITIAL_UNLOCKED_PACTS],
+          pactResetsUsed: 0,
           devExtraPendingRegions: 0,
         });
       },
@@ -398,6 +456,8 @@ export const useStore = create<StoreState>()(
         lockedRelics: state.lockedRelics,
         bonusRelics: state.bonusRelics,
         playerLevels: state.playerLevels,
+        unlockedPactIds: state.unlockedPactIds,
+        pactResetsUsed: state.pactResetsUsed,
         schemaVersion: state.schemaVersion,
       }),
       // Pre-release: any state persisted under an older schema is wiped.
@@ -559,4 +619,42 @@ export function selectAvailableBonusRelics(state: StoreState): readonly Relic[] 
     out.push(r);
   }
   return out;
+}
+
+// ----- Pacts -----
+
+export const ALL_PACTS_LIST: readonly Pact[] = ALL_PACTS;
+
+const PACTS_BY_ID: ReadonlyMap<string, Pact> = new Map(ALL_PACTS.map((p) => [p.id, p]));
+
+export function selectUnlockedPactIds(state: StoreState): readonly string[] {
+  return state.unlockedPactIds ?? [];
+}
+
+export function selectPactResetsRemaining(state: StoreState): number {
+  return Math.max(0, MAX_PACT_RESETS - (state.pactResetsUsed ?? 0));
+}
+
+export function selectPactById(id: string): Pact | null {
+  return PACTS_BY_ID.get(id) ?? null;
+}
+
+// Number of pacts on the frontier (adjacent to something already unlocked
+// and not yet unlocked themselves). This is the strict-frontier model:
+// only frontier nodes are rollable.
+export function selectEligiblePactCount(state: StoreState): number {
+  const unlocked = new Set(state.unlockedPactIds ?? []);
+  let n = 0;
+  for (const p of ALL_PACTS) {
+    if (unlocked.has(p.id)) continue;
+    if (p.prerequisites.some((req) => unlocked.has(req))) n++;
+  }
+  return n;
+}
+
+// How many more rolls the user has before hitting the 40-pact cap.
+// The auto-unlocked center counts toward the cap, so on a fresh state this
+// is MAX_PACTS_UNLOCKED - 1.
+export function selectPactRollsRemaining(state: StoreState): number {
+  return Math.max(0, MAX_PACTS_UNLOCKED - (state.unlockedPactIds?.length ?? 0));
 }

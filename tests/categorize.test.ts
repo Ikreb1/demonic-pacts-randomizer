@@ -105,4 +105,16 @@ describe('categorize', () => {
     ]);
     expect(groups[groups.length - 1].id).toBe('xp-milestones');
   });
+
+  it('separates forestry events from random events into different buckets', () => {
+    const forestry = t({ name: 'Complete a Forestry Event' });
+    const randomEvt = t({ name: 'Complete the Evil Bob random event' });
+    expect(bucketFor(forestry)).toBe('forestry');
+    expect(bucketFor(randomEvt)).toBe('minigames');
+    // And in a combined call, they end up in separate groups (not lumped).
+    const groups = categorize([forestry, randomEvt]);
+    const ids = groups.map((g) => g.id);
+    expect(ids).toContain('forestry');
+    expect(ids).toContain('minigames');
+  });
 });

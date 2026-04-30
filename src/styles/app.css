@@ -1240,3 +1240,220 @@ input[type='text'] {
   border-color: var(--good);
   box-shadow: 0 0 14px rgba(76, 175, 106, 0.4), inset 0 0 0 1px var(--good);
 }
+
+/* ----- Pacts tab ----- */
+
+:root {
+  --pact-minor: #6b7588;
+  --pact-major: #b76de0;
+  --pact-capstone: #e6c75a;
+}
+
+.pacts-tab {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.pacts-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 16px;
+}
+.pacts-header-status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.pacts-status-pill {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 12px;
+  color: var(--fg-dim);
+}
+.pacts-header-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.pacts-recent {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-elev);
+  border: 1px solid var(--good);
+  border-radius: 8px;
+  padding: 8px 14px;
+  align-self: flex-start;
+  box-shadow: 0 0 10px rgba(76, 175, 106, 0.25);
+}
+.pacts-recent-glyph { font-size: 18px; }
+.pacts-recent-kind {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--bg-card);
+  color: var(--fg-dim);
+}
+.pacts-recent-kind-capstone { background: var(--pact-capstone); color: #1c1810; }
+.pacts-recent-kind-major    { background: var(--pact-major); color: white; }
+.pacts-recent-kind-minor    { background: var(--pact-minor); color: white; }
+
+.pacts-empty-hint {
+  margin: 0;
+}
+
+.pacts-tree-wrap {
+  position: relative;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+  /* Cap the tree at ~70% of viewport height so it fits a 1080p window
+     without scrolling. The SVG inside scales to fit both dimensions. */
+  height: min(70vh, 720px);
+  min-height: 360px;
+}
+
+.pacts-tree-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.pacts-edge {
+  stroke: var(--fg-dim);
+  stroke-width: 1.5;
+  opacity: 0.4;
+}
+.pacts-edge-live {
+  stroke: var(--good);
+  stroke-width: 2.5;
+  opacity: 1;
+}
+
+.pacts-node {
+  cursor: default;
+  outline: none;
+}
+.pacts-node-circle {
+  fill: var(--bg-card);
+  stroke: var(--border);
+  stroke-width: 2;
+  transition: fill 0.2s, stroke 0.2s;
+}
+.pacts-node-minor    .pacts-node-circle { stroke: var(--pact-minor); }
+.pacts-node-major    .pacts-node-circle { stroke: var(--pact-major); }
+.pacts-node-capstone .pacts-node-circle { stroke: var(--pact-capstone); stroke-width: 3; }
+
+.pacts-node-unlocked.pacts-node-minor    .pacts-node-circle { fill: var(--pact-minor); }
+.pacts-node-unlocked.pacts-node-major    .pacts-node-circle { fill: var(--pact-major); }
+.pacts-node-unlocked.pacts-node-capstone .pacts-node-circle { fill: var(--pact-capstone); }
+
+.pacts-node-eligible:not(.pacts-node-unlocked) .pacts-node-circle {
+  stroke-dasharray: 4 3;
+}
+
+.pacts-node:focus .pacts-node-circle,
+.pacts-node:hover .pacts-node-circle {
+  stroke-width: 4;
+}
+
+/* Wiki icons (PNG images sourced from the OSRS wiki) sit inside each
+   node circle. Locked nodes get a low-opacity treatment so the user can
+   read them at a glance as "not yet earned". */
+.pacts-node-icon {
+  pointer-events: none;
+  opacity: 0.55;
+  transition: opacity 0.2s;
+}
+.pacts-node-unlocked .pacts-node-icon {
+  opacity: 1;
+}
+
+/* Glyphs are the fallback for nodes without a wiki icon match. */
+.pacts-node-glyph {
+  fill: var(--fg-dim);
+  pointer-events: none;
+  transition: fill 0.2s;
+}
+.pacts-node-capstone .pacts-node-glyph { fill: var(--pact-capstone); }
+.pacts-node-major    .pacts-node-glyph { fill: var(--pact-major); }
+.pacts-node-minor    .pacts-node-glyph { fill: var(--pact-minor); }
+
+.pacts-node-unlocked .pacts-node-glyph {
+  fill: var(--bg);
+}
+.pacts-node-unlocked.pacts-node-capstone .pacts-node-glyph {
+  /* Gold capstone fills are already very bright — use near-black so the
+     star reads as a clean silhouette. */
+  fill: #1c1810;
+}
+
+@keyframes pact-pulse {
+  0%   { transform: scale(1);    filter: drop-shadow(0 0 0 rgba(230, 199, 90, 0.0)); }
+  50%  { transform: scale(1.18); filter: drop-shadow(0 0 8px rgba(230, 199, 90, 0.85)); }
+  100% { transform: scale(1);    filter: drop-shadow(0 0 0 rgba(230, 199, 90, 0.0)); }
+}
+.pacts-node-recent .pacts-node-circle {
+  transform-origin: center;
+  transform-box: fill-box;
+  animation: pact-pulse 1.4s ease-in-out infinite;
+}
+
+.pacts-tooltip {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  max-width: 320px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+  z-index: 5;
+}
+.pacts-tooltip-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: space-between;
+}
+.pacts-tooltip-kind {
+  font-size: 11px;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--bg-elev);
+  color: var(--fg-dim);
+}
+.pacts-tooltip-kind-capstone { background: var(--pact-capstone); color: #1c1810; }
+.pacts-tooltip-kind-major    { background: var(--pact-major); color: white; }
+.pacts-tooltip-kind-minor    { background: var(--pact-minor); color: white; }
+.pacts-tooltip-branch {
+  font-size: 11px;
+  color: var(--fg-dim);
+  text-transform: capitalize;
+  margin-top: 2px;
+}
+.pacts-tooltip-effect {
+  margin: 8px 0 0;
+  font-size: 12px;
+  white-space: pre-wrap;
+}
+.pacts-tooltip-prereqs {
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--fg-dim);
+}

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { RandomizerTab } from './components/RandomizerTab';
 import { CategoriesTab } from './components/CategoriesTab';
 import { EligibleTab } from './components/EligibleTab';
+import { PactsTab } from './components/PactsTab';
 import { RegionFilter } from './components/RegionFilter';
 import { SyncPanel } from './components/SyncPanel';
 import { ResetPanel } from './components/ResetPanel';
@@ -9,7 +10,7 @@ import { DevPanel } from './components/DevPanel';
 import { RegionUnlockModal } from './components/RegionUnlockModal';
 import { RelicUnlockModal } from './components/RelicUnlockModal';
 
-type TabId = 'randomizer' | 'categories' | 'eligible';
+type TabId = 'randomizer' | 'categories' | 'eligible' | 'pacts';
 
 export function App() {
   const [tab, setTab] = useState<TabId>('randomizer');
@@ -54,11 +55,20 @@ export function App() {
           >
             Can Do Now
           </button>
+          <button
+            role="tab"
+            aria-selected={tab === 'pacts'}
+            className={tab === 'pacts' ? 'tab tab-active' : 'tab'}
+            onClick={() => setTab('pacts')}
+          >
+            Pacts
+          </button>
         </nav>
         <div className="tab-panel" role="tabpanel">
           {tab === 'randomizer' && <RandomizerTab />}
           {tab === 'categories' && <CategoriesTab />}
           {tab === 'eligible' && <EligibleTab />}
+          {tab === 'pacts' && <PactsTab />}
         </div>
       </main>
 

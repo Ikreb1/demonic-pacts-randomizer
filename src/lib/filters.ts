@@ -1,7 +1,12 @@
 import type { Region, Task, Tier } from '../types';
+import { hasUnmetDependency, isAlwaysSkippedFromRoll } from './dependencies';
 
 export function isEligible(task: Task, regions: ReadonlySet<Region>, completed: ReadonlySet<number>): boolean {
-  return regions.has(task.region) && !completed.has(task.id);
+  if (!regions.has(task.region)) return false;
+  if (completed.has(task.id)) return false;
+  if (isAlwaysSkippedFromRoll(task)) return false;
+  if (hasUnmetDependency(task, completed)) return false;
+  return true;
 }
 
 export function eligibleByTier(

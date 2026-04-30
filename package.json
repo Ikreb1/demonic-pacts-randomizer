@@ -9,6 +9,8 @@
     "preview": "vite preview",
     "fetch:tasks": "node scripts/fetch-tasks.mjs",
     "fetch:relics": "node scripts/fetch-relics.mjs",
+    "fetch:pacts": "node scripts/fetch-pacts.mjs",
+    "fetch:pact-icons": "node scripts/download-pact-icons.mjs",
     "test": "vitest run",
     "test:watch": "vitest"
   },

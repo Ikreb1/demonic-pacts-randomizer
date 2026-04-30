@@ -20,6 +20,7 @@ const {
   useStore,
   ALL_TASKS_LIST,
   ALL_RELICS_LIST,
+  ALL_PACTS_LIST,
   selectActiveTask,
   selectPendingRegionPicks,
   selectNextPickIsForcedKaramja,
@@ -29,11 +30,25 @@ const {
   selectLockedRelics,
   selectPendingReloadedPicks,
   selectAvailableBonusRelics,
+  selectUnlockedPactIds,
+  selectPactResetsRemaining,
+  selectEligiblePactCount,
+  selectPactRollsRemaining,
   relicsForTier,
 } = await import('../src/state/store');
-const { TIERS, TIER_POINTS, REGION_UNLOCK_THRESHOLDS, RELIC_TIER_THRESHOLDS } = await import(
-  '../src/types'
-);
+const {
+  TIERS,
+  TIER_POINTS,
+  REGION_UNLOCK_THRESHOLDS,
+  RELIC_TIER_THRESHOLDS,
+  MAX_PACT_RESETS,
+  MAX_PACTS_UNLOCKED,
+} = await import('../src/types');
+
+// The center pact is auto-unlocked at game start. Tests that need a fresh
+// state should use this instead of an empty array.
+const CENTER_PACT_ID =
+  ALL_PACTS_LIST.find((p) => (p.x ?? 0) === 0 && (p.y ?? 0) === 0)?.id ?? ALL_PACTS_LIST[0]?.id;
 type RelicTier = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 
 beforeEach(() => {
@@ -47,6 +62,8 @@ beforeEach(() => {
     score: 0,
     lockedRelics: { 1: null, 2: null, 3: null, 4: null, 5: null, 6: null, 7: null, 8: null },
     bonusRelics: [],
+    unlockedPactIds: CENTER_PACT_ID ? [CENTER_PACT_ID] : [],
+    pactResetsUsed: 0,
   });
 });
 
@@ -733,6 +750,202 @@ describe('store roll-and-lock flow', () => {
       expect(useStore.getState().bonusRelics).toHaveLength(1);
       useStore.getState().resetAll();
       expect(useStore.getState().bonusRelics).toEqual([]);
+    });
+  });
+
+  describe('applySync half-points for non-primary completions', () => {
+    function findTask(name: string) {
+      const t = ALL_TASKS_LIST.find((x) => x.name === name);
+      if (!t) throw new Error(`task not in fixture: ${name}`);
+      return t;
+    }
+
+    it('credits half tier points per newly-synced task', () => {
+      const easy = findTask('Open the Leagues Menu'); // easy, General region
+      const medium = ALL_TASKS_LIST.find(
+        (t) => t.tier === 'medium' && (t.region === 'General' || t.region === 'Varlamore'),
+      )!;
+      useStore.setState({ score: 0 });
+      useStore
+        .getState()
+        .applySync([easy.id, medium.id], { username: 'x', at: 0, source: 'wikisync' });
+      const expected =
+        Math.round(TIER_POINTS.easy * 0.5) + Math.round(TIER_POINTS[medium.tier] * 0.5);
+      expect(useStore.getState().score).toBe(expected);
+    });
+
+    it('does not double-credit when re-syncing the same set', () => {
+      const easy = findTask('Open the Leagues Menu');
+      useStore.setState({ score: 0 });
+      useStore.getState().applySync([easy.id], { username: 'x', at: 0, source: 'wikisync' });
+      const after = useStore.getState().score;
+      useStore.getState().applySync([easy.id], { username: 'x', at: 1, source: 'wikisync' });
+      expect(useStore.getState().score).toBe(after);
+    });
+
+    it('excludes the locked active task from half-point credit', () => {
+      // Set up an active task, then sync an arrival containing only that task.
+      const easy = ALL_TASKS_LIST.find(
+        (t) => t.tier === 'easy' && (t.region === 'General' || t.region === 'Varlamore'),
+      )!;
+      useStore.setState({ activeTask: easy.id, score: 0 });
+      useStore.getState().applySync([easy.id], { username: 'x', at: 0, source: 'wikisync' });
+      // No half-point credit; active is cleared by the existing logic.
+      expect(useStore.getState().score).toBe(0);
+      expect(useStore.getState().activeTask).toBeNull();
+    });
+
+    it('manual completions remain score-neutral', () => {
+      // Half-points apply only to sync; manual stays as it was.
+      const easy = ALL_TASKS_LIST.find((t) => t.region === 'General' || t.region === 'Varlamore')!;
+      useStore.setState({ score: 0 });
+      useStore.getState().toggleManualComplete(easy.id);
+      expect(useStore.getState().score).toBe(0);
+    });
+  });
+
+  describe('roll respects task dependencies', () => {
+    function findTask(name: string) {
+      const t = ALL_TASKS_LIST.find((x) => x.name === name);
+      if (!t) throw new Error(`task not in fixture: ${name}`);
+      return t;
+    }
+
+    it('never rolls "Open the Leagues Menu" or "Complete the Leagues Tutorial"', () => {
+      const tutorialIds = new Set([
+        findTask('Open the Leagues Menu').id,
+        findTask('Complete the Leagues Tutorial').id,
+      ]);
+      // Many rolls — none should ever surface a tutorial task.
+      for (let i = 0; i < 60; i++) {
+        useStore.getState().roll();
+        const r = useStore.getState().currentRoll!;
+        for (const tier of TIERS) {
+          if (r[tier] !== null) expect(tutorialIds.has(r[tier]!)).toBe(false);
+        }
+      }
+    });
+
+    it('never rolls "75 Easy Clue Scrolls" before "1 Easy Clue Scroll" is complete', () => {
+      const child = findTask('75 Easy Clue Scrolls');
+      for (let i = 0; i < 60; i++) {
+        useStore.getState().roll();
+        const r = useStore.getState().currentRoll!;
+        for (const tier of TIERS) {
+          expect(r[tier]).not.toBe(child.id);
+        }
+      }
+    });
+
+    it('once parent is complete, the child shows up in the eligible bucket', async () => {
+      const { eligibleByTier } = await import('../src/lib/filters');
+      const parent = findTask('1 Easy Clue Scroll');
+      const child = findTask('25 Easy Clue Scrolls');
+      const regions = new Set<'General' | 'Varlamore'>(['General', 'Varlamore']);
+      // Before completing parent: child is NOT in any tier bucket.
+      const beforeBuckets = eligibleByTier(ALL_TASKS_LIST, regions, new Set());
+      const beforeAllIds = new Set(
+        Object.values(beforeBuckets).flatMap((arr) => arr.map((t) => t.id)),
+      );
+      expect(beforeAllIds.has(child.id)).toBe(false);
+      // After completing parent: child appears in its tier bucket.
+      const afterBuckets = eligibleByTier(ALL_TASKS_LIST, regions, new Set([parent.id]));
+      const afterAllIds = new Set(
+        Object.values(afterBuckets).flatMap((arr) => arr.map((t) => t.id)),
+      );
+      expect(afterAllIds.has(child.id)).toBe(true);
+    });
+  });
+
+  describe('pacts roll and reset', () => {
+    it('starts with the center pact pre-unlocked', () => {
+      const unlocked = selectUnlockedPactIds(useStore.getState());
+      expect(unlocked).toHaveLength(1);
+      expect(unlocked[0]).toBe(CENTER_PACT_ID);
+    });
+
+    it('the pre-unlocked center counts toward the 40-pact cap', () => {
+      expect(selectPactRollsRemaining(useStore.getState())).toBe(MAX_PACTS_UNLOCKED - 1);
+    });
+
+    it('rollPact only picks nodes adjacent to something already unlocked', () => {
+      const unlockedBefore = new Set(selectUnlockedPactIds(useStore.getState()));
+      const center = ALL_PACTS_LIST.find((p) => p.id === CENTER_PACT_ID)!;
+      const centerNeighbors = new Set(center.prerequisites);
+      // Several rolls in a row — every pick must either be a neighbor of
+      // the current unlocked set, transitively, never a random distant node.
+      for (let i = 0; i < 5; i++) {
+        const picked = useStore.getState().rollPact();
+        if (picked === null) break;
+        // The picked node must have at least one neighbor in the unlocked
+        // set as it stood BEFORE this roll.
+        const p = ALL_PACTS_LIST.find((x) => x.id === picked)!;
+        expect(p.prerequisites.some((req) => unlockedBefore.has(req))).toBe(true);
+        unlockedBefore.add(picked);
+      }
+      // Sanity: every neighbor of center starts as a candidate.
+      expect(centerNeighbors.size).toBeGreaterThan(0);
+    });
+
+    it('rollPact is a no-op once the 40-pact cap is hit', () => {
+      // Seed 40 unlocked pacts directly — pretend the user has rolled out.
+      const fortyIds = ALL_PACTS_LIST.slice(0, MAX_PACTS_UNLOCKED).map((p) => p.id);
+      useStore.setState({ unlockedPactIds: fortyIds });
+      expect(selectPactRollsRemaining(useStore.getState())).toBe(0);
+      const result = useStore.getState().rollPact();
+      expect(result).toBeNull();
+      expect(selectUnlockedPactIds(useStore.getState())).toHaveLength(MAX_PACTS_UNLOCKED);
+    });
+
+    it('rollPact stops naturally before the cap if the frontier dries up', () => {
+      // Drain the frontier: keep rolling until null. With only the center
+      // initially unlocked and a connected planner graph, this should reach
+      // the cap (40) — but the test still passes if it stops earlier on a
+      // disconnected graph.
+      let safety = MAX_PACTS_UNLOCKED + 5;
+      while (useStore.getState().rollPact() !== null && safety-- > 0) {
+        // each roll appends one
+      }
+      const finalCount = selectUnlockedPactIds(useStore.getState()).length;
+      expect(finalCount).toBeLessThanOrEqual(MAX_PACTS_UNLOCKED);
+      // Further rolls remain a no-op.
+      const before = finalCount;
+      expect(useStore.getState().rollPact()).toBeNull();
+      expect(selectUnlockedPactIds(useStore.getState())).toHaveLength(before);
+    });
+
+    it('resetPacts restores the center-only initial state and decrements remaining count', () => {
+      useStore.getState().rollPact();
+      useStore.getState().rollPact();
+      expect(selectPactResetsRemaining(useStore.getState())).toBe(MAX_PACT_RESETS);
+      useStore.getState().resetPacts();
+      expect(selectUnlockedPactIds(useStore.getState())).toEqual([CENTER_PACT_ID]);
+      expect(selectPactResetsRemaining(useStore.getState())).toBe(MAX_PACT_RESETS - 1);
+    });
+
+    it('resetPacts is a no-op once 5 resets have been used', () => {
+      useStore.setState({ pactResetsUsed: MAX_PACT_RESETS, unlockedPactIds: ['x'] });
+      useStore.getState().resetPacts();
+      // Untouched: still has pre-reset state, counter unchanged.
+      expect(selectPactResetsRemaining(useStore.getState())).toBe(0);
+      expect(selectUnlockedPactIds(useStore.getState())).toEqual(['x']);
+    });
+
+    it('selectEligiblePactCount counts only nodes adjacent to unlocked', () => {
+      // Fresh state: only neighbors of the center are eligible.
+      const center = ALL_PACTS_LIST.find((p) => p.id === CENTER_PACT_ID)!;
+      const expectedFrontier = new Set(
+        center.prerequisites.filter((req) => req !== CENTER_PACT_ID),
+      );
+      expect(selectEligiblePactCount(useStore.getState())).toBe(expectedFrontier.size);
+    });
+
+    it('resetAll restores center-only unlocks and the full reset budget', () => {
+      useStore.getState().rollPact();
+      useStore.getState().resetPacts();
+      useStore.getState().resetAll();
+      expect(selectUnlockedPactIds(useStore.getState())).toEqual([CENTER_PACT_ID]);
+      expect(selectPactResetsRemaining(useStore.getState())).toBe(MAX_PACT_RESETS);
     });
   });
 });

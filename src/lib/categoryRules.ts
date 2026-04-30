@@ -225,13 +225,25 @@ export const CATEGORY_RULES: CategoryRule[] = [
       /\b(zulrah|vorkath|jad|tztok|tzkal|zuk|hydra|alchemical hydra|nightmare|nex|abyssal sire|kraken|cerberus|kalphite queen|corp|corporeal beast|leviathan|whisperer|vardorvis|duke sucellus|muspah|sarachnis|callisto|venenatis|vet'?ion|chaos elemental|crazy archaeologist|king black dragon|dagannoth (kings|prime|rex|supreme)|hespori|skotizo|grotesque guardians|kalphite|giant mole|barrows brother|barrows|ahrim|akrisae|dharok|guthan|karil|torag|verac|inferno|fight caves|gauntlet|amoxliatl|hueycoatl|royal titans|zalcano|perilous moons|moons of peril|frost crabs|leagues finale|the leviathan|the whisperer|huey|echo bosses?|sol heredit|\byama\b|doom of mokhaiotl|deep delves?|colosseum|tzhaar-ket-rak)\b/,
     ),
   },
+  // Forestry fires before minigames so its tokens (forestry event, bush
+  // event, etc.) land in their own bucket instead of being lumped together
+  // with random events under "Minigames & Activities".
+  {
+    id: 'forestry',
+    label: 'Forestry',
+    emoji: '🌲',
+    sort: 117,
+    match: re(
+      /\b(forestry event|bush event|sapling event|crying event|forestry pheasant|woodcutting guild forestry)\b/,
+    ),
+  },
   {
     id: 'minigames',
     label: 'Minigames & Activities',
     emoji: '🎯',
     sort: 9,
     match: re(
-      /\b(barbarian assault|pest control|castle wars|last man standing|lms|mahogany homes|wintertodt|tempoross|guardians of the rift|gotr|soul wars|trouble brewing|fishing trawler|pyramid plunder|gnome restaurant|tithe farm|volcanic mine|brimhaven agility|sepulchre|hallowed sepulchre|shades of mort'?ton|nightmare zone|nmz|temple trek|agility course|agility arena|farming contracts?|burthorpe games|champion'?s challenge|impetuous impulses|mage training arena|sorceress'?s garden|stealing creation|tears of guthix|underground pass|warriors'? guild|lava maze|forestry event|random event|bush event|sapling event|crying event|forestry pheasant)\b/,
+      /\b(barbarian assault|pest control|castle wars|last man standing|lms|mahogany homes|wintertodt|tempoross|guardians of the rift|gotr|soul wars|trouble brewing|fishing trawler|pyramid plunder|gnome restaurant|tithe farm|volcanic mine|brimhaven agility|sepulchre|hallowed sepulchre|shades of mort'?ton|nightmare zone|nmz|temple trek|agility course|agility arena|farming contracts?|burthorpe games|champion'?s challenge|impetuous impulses|mage training arena|sorceress'?s garden|stealing creation|tears of guthix|underground pass|warriors'? guild|lava maze|random event)\b/,
     ),
   },
   {

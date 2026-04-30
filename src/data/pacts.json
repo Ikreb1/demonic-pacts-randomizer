@@ -1,0 +1,1919 @@
+{
+  "generatedAt": "2026-04-30T16:51:50.661Z",
+  "sourcePage": "tools.runescape.wiki/demonic-pacts (planner JS bundle)",
+  "pacts": [
+    {
+      "id": "node1",
+      "name": "+50% chance to Regenerate runes, ammo and charges",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node2",
+        "node74",
+        "node44",
+        "node62",
+        "node92",
+        "node93"
+      ],
+      "effect": "+50% chance to Regenerate runes, ammo and charges\n\nRegenerate: Whenever you use runes to cast a spell, fire ammunition from a ranged weapon or consume charges with a charged weapon there is a % chance to generate an additional resource spent.",
+      "x": 0,
+      "y": 0,
+      "iconCode": "AA"
+    },
+    {
+      "id": "node10",
+      "name": "+30% chance to Regenerate runes, ammo and charges",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node6",
+        "node7",
+        "node15"
+      ],
+      "effect": "+30% chance to Regenerate runes, ammo and charges.",
+      "x": -50,
+      "y": 200,
+      "iconCode": "F3"
+    },
+    {
+      "id": "node100",
+      "name": "Healing with Demonic Pacts overheals you, up to +30% of y…",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node99",
+        "node101"
+      ],
+      "effect": "Healing with Demonic Pacts overheals you, up to +30% of your base Hitpoints level.",
+      "x": 262,
+      "y": 212,
+      "iconCode": "F13"
+    },
+    {
+      "id": "node101",
+      "name": "All attacks have +25% Prayer penetration (up to 100%)",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node100",
+        "node87"
+      ],
+      "effect": "All attacks have +25% Prayer penetration (up to 100%).",
+      "x": 325,
+      "y": 150,
+      "iconCode": "H10"
+    },
+    {
+      "id": "node102",
+      "name": "While protection prayers are not active, you restore 1 Pr…",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node66",
+        "node106"
+      ],
+      "effect": "While protection prayers are not active, you restore 1 Prayer point every 15 ticks (9s), this is sped up by 1 tick (0.6s) for every 7 worn prayer bonus you have.",
+      "x": -262,
+      "y": 87,
+      "iconCode": "I6"
+    },
+    {
+      "id": "node103",
+      "name": "All attacks have +25% Prayer penetration (up to 100%)",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node20",
+        "node106"
+      ],
+      "effect": "All attacks have +25% Prayer penetration (up to 100%).",
+      "x": -425,
+      "y": 300,
+      "iconCode": "H10"
+    },
+    {
+      "id": "node106",
+      "name": "All attacks have +25% Prayer penetration (up to 100%)",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node102",
+        "node103",
+        "node107"
+      ],
+      "effect": "All attacks have +25% Prayer penetration (up to 100%).",
+      "x": -425,
+      "y": 87,
+      "iconCode": "H10"
+    },
+    {
+      "id": "node107",
+      "name": "Air spells deal +7% damage for each active prayer",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node106",
+        "node67",
+        "node108"
+      ],
+      "effect": "Air spells deal +7% damage for each active prayer.",
+      "x": -425,
+      "y": -175,
+      "iconCode": "I1"
+    },
+    {
+      "id": "node108",
+      "name": "+1% Magic damage",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node107",
+        "node109",
+        "node111"
+      ],
+      "effect": "+1% Magic damage\n\nThis bonus is multiplied by the Tumeken's Shadow special effect.\n\n+10% accuracy in all combat styles.",
+      "x": -475,
+      "y": -225,
+      "iconCode": "FA"
+    },
+    {
+      "id": "node109",
+      "name": "Air spells have a +1% chance to max hit for every 1 praye…",
+      "kind": "capstone",
+      "branch": "tree",
+      "prerequisites": [
+        "node108"
+      ],
+      "effect": "Air spells have a +1% chance to max hit for every 1 prayer bonus, this chance is doubled against enemies weak to air spells.",
+      "x": -525,
+      "y": -275,
+      "iconCode": "L1"
+    },
+    {
+      "id": "node11",
+      "name": "+50% accuracy in all combat styles",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node7",
+        "node8",
+        "node17"
+      ],
+      "effect": "+50% accuracy in all combat styles.",
+      "x": 50,
+      "y": 200,
+      "iconCode": "F1"
+    },
+    {
+      "id": "node111",
+      "name": "Smoke spells now count as 'air' spells",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node108"
+      ],
+      "effect": "Smoke spells now count as 'air' spells.",
+      "x": -437,
+      "y": -262,
+      "iconCode": "L5"
+    },
+    {
+      "id": "node112",
+      "name": "Water spells deal increased damage the higher health perc…",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node68",
+        "node113"
+      ],
+      "effect": "Water spells deal increased damage the higher health percentage you have (+20% damage at 100% health).",
+      "x": -350,
+      "y": -250,
+      "iconCode": "I2"
+    },
+    {
+      "id": "node113",
+      "name": "+1% Magic damage",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node112",
+        "node114",
+        "node123"
+      ],
+      "effect": "+1% Magic damage\n\nThis bonus is multiplied by the Tumeken's Shadow special effect.\n\n+10% accuracy in all combat styles.",
+      "x": -400,
+      "y": -300,
+      "iconCode": "FA"
+    },
+    {
+      "id": "node114",
+      "name": "Water spell hits bounce back to you, healing you for the …",
+      "kind": "capstone",
+      "branch": "tree",
+      "prerequisites": [
+        "node113"
+      ],
+      "effect": "Water spell hits bounce back to you, healing you for the 60% of the damage dealt to your target.",
+      "x": -450,
+      "y": -350,
+      "iconCode": "L2"
+    },
+    {
+      "id": "node117",
+      "name": "Fire spell casts burn up to 6% of your maximum Hitpoints …",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node69",
+        "node118"
+      ],
+      "effect": "Fire spell casts burn up to 6% of your maximum Hitpoints to increase your damage dealt by double the amount burned for.\n\nThis effect cannot kill you directly.",
+      "x": -275,
+      "y": -325,
+      "iconCode": "I3"
+    },
+    {
+      "id": "node118",
+      "name": "+1% Magic damage",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node117",
+        "node119",
+        "node124"
+      ],
+      "effect": "+1% Magic damage\n\nThis bonus is multiplied by the Tumeken's Shadow special effect.\n\n+10% accuracy in all combat styles.",
+      "x": -325,
+      "y": -375,
+      "iconCode": "FA"
+    },
+    {
+      "id": "node119",
+      "name": "Fire spell hits apply 1 burn (max 5) and bounce to up to …",
+      "kind": "capstone",
+      "branch": "tree",
+      "prerequisites": [
+        "node118"
+      ],
+      "effect": "Fire spell hits apply 1 burn (max 5) and bounce to up to 2 nearby targets.",
+      "x": -375,
+      "y": -425,
+      "iconCode": "L3"
+    },
+    {
+      "id": "node12",
+      "name": "While an off-hand item is equipped, gain +5 melee strengt…",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node8",
+        "node19"
+      ],
+      "effect": "While an off-hand item is equipped, gain +5 melee strength, +5 ranged strength and +2% magic damage.",
+      "x": 150,
+      "y": 200,
+      "iconCode": "H4"
+    },
+    {
+      "id": "node122",
+      "name": "Attack rate with combat spells in a spellbook is sped up …",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node68",
+        "node69"
+      ],
+      "effect": "Attack rate with combat spells in a spellbook is sped up by 2 ticks.\n\nThis cannot reduce attack rate below 2 ticks (1.2s).",
+      "x": -288,
+      "y": -262,
+      "iconCode": "F7"
+    },
+    {
+      "id": "node123",
+      "name": "Ice spells now count as 'water' spells",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node113"
+      ],
+      "effect": "Ice spells now count as 'water' spells.",
+      "x": -338,
+      "y": -312,
+      "iconCode": "L6"
+    },
+    {
+      "id": "node124",
+      "name": "Blood spells now count as 'fire' spells",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node118"
+      ],
+      "effect": "Blood spells now count as 'fire' spells.",
+      "x": -388,
+      "y": -362,
+      "iconCode": "L7"
+    },
+    {
+      "id": "node127",
+      "name": "Earth spell hits reduce the enemies Defence & Magic Defen…",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node70",
+        "node128",
+        "node134"
+      ],
+      "effect": "Earth spell hits reduce the enemies Defence & Magic Defence levels by 2.",
+      "x": -200,
+      "y": -400,
+      "iconCode": "I4"
+    },
+    {
+      "id": "node128",
+      "name": "+1% Magic damage",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node127",
+        "node129",
+        "node131"
+      ],
+      "effect": "+1% Magic damage\n\nThis bonus is multiplied by the Tumeken's Shadow special effect.\n\n+10% accuracy in all combat styles.",
+      "x": -250,
+      "y": -450,
+      "iconCode": "FA"
+    },
+    {
+      "id": "node129",
+      "name": "Earth spells deal additional flat damage based on your cu…",
+      "kind": "capstone",
+      "branch": "tree",
+      "prerequisites": [
+        "node128"
+      ],
+      "effect": "Earth spells deal additional flat damage based on your current Defence level (+1 damage per 12 Defence levels).",
+      "x": -300,
+      "y": -500,
+      "iconCode": "L4"
+    },
+    {
+      "id": "node13",
+      "name": "+1% Ranged damage",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node9",
+        "node14",
+        "node20"
+      ],
+      "effect": "+1% Ranged damage.\n\n+10% accuracy in all combat styles.",
+      "x": -150,
+      "y": 250,
+      "iconCode": "HA"
+    },
+    {
+      "id": "node131",
+      "name": "Shadow spells, now count as 'earth' spells",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node128"
+      ],
+      "effect": "Shadow spells, now count as 'earth' spells.",
+      "x": -288,
+      "y": -412,
+      "iconCode": "L8"
+    },
+    {
+      "id": "node133",
+      "name": "Attack rate with powered staves is sped up by 3 ticks",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node69",
+        "node68"
+      ],
+      "effect": "Attack rate with powered staves is sped up by 3 ticks.\nAll one handed powered staves have their max hit reduced by 8\n\nThis cannot reduce attack rate below 1 tick (0.6s).",
+      "x": -238,
+      "y": -212,
+      "iconCode": "F8"
+    },
+    {
+      "id": "node134",
+      "name": "All attacks have +25% Prayer penetration (up to 100%)",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node127",
+        "node136"
+      ],
+      "effect": "All attacks have +25% Prayer penetration (up to 100%).",
+      "x": -100,
+      "y": -500,
+      "iconCode": "H10"
+    },
+    {
+      "id": "node135",
+      "name": "Whenever an attack deals 0 damage to you while either a t…",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node97",
+        "node136"
+      ],
+      "effect": "Whenever an attack deals 0 damage to you while either a two-handed shield or an off-hand is equipped, you're healed for 2 and restore 2 prayer points.",
+      "x": 0,
+      "y": -400,
+      "iconCode": "J8"
+    },
+    {
+      "id": "node136",
+      "name": "All attacks have +25% Prayer penetration (up to 100%)",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node134",
+        "node135",
+        "node139"
+      ],
+      "effect": "All attacks have +25% Prayer penetration (up to 100%).",
+      "x": 100,
+      "y": -500,
+      "iconCode": "H10"
+    },
+    {
+      "id": "node139",
+      "name": "All recoil & Thorns style effects deal additional damage …",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node136",
+        "node140",
+        "node145"
+      ],
+      "effect": "All recoil & Thorns style effects deal additional damage equal to 1% of your total defence bonuses.",
+      "x": 200,
+      "y": -400,
+      "iconCode": "J1"
+    },
+    {
+      "id": "node14",
+      "name": "Ranged prayers are 30% more effective",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node13",
+        "node15"
+      ],
+      "effect": "Ranged prayers are 30% more effective.",
+      "x": -100,
+      "y": 250,
+      "iconCode": "K1"
+    },
+    {
+      "id": "node140",
+      "name": "+1% Melee damage",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node139",
+        "node141"
+      ],
+      "effect": "+1% Melee damage.\n\n+10% accuracy in all combat styles.",
+      "x": 250,
+      "y": -450,
+      "iconCode": "GA"
+    },
+    {
+      "id": "node141",
+      "name": "When the Thorns effect triggers, it will always hit twice…",
+      "kind": "capstone",
+      "branch": "tree",
+      "prerequisites": [
+        "node140"
+      ],
+      "effect": "When the Thorns effect triggers, it will always hit twice, dealing 50% of its damage in the second hit.",
+      "x": 300,
+      "y": -500,
+      "iconCode": "M1"
+    },
+    {
+      "id": "node142",
+      "name": "Melee weapons under 1kg attack 1 tick (0.6s) faster",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node143",
+        "node163"
+      ],
+      "effect": "Melee weapons under 1kg attack 1 tick (0.6s) faster.",
+      "x": 275,
+      "y": -325,
+      "iconCode": "J2"
+    },
+    {
+      "id": "node143",
+      "name": "+1% Melee damage",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node142",
+        "node144"
+      ],
+      "effect": "+1% Melee damage.\n\n+10% accuracy in all combat styles.",
+      "x": 325,
+      "y": -375,
+      "iconCode": "GA"
+    },
+    {
+      "id": "node144",
+      "name": "Whenever you deal damage with a melee weapon, you restore…",
+      "kind": "capstone",
+      "branch": "tree",
+      "prerequisites": [
+        "node143"
+      ],
+      "effect": "Whenever you deal damage with a melee weapon, you restore 2% special attack energy per hit.",
+      "x": 375,
+      "y": -425,
+      "iconCode": "M2"
+    },
+    {
+      "id": "node145",
+      "name": "+1% Melee damage",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node84",
+        "node139",
+        "node146"
+      ],
+      "effect": "+1% Melee damage.\n\n+10% accuracy in all combat styles.",
+      "x": 150,
+      "y": -350,
+      "iconCode": "GA"
+    },
+    {
+      "id": "node146",
+      "name": "Attacking with a melee weapon or Thorns has a +10% chance…",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node79",
+        "node145"
+      ],
+      "effect": "Attacking with a melee weapon or Thorns has a +10% chance to heal you based off your distance between you and your target (1 tile = 1 health).",
+      "x": 163,
+      "y": -287,
+      "iconCode": "G10"
+    },
+    {
+      "id": "node15",
+      "name": "+1% Ranged damage",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node10",
+        "node14",
+        "node16",
+        "node21"
+      ],
+      "effect": "+1% Ranged damage.\n\n+10% accuracy in all combat styles.",
+      "x": -50,
+      "y": 250,
+      "iconCode": "HA"
+    },
+    {
+      "id": "node150",
+      "name": "For each unique heavy melee weapon (>=1kg) in your invent…",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node151",
+        "node161"
+      ],
+      "effect": "For each unique heavy melee weapon (>=1kg) in your inventory, your chance of a Blindbag trigger is increased by 2% up to a maximum of 10% (5 weapons).",
+      "x": 350,
+      "y": -250,
+      "iconCode": "J3"
+    },
+    {
+      "id": "node151",
+      "name": "+1% Melee damage",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node150",
+        "node152"
+      ],
+      "effect": "+1% Melee damage.\n\n+10% accuracy in all combat styles.",
+      "x": 400,
+      "y": -300,
+      "iconCode": "GA"
+    },
+    {
+      "id": "node152",
+      "name": "For each unique heavy melee weapon (>=1kg) in your invent…",
+      "kind": "capstone",
+      "branch": "tree",
+      "prerequisites": [
+        "node151"
+      ],
+      "effect": "For each unique heavy melee weapon (>=1kg) in your inventory, the max hit of your Blindbag attacks is increased by 2% up to a maximum of 10% (5 weapons).",
+      "x": 450,
+      "y": -350,
+      "iconCode": "M3"
+    },
+    {
+      "id": "node153",
+      "name": "Your maximum hit when attacking with a melee weapon is in…",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node154",
+        "node156",
+        "node164"
+      ],
+      "effect": "Your maximum hit when attacking with a melee weapon is increased by 4% and an additional 4% for every 3 tiles of distance between you and your target.",
+      "x": 425,
+      "y": -175,
+      "iconCode": "J4"
+    },
+    {
+      "id": "node154",
+      "name": "+1% Melee damage",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node153",
+        "node155"
+      ],
+      "effect": "+1% Melee damage.\n\n+10% accuracy in all combat styles.",
+      "x": 475,
+      "y": -225,
+      "iconCode": "GA"
+    },
+    {
+      "id": "node155",
+      "name": "If your melee attack range is at least 4, it is increased…",
+      "kind": "capstone",
+      "branch": "tree",
+      "prerequisites": [
+        "node154"
+      ],
+      "effect": "If your melee attack range is at least 4, it is increased to 7\n\nAll halberds slower than 5 ticks have their attack rate set to 5 ticks (3.0s).",
+      "x": 525,
+      "y": -275,
+      "iconCode": "M4"
+    },
+    {
+      "id": "node156",
+      "name": "+1% Melee damage",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node80",
+        "node88",
+        "node153"
+      ],
+      "effect": "+1% Melee damage.\n\n+10% accuracy in all combat styles.",
+      "x": 375,
+      "y": -125,
+      "iconCode": "GA"
+    },
+    {
+      "id": "node157",
+      "name": "When hitting a target with a two handed melee weapon, you…",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node80",
+        "node161"
+      ],
+      "effect": "When hitting a target with a two handed melee weapon, you have a 5% chance to trigger a Ranged echo as if you have a bow, crossbow and thrown weapon equipped.\n\nRanged echo: An additional ranged attack which rolls with your melee stats instead of ranged. Echo attacks cannot trigger additional echo attacks.",
+      "x": 312,
+      "y": -137,
+      "iconCode": "G9"
+    },
+    {
+      "id": "node16",
+      "name": "Ranged strength is increased by 1 for every 10 hitpoints …",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node15",
+        "node17"
+      ],
+      "effect": "Ranged strength is increased by 1 for every 10 hitpoints difference between your current hitpoints and Hitpoints level.",
+      "x": 0,
+      "y": 250,
+      "iconCode": "K2"
+    },
+    {
+      "id": "node161",
+      "name": "+1% Melee damage",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node86",
+        "node150",
+        "node157",
+        "node165"
+      ],
+      "effect": "+1% Melee damage.\n\n+10% accuracy in all combat styles.",
+      "x": 300,
+      "y": -200,
+      "iconCode": "GA"
+    },
+    {
+      "id": "node162",
+      "name": "Melee strength is increased by 50% of your worn prayer bonus",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node163",
+        "node165"
+      ],
+      "effect": "Melee strength is increased by 50% of your worn prayer bonus.",
+      "x": 238,
+      "y": -212,
+      "iconCode": "G7"
+    },
+    {
+      "id": "node163",
+      "name": "+1% Melee damage",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node79",
+        "node85",
+        "node142",
+        "node162"
+      ],
+      "effect": "+1% Melee damage.\n\n+10% accuracy in all combat styles.",
+      "x": 225,
+      "y": -275,
+      "iconCode": "GA"
+    },
+    {
+      "id": "node164",
+      "name": "All attacks have +25% Prayer penetration (up to 100%)",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node87",
+        "node91",
+        "node153"
+      ],
+      "effect": "All attacks have +25% Prayer penetration (up to 100%).",
+      "x": 425,
+      "y": 87,
+      "iconCode": "H10"
+    },
+    {
+      "id": "node165",
+      "name": "Attacks with a melee weapon can consume 5 overhealed hitp…",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node161",
+        "node162"
+      ],
+      "effect": "Attacks with a melee weapon can consume 5 overhealed hitpoints (if available), increasing your minimum hit on that attack by 5.",
+      "x": 288,
+      "y": -262,
+      "iconCode": "G8"
+    },
+    {
+      "id": "node166",
+      "name": "Whenever you Regenerate charges from a powered staff or w…",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node67",
+        "node53"
+      ],
+      "effect": "Whenever you Regenerate charges from a powered staff or wand, also Regenerate 1 air rune.",
+      "x": -363,
+      "y": -187,
+      "iconCode": "F6"
+    },
+    {
+      "id": "node167",
+      "name": "Whenever you Regenerate charges from a powered staff or w…",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node54",
+        "node70"
+      ],
+      "effect": "Whenever you Regenerate charges from a powered staff or wand, also Regenerate 1 earth rune.",
+      "x": -163,
+      "y": -287,
+      "iconCode": "F9"
+    },
+    {
+      "id": "node17",
+      "name": "+1% Ranged damage",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node11",
+        "node16",
+        "node18",
+        "node21"
+      ],
+      "effect": "+1% Ranged damage.\n\n+10% accuracy in all combat styles.",
+      "x": 50,
+      "y": 250,
+      "iconCode": "HA"
+    },
+    {
+      "id": "node18",
+      "name": "Ranged echoes can now trigger additional Ranged echoes at…",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node17",
+        "node19"
+      ],
+      "effect": "Ranged echoes can now trigger additional Ranged echoes at half your chance to trigger them (up to 4 times).",
+      "x": 100,
+      "y": 250,
+      "iconCode": "K3"
+    },
+    {
+      "id": "node19",
+      "name": "+1% Ranged damage",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node12",
+        "node18",
+        "node22"
+      ],
+      "effect": "+1% Ranged damage.\n\n+10% accuracy in all combat styles.",
+      "x": 150,
+      "y": 250,
+      "iconCode": "HA"
+    },
+    {
+      "id": "node2",
+      "name": "Whenever you Regenerate ammo, you have a +25% chance to f…",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node1",
+        "node3",
+        "node4",
+        "node5"
+      ],
+      "effect": "Whenever you Regenerate ammo, you have a +25% chance to fire a Ranged echo against the enemy.\n\nRanged echo: An additional ranged attack which rolls with your ranged accuracy against the targets ranged defence. Echo attacks cannot trigger additional echo attacks.",
+      "x": 0,
+      "y": 50,
+      "iconCode": "B2"
+    },
+    {
+      "id": "node20",
+      "name": "Bows attack 1 tick (0.6s) faster",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node13",
+        "node23",
+        "node103"
+      ],
+      "effect": "Bows attack 1 tick (0.6s) faster.",
+      "x": -150,
+      "y": 300,
+      "iconCode": "K4"
+    },
+    {
+      "id": "node21",
+      "name": "Crossbows attack 2 ticks (1.2s) slower, but deal +70% damage",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node15",
+        "node17",
+        "node24"
+      ],
+      "effect": "Crossbows attack 2 ticks (1.2s) slower, but deal +70% damage.",
+      "x": 0,
+      "y": 300,
+      "iconCode": "K8"
+    },
+    {
+      "id": "node22",
+      "name": "While a thrown weapon is equipped, ranged strength is als…",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node19",
+        "node25",
+        "node91"
+      ],
+      "effect": "While a thrown weapon is equipped, ranged strength is also increased by your 80% of your melee strength.",
+      "x": 150,
+      "y": 300,
+      "iconCode": "K6"
+    },
+    {
+      "id": "node23",
+      "name": "+1% Ranged damage",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node20",
+        "node27",
+        "node38"
+      ],
+      "effect": "+1% Ranged damage.\n\n+10% accuracy in all combat styles.",
+      "x": -150,
+      "y": 350,
+      "iconCode": "HA"
+    },
+    {
+      "id": "node24",
+      "name": "+1% Ranged damage",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node21",
+        "node30",
+        "node38",
+        "node39"
+      ],
+      "effect": "+1% Ranged damage.\n\n+10% accuracy in all combat styles.",
+      "x": 0,
+      "y": 350,
+      "iconCode": "HA"
+    },
+    {
+      "id": "node25",
+      "name": "+1% Ranged damage",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node22",
+        "node33",
+        "node39"
+      ],
+      "effect": "+1% Ranged damage.\n\n+10% accuracy in all combat styles.",
+      "x": 150,
+      "y": 350,
+      "iconCode": "HA"
+    },
+    {
+      "id": "node26",
+      "name": "Hitting with a bow increases your bows minimum hit by 1, …",
+      "kind": "capstone",
+      "branch": "tree",
+      "prerequisites": [
+        "node27"
+      ],
+      "effect": "Hitting with a bow increases your bows minimum hit by 1, capping at 15% of your base maximum hit. This bonus is halved when you take damage that you didn't or couldn't pray against.",
+      "x": -185,
+      "y": 450,
+      "iconCode": "N4"
+    },
+    {
+      "id": "node27",
+      "name": "+1% Ranged damage",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node23",
+        "node26",
+        "node28"
+      ],
+      "effect": "+1% Ranged damage.\n\n+10% accuracy in all combat styles.",
+      "x": -150,
+      "y": 400,
+      "iconCode": "HA"
+    },
+    {
+      "id": "node28",
+      "name": "Hitting with a bow increases your bows maximum hit by 1, …",
+      "kind": "capstone",
+      "branch": "tree",
+      "prerequisites": [
+        "node27"
+      ],
+      "effect": "Hitting with a bow increases your bows maximum hit by 1, capping at 15% of your base maximum hit. This bonus is halved when you take damage that you didn't or couldn't pray against.",
+      "x": -115,
+      "y": 450,
+      "iconCode": "N5"
+    },
+    {
+      "id": "node29",
+      "name": "Crossbow hits always max hit",
+      "kind": "capstone",
+      "branch": "tree",
+      "prerequisites": [
+        "node30"
+      ],
+      "effect": "Crossbow hits always max hit.",
+      "x": -35,
+      "y": 450,
+      "iconCode": "N6"
+    },
+    {
+      "id": "node3",
+      "name": "While a bow is equipped, Ranged echoes never miss",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node2",
+        "node6"
+      ],
+      "effect": "While a bow is equipped, Ranged echoes never miss.\n\nAll bow pacts will not work with an Eclipse Atlatl.",
+      "x": -100,
+      "y": 100,
+      "iconCode": "E1"
+    },
+    {
+      "id": "node30",
+      "name": "+1% Ranged damage",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node24",
+        "node29",
+        "node31"
+      ],
+      "effect": "+1% Ranged damage.\n\n+10% accuracy in all combat styles.",
+      "x": 0,
+      "y": 400,
+      "iconCode": "HA"
+    },
+    {
+      "id": "node31",
+      "name": "Crossbows attacks roll accuracy twice",
+      "kind": "capstone",
+      "branch": "tree",
+      "prerequisites": [
+        "node30"
+      ],
+      "effect": "Crossbows attacks roll accuracy twice.",
+      "x": 35,
+      "y": 450,
+      "iconCode": "N7"
+    },
+    {
+      "id": "node32",
+      "name": "While a thrown weapon is equipped, increase your ranged a…",
+      "kind": "capstone",
+      "branch": "tree",
+      "prerequisites": [
+        "node33"
+      ],
+      "effect": "While a thrown weapon is equipped, increase your ranged accuracy by 60.",
+      "x": 115,
+      "y": 450,
+      "iconCode": "N8"
+    },
+    {
+      "id": "node33",
+      "name": "+1% Ranged damage",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node25",
+        "node32",
+        "node34"
+      ],
+      "effect": "+1% Ranged damage.\n\n+10% accuracy in all combat styles.",
+      "x": 150,
+      "y": 400,
+      "iconCode": "HA"
+    },
+    {
+      "id": "node34",
+      "name": "When attacking with a thrown weapon, you now throw at an …",
+      "kind": "capstone",
+      "branch": "tree",
+      "prerequisites": [
+        "node33"
+      ],
+      "effect": "When attacking with a thrown weapon, you now throw at an additional nearby target.",
+      "x": 185,
+      "y": 450,
+      "iconCode": "N9"
+    },
+    {
+      "id": "node38",
+      "name": "Whenever you Regenerate ammo, you have a +5% chance to fi…",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node23",
+        "node24"
+      ],
+      "effect": "Whenever you Regenerate ammo, you have a +5% chance to fire a Ranged echo against the enemy.\n\nRanged echo: An additional ranged attack which rolls with your ranged accuracy against the targets ranged defence. Echo attacks cannot trigger additional echo attacks.",
+      "x": -75,
+      "y": 360,
+      "iconCode": "K10"
+    },
+    {
+      "id": "node39",
+      "name": "Whenever you Regenerate ammo, you have a +5% chance to fi…",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node24",
+        "node25"
+      ],
+      "effect": "Whenever you Regenerate ammo, you have a +5% chance to fire a Ranged echo against the enemy.\n\nRanged echo: An additional ranged attack which rolls with your ranged accuracy against the targets ranged defence. Echo attacks cannot trigger additional echo attacks.",
+      "x": 75,
+      "y": 360,
+      "iconCode": "K10"
+    },
+    {
+      "id": "node4",
+      "name": "While a crossbow is equipped, you have a +15% chance to t…",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node2",
+        "node7"
+      ],
+      "effect": "While a crossbow is equipped, you have a +15% chance to trigger Ranged echoes\n\nAll crossbow weapon pacts will work with ballistae.",
+      "x": 0,
+      "y": 100,
+      "iconCode": "E2"
+    },
+    {
+      "id": "node43",
+      "name": "Melee range is doubled whilst using two handed weapons",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node74",
+        "node83"
+      ],
+      "effect": "Melee range is doubled whilst using two handed weapons.",
+      "x": 237,
+      "y": -63,
+      "iconCode": "D4"
+    },
+    {
+      "id": "node44",
+      "name": "Whenever your combat spells Regenerate runes, your Magic …",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node1",
+        "node45",
+        "node46",
+        "node47",
+        "node48"
+      ],
+      "effect": "Whenever your combat spells Regenerate runes, your Magic level is boosted by 1 for 30 ticks (18s).\n\nThis boost cannot exceed 10 Magic levels and additional triggers reset the duration.",
+      "x": -88,
+      "y": -63,
+      "iconCode": "B1"
+    },
+    {
+      "id": "node45",
+      "name": "Whenever your combat spells Regenerate air runes, you hav…",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node44",
+        "node55"
+      ],
+      "effect": "Whenever your combat spells Regenerate air runes, you have a 15% chance to restore 1 prayer point per rune regenerated.",
+      "x": -237,
+      "y": -63,
+      "iconCode": "C1"
+    },
+    {
+      "id": "node46",
+      "name": "Whenever your combat spells Regenerate water runes, you'r…",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node44",
+        "node56"
+      ],
+      "effect": "Whenever your combat spells Regenerate water runes, you're healed for 1 per rune regenerated.",
+      "x": -200,
+      "y": -100,
+      "iconCode": "C2"
+    },
+    {
+      "id": "node47",
+      "name": "Whenever your combat spells Regenerate fire runes, the da…",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node44",
+        "node56"
+      ],
+      "effect": "Whenever your combat spells Regenerate fire runes, the damage of your next spell hit is increased by 1 per rune regenerated.",
+      "x": -125,
+      "y": -175,
+      "iconCode": "C3"
+    },
+    {
+      "id": "node48",
+      "name": "Whenever your combat spells Regenerate earth runes, your …",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node44",
+        "node57"
+      ],
+      "effect": "Whenever your combat spells Regenerate earth runes, your Defence level is boosted by 1 per rune regenerated for 30 ticks (18s).\n\nThis boost cannot exceed 20% of your base Defence level and additional triggers reset the duration.",
+      "x": -88,
+      "y": -212,
+      "iconCode": "C4"
+    },
+    {
+      "id": "node5",
+      "name": "While a thrown weapon is equipped, Ranged echoes have a 2…",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node2",
+        "node8"
+      ],
+      "effect": "While a thrown weapon is equipped, Ranged echoes have a 20% chance to max hit\n\nAll thrown weapon pacts will work with an Eclipse Atlatl.",
+      "x": 100,
+      "y": 100,
+      "iconCode": "E3"
+    },
+    {
+      "id": "node53",
+      "name": "Whenever you Regenerate charges from a powered staff or w…",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node68",
+        "node166"
+      ],
+      "effect": "Whenever you Regenerate charges from a powered staff or wand, also Regenerate 1 water rune.",
+      "x": -313,
+      "y": -137,
+      "iconCode": "F5"
+    },
+    {
+      "id": "node54",
+      "name": "Whenever you Regenerate charges from a powered staff or w…",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node69",
+        "node167"
+      ],
+      "effect": "Whenever you Regenerate charges from a powered staff or wand, also Regenerate 1 fire rune.",
+      "x": -213,
+      "y": -337,
+      "iconCode": "F10"
+    },
+    {
+      "id": "node55",
+      "name": "+25% accuracy in all combat styles",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node45",
+        "node58",
+        "node59"
+      ],
+      "effect": "+25% accuracy in all combat styles.",
+      "x": -287,
+      "y": -112,
+      "iconCode": "CA"
+    },
+    {
+      "id": "node56",
+      "name": "+25% accuracy in all combat styles",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node46",
+        "node47",
+        "node59",
+        "node60"
+      ],
+      "effect": "+25% accuracy in all combat styles.",
+      "x": -213,
+      "y": -187,
+      "iconCode": "CA"
+    },
+    {
+      "id": "node57",
+      "name": "+25% accuracy in all combat styles",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node48",
+        "node60",
+        "node61"
+      ],
+      "effect": "+25% accuracy in all combat styles.",
+      "x": -138,
+      "y": -262,
+      "iconCode": "CA"
+    },
+    {
+      "id": "node58",
+      "name": "+50% accuracy in all combat styles",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node55",
+        "node63",
+        "node67"
+      ],
+      "effect": "+50% accuracy in all combat styles.",
+      "x": -325,
+      "y": -75,
+      "iconCode": "F1"
+    },
+    {
+      "id": "node59",
+      "name": "Healing with Demonic Pacts overheals you, up to +30% of y…",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node55",
+        "node56",
+        "node68"
+      ],
+      "effect": "Healing with Demonic Pacts overheals you, up to +30% of your base Hitpoints level.",
+      "x": -250,
+      "y": -150,
+      "iconCode": "F13"
+    },
+    {
+      "id": "node6",
+      "name": "+5 permanent Defence level boost",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node3",
+        "node9",
+        "node10",
+        "node64"
+      ],
+      "effect": "+5 permanent Defence level boost.",
+      "x": -100,
+      "y": 150,
+      "iconCode": "DA"
+    },
+    {
+      "id": "node60",
+      "name": "+30% chance to Regenerate runes, ammo and charges",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node56",
+        "node57",
+        "node69"
+      ],
+      "effect": "+30% chance to Regenerate runes, ammo and charges.",
+      "x": -175,
+      "y": -225,
+      "iconCode": "F3"
+    },
+    {
+      "id": "node61",
+      "name": "+15 permanent Defence level boost",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node57",
+        "node70",
+        "node94"
+      ],
+      "effect": "+15 permanent Defence level boost.",
+      "x": -100,
+      "y": -300,
+      "iconCode": "F4"
+    },
+    {
+      "id": "node62",
+      "name": "+5% chance to Regenerate runes, ammo and charges",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node1",
+        "node63",
+        "node64"
+      ],
+      "effect": "+5% chance to Regenerate runes, ammo and charges.",
+      "x": -200,
+      "y": 25,
+      "iconCode": "BA"
+    },
+    {
+      "id": "node63",
+      "name": "+5 permanent Defence level boost",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node58",
+        "node62"
+      ],
+      "effect": "+5 permanent Defence level boost.",
+      "x": -325,
+      "y": 25,
+      "iconCode": "DA"
+    },
+    {
+      "id": "node64",
+      "name": "+5 permanent Defence level boost",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node6",
+        "node62",
+        "node65"
+      ],
+      "effect": "+5 permanent Defence level boost.",
+      "x": -200,
+      "y": 150,
+      "iconCode": "DA"
+    },
+    {
+      "id": "node65",
+      "name": "Whenever you max hit from at least 3 tiles away, your nex…",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node64",
+        "node66"
+      ],
+      "effect": "Whenever you max hit from at least 3 tiles away, your next hit from a different style deals +25% damage.",
+      "x": -262,
+      "y": 212,
+      "iconCode": "H6"
+    },
+    {
+      "id": "node66",
+      "name": "All attacks have +25% Prayer penetration (up to 100%)",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node65",
+        "node102"
+      ],
+      "effect": "All attacks have +25% Prayer penetration (up to 100%).",
+      "x": -325,
+      "y": 150,
+      "iconCode": "H10"
+    },
+    {
+      "id": "node67",
+      "name": "+1% Magic damage",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node58",
+        "node107",
+        "node166"
+      ],
+      "effect": "+1% Magic damage\n\nThis bonus is multiplied by the Tumeken's Shadow special effect.\n\n+10% accuracy in all combat styles.",
+      "x": -375,
+      "y": -125,
+      "iconCode": "FA"
+    },
+    {
+      "id": "node68",
+      "name": "+1% Magic damage",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node53",
+        "node59",
+        "node112",
+        "node122",
+        "node133"
+      ],
+      "effect": "+1% Magic damage\n\nThis bonus is multiplied by the Tumeken's Shadow special effect.\n\n+10% accuracy in all combat styles.",
+      "x": -300,
+      "y": -200,
+      "iconCode": "FA"
+    },
+    {
+      "id": "node69",
+      "name": "+1% Magic damage",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node54",
+        "node60",
+        "node117",
+        "node133",
+        "node122"
+      ],
+      "effect": "+1% Magic damage\n\nThis bonus is multiplied by the Tumeken's Shadow special effect.\n\n+10% accuracy in all combat styles.",
+      "x": -225,
+      "y": -275,
+      "iconCode": "FA"
+    },
+    {
+      "id": "node7",
+      "name": "+25% accuracy in all combat styles",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node4",
+        "node10",
+        "node11"
+      ],
+      "effect": "+25% accuracy in all combat styles.",
+      "x": 0,
+      "y": 150,
+      "iconCode": "CA"
+    },
+    {
+      "id": "node70",
+      "name": "+1% Magic damage",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node61",
+        "node127",
+        "node167"
+      ],
+      "effect": "+1% Magic damage\n\nThis bonus is multiplied by the Tumeken's Shadow special effect.\n\n+10% accuracy in all combat styles.",
+      "x": -150,
+      "y": -350,
+      "iconCode": "FA"
+    },
+    {
+      "id": "node71",
+      "name": "While you have a shield equipped you gain the Thorns effect",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node74",
+        "node81"
+      ],
+      "effect": "While you have a shield equipped you gain the Thorns effect\n\nThorns: Whenever you're attacked enemies will be instantly hit with 3 melee damage. This effect can only trigger once per hit-splat and will trigger if you take 0 damage. Other pacts will specify if they effect Thorns.",
+      "x": 88,
+      "y": -212,
+      "iconCode": "D1"
+    },
+    {
+      "id": "node72",
+      "name": "Melee weapons under 1kg always trigger an additional mele…",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node74",
+        "node82"
+      ],
+      "effect": "Melee weapons under 1kg always trigger an additional melee hit using 40% of your base max hit (minimum of 1)\n\nThis will not trigger on special attacks.",
+      "x": 125,
+      "y": -175,
+      "iconCode": "D2"
+    },
+    {
+      "id": "node73",
+      "name": "Each melee attack with a heavy melee weapon (>=1kg) has a…",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node74",
+        "node82"
+      ],
+      "effect": "Each melee attack with a heavy melee weapon (>=1kg) has a 15% chance to trigger an instant Blindbag attack.\n\nBlindbag: Automatically attack your current target with a random heavy melee weapon in your inventory as though you have equipped it, ignoring all stat requirements and attack delay. Blindbag attacks can trigger additional Blindbag attacks but cannot trigger from special attacks.",
+      "x": 200,
+      "y": -100,
+      "iconCode": "D3"
+    },
+    {
+      "id": "node74",
+      "name": "Your minimum hit when attacking with a melee weapon is in…",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node1",
+        "node71",
+        "node72",
+        "node73",
+        "node43"
+      ],
+      "effect": "Your minimum hit when attacking with a melee weapon is increased by 3.\n\nThis minimum hit is further increased by 3 for each additional tile between you and the target.",
+      "x": 88,
+      "y": -63,
+      "iconCode": "B3"
+    },
+    {
+      "id": "node79",
+      "name": "Melee weapons that are under 1kg or one handed, increase …",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node146",
+        "node163"
+      ],
+      "effect": "Melee weapons that are under 1kg or one handed, increase your melee strength by 20% of your Strength level.",
+      "x": 213,
+      "y": -337,
+      "iconCode": "G6"
+    },
+    {
+      "id": "node8",
+      "name": "+5 permanent Defence level boost",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node5",
+        "node11",
+        "node12",
+        "node99"
+      ],
+      "effect": "+5 permanent Defence level boost.",
+      "x": 100,
+      "y": 150,
+      "iconCode": "DA"
+    },
+    {
+      "id": "node80",
+      "name": "Attacking with a melee weapon or Thorns has a +10% chance…",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node156",
+        "node157"
+      ],
+      "effect": "Attacking with a melee weapon or Thorns has a +10% chance to heal you based off your distance between you and your target (1 tile = 1 health).",
+      "x": 362,
+      "y": -187,
+      "iconCode": "G10"
+    },
+    {
+      "id": "node81",
+      "name": "+5 permanent Defence level boost",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node71",
+        "node84",
+        "node85"
+      ],
+      "effect": "+5 permanent Defence level boost.",
+      "x": 138,
+      "y": -262,
+      "iconCode": "DA"
+    },
+    {
+      "id": "node82",
+      "name": "+25% accuracy in all combat styles",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node72",
+        "node73",
+        "node85",
+        "node86"
+      ],
+      "effect": "+25% accuracy in all combat styles.",
+      "x": 213,
+      "y": -187,
+      "iconCode": "CA"
+    },
+    {
+      "id": "node83",
+      "name": "+25% accuracy in all combat styles",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node43",
+        "node86",
+        "node88"
+      ],
+      "effect": "+25% accuracy in all combat styles.",
+      "x": 287,
+      "y": -112,
+      "iconCode": "CA"
+    },
+    {
+      "id": "node84",
+      "name": "While you have a shield equipped, you have a 0.1% chance …",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node81",
+        "node95",
+        "node145"
+      ],
+      "effect": "While you have a shield equipped, you have a 0.1% chance per Defence level to reflect all damage back to the attacker.",
+      "x": 100,
+      "y": -300,
+      "iconCode": "G1"
+    },
+    {
+      "id": "node85",
+      "name": "Special attacks have a 20% chance to not consume any energy",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node81",
+        "node82",
+        "node163"
+      ],
+      "effect": "Special attacks have a 20% chance to not consume any energy.",
+      "x": 175,
+      "y": -225,
+      "iconCode": "G2"
+    },
+    {
+      "id": "node86",
+      "name": "+50% accuracy in all combat styles",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node82",
+        "node83",
+        "node161"
+      ],
+      "effect": "+50% accuracy in all combat styles.",
+      "x": 250,
+      "y": -150,
+      "iconCode": "F1"
+    },
+    {
+      "id": "node87",
+      "name": "+30% chance to Regenerate runes, ammo and charges",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node101",
+        "node164"
+      ],
+      "effect": "+30% chance to Regenerate runes, ammo and charges.",
+      "x": 262,
+      "y": 87,
+      "iconCode": "F3"
+    },
+    {
+      "id": "node88",
+      "name": "Whenever you attack an enemy from at least 2 tiles away w…",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node83",
+        "node98",
+        "node156"
+      ],
+      "effect": "Whenever you attack an enemy from at least 2 tiles away with any style, you restore 2% special attack energy.",
+      "x": 325,
+      "y": -75,
+      "iconCode": "G4"
+    },
+    {
+      "id": "node9",
+      "name": "You have a 5% chance per attack in any style to roll max …",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node6",
+        "node13"
+      ],
+      "effect": "You have a 5% chance per attack in any style to roll max accuracy, this is increased by 5% for each tile distance between you and your target.",
+      "x": -150,
+      "y": 200,
+      "iconCode": "H1"
+    },
+    {
+      "id": "node91",
+      "name": "All attacks have +25% Prayer penetration (up to 100%)",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node22",
+        "node164"
+      ],
+      "effect": "All attacks have +25% Prayer penetration (up to 100%).",
+      "x": 425,
+      "y": 300,
+      "iconCode": "H10"
+    },
+    {
+      "id": "node92",
+      "name": "+5% chance to Regenerate runes, ammo and charges",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node1",
+        "node94",
+        "node95"
+      ],
+      "effect": "+5% chance to Regenerate runes, ammo and charges.",
+      "x": 0,
+      "y": -200,
+      "iconCode": "BA"
+    },
+    {
+      "id": "node93",
+      "name": "+5% chance to Regenerate runes, ammo and charges",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node1",
+        "node98",
+        "node99"
+      ],
+      "effect": "+5% chance to Regenerate runes, ammo and charges.",
+      "x": 200,
+      "y": 25,
+      "iconCode": "BA"
+    },
+    {
+      "id": "node94",
+      "name": "+5 permanent Defence level boost",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node61",
+        "node92",
+        "node96"
+      ],
+      "effect": "+5 permanent Defence level boost.",
+      "x": -50,
+      "y": -250,
+      "iconCode": "DA"
+    },
+    {
+      "id": "node95",
+      "name": "+5 permanent Defence level boost",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node84",
+        "node92"
+      ],
+      "effect": "+5 permanent Defence level boost.",
+      "x": 50,
+      "y": -250,
+      "iconCode": "DA"
+    },
+    {
+      "id": "node96",
+      "name": "Healing with Demonic Pacts overheals you, up to +30% of y…",
+      "kind": "major",
+      "branch": "tree",
+      "prerequisites": [
+        "node94",
+        "node97"
+      ],
+      "effect": "Healing with Demonic Pacts overheals you, up to +30% of your base Hitpoints level.",
+      "x": 0,
+      "y": -300,
+      "iconCode": "F13"
+    },
+    {
+      "id": "node97",
+      "name": "All attacks have +25% Prayer penetration (up to 100%)",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node96",
+        "node135"
+      ],
+      "effect": "All attacks have +25% Prayer penetration (up to 100%).",
+      "x": -50,
+      "y": -350,
+      "iconCode": "H10"
+    },
+    {
+      "id": "node98",
+      "name": "+5 permanent Defence level boost",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node88",
+        "node93"
+      ],
+      "effect": "+5 permanent Defence level boost.",
+      "x": 325,
+      "y": 25,
+      "iconCode": "DA"
+    },
+    {
+      "id": "node99",
+      "name": "+5 permanent Defence level boost",
+      "kind": "minor",
+      "branch": "tree",
+      "prerequisites": [
+        "node8",
+        "node93",
+        "node100"
+      ],
+      "effect": "+5 permanent Defence level boost.",
+      "x": 200,
+      "y": 150,
+      "iconCode": "DA"
+    }
+  ],
+  "iconsGeneratedAt": "2026-04-30T17:12:27.086Z"
+}
