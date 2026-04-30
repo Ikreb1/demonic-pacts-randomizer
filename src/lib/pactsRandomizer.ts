@@ -8,13 +8,22 @@ const MINOR_WEIGHT_MULT = 0.5;
 // in a full 40-roll run, with every capstone enjoying roughly equal
 // odds (per-capstone hit rate ~20–40%). Lower BASE pulls harder.
 const CAPSTONE_DECAY_BASE = 0.45;
-// How much to compensate for capstones that sit further from the centre
-// than the closest one. The planner's bottom row is 9 hops out while the
-// top is 7. We measure equality at the *side* level, normalised by how
-// many capstones each side has (UL=4, UR=4, LO=6), and 0.8 lands all
-// three sides at ~30% saturation per run (ratio < 1.1×). Lower values
-// favour the upper sides; higher values overcorrect to the bottom.
-const REMOTENESS_COMPENSATION = 0.8;
+// Compensation for capstones that sit further from the centre than the
+// closest ones. The planner has three capstone depths: 7 (upper corners),
+// 8 (upper inner), 9 (lower row). Two-tier formula:
+//   - REMOTENESS_UNIFORM applies linearly to every hop of remoteness, so
+//     d=8 inner capstones get a small boost over the raw-distance favourite
+//     (d=7 corners). Without this, d=8 was starved (~25%) because d=7
+//     dominates on raw graph distance.
+//   - REMOTENESS_DEEP_BONUS applies *additionally* beyond DEADBAND hops,
+//     compensating the d=9 lower row whose deeper geometry the linear term
+//     alone can't recover.
+// Tuned against the real planner so all three depth bands land in roughly
+// the 30–35% hit-rate range and side saturations sit within ~1.1× of
+// each other.
+const REMOTENESS_UNIFORM = 0.2;
+const REMOTENESS_DEADBAND = 1;
+const REMOTENESS_DEEP_BONUS = 0.6;
 
 /**
  * Pick the next pact to unlock, weighted toward nodes that lead to a
@@ -82,7 +91,10 @@ function weightFor(
   let bestScore = 0;
   for (const [id, d] of distances) {
     if (!capstoneIds.has(id)) continue;
-    const compensation = (remoteness.get(id) ?? 0) * REMOTENESS_COMPENSATION;
+    const rem = remoteness.get(id) ?? 0;
+    const compensation =
+      rem * REMOTENESS_UNIFORM +
+      Math.max(0, rem - REMOTENESS_DEADBAND) * REMOTENESS_DEEP_BONUS;
     const effective = Math.max(0, d - compensation);
     const score = Math.pow(CAPSTONE_DECAY_BASE, effective);
     if (score > bestScore) bestScore = score;
