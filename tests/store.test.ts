@@ -948,4 +948,46 @@ describe('store roll-and-lock flow', () => {
       expect(selectPactResetsRemaining(useStore.getState())).toBe(MAX_PACT_RESETS);
     });
   });
+
+  describe('hiscores state actions', () => {
+    it('setHiscoresBaseUrl trims whitespace', () => {
+      useStore.getState().setHiscoresBaseUrl('  https://example.test/  ');
+      expect(useStore.getState().hiscoresProxyBaseUrl).toBe('https://example.test/');
+    });
+
+    it('recordHiscoresSubmit sets timestamp + score and clears any prior error', () => {
+      useStore.setState({
+        hiscoresLastError: { at: 1, message: 'old' },
+        hiscoresLastSubmittedAt: null,
+        hiscoresLastSubmittedScore: null,
+      });
+      useStore.getState().recordHiscoresSubmit(4242, 1_700_000_000_000);
+      const s = useStore.getState();
+      expect(s.hiscoresLastSubmittedAt).toBe(1_700_000_000_000);
+      expect(s.hiscoresLastSubmittedScore).toBe(4242);
+      expect(s.hiscoresLastError).toBeNull();
+    });
+
+    it('recordHiscoresError stores the message with a timestamp', () => {
+      const before = Date.now();
+      useStore.getState().recordHiscoresError('CORS failed');
+      const err = useStore.getState().hiscoresLastError!;
+      expect(err.message).toBe('CORS failed');
+      expect(err.at).toBeGreaterThanOrEqual(before);
+      expect(err.at).toBeLessThanOrEqual(Date.now());
+    });
+
+    it('resetAll clears the hiscores last-submit/error fields', () => {
+      useStore.setState({
+        hiscoresLastSubmittedAt: 1,
+        hiscoresLastSubmittedScore: 99,
+        hiscoresLastError: { at: 1, message: 'x' },
+      });
+      useStore.getState().resetAll();
+      const s = useStore.getState();
+      expect(s.hiscoresLastSubmittedAt).toBeNull();
+      expect(s.hiscoresLastSubmittedScore).toBeNull();
+      expect(s.hiscoresLastError).toBeNull();
+    });
+  });
 });

@@ -17,6 +17,7 @@ import type { RollResult } from '../lib/randomizer';
 import { rollOnePerTier } from '../lib/randomizer';
 import { eligibleByTier } from '../lib/filters';
 import { rollNextPact } from '../lib/pactsRandomizer';
+import { DEFAULT_HISCORES_BASE_URL } from '../lib/hiscores';
 import tasksFile from '../data/tasks.json';
 import relicsFile from '../data/relics.json';
 import pactsFile from '../data/pacts.json';
@@ -56,6 +57,13 @@ interface PersistedState {
   playerLevels: PlayerLevels;
   unlockedPactIds: string[];
   pactResetsUsed: number;
+  // Community hiscores. Submission is gated on a successful WikiSync run
+  // (see App.tsx subscribe). Only the proxy URL is user-configurable; the
+  // other fields are written by the auto-submit side-effect.
+  hiscoresProxyBaseUrl: string;
+  hiscoresLastSubmittedAt: number | null;
+  hiscoresLastSubmittedScore: number | null;
+  hiscoresLastError: { at: number; message: string } | null;
   schemaVersion: number;
 }
 
@@ -78,11 +86,14 @@ interface StoreState extends PersistedState {
   lockReloadedRelic: (tier: RelicTier, name: string, viaRandom?: boolean) => void;
   rollPact: () => string | null;
   resetPacts: () => void;
+  setHiscoresBaseUrl: (url: string) => void;
+  recordHiscoresSubmit: (score: number, at: number) => void;
+  recordHiscoresError: (message: string) => void;
   devQueueRegionPick: () => void;
   resetAll: () => void;
 }
 
-const SCHEMA_VERSION = 7;
+const SCHEMA_VERSION = 8;
 const DEFAULT_PROXY_BASE_URL = 'https://dpl-wikisync-proxy.breki.workers.dev';
 const RECENT_USERNAMES_MAX = 5;
 export const RANDOM_REGION_BONUS = 500;
@@ -114,6 +125,10 @@ const initialPersisted: PersistedState = {
   playerLevels: {},
   unlockedPactIds: [...INITIAL_UNLOCKED_PACTS],
   pactResetsUsed: 0,
+  hiscoresProxyBaseUrl: DEFAULT_HISCORES_BASE_URL,
+  hiscoresLastSubmittedAt: null,
+  hiscoresLastSubmittedScore: null,
+  hiscoresLastError: null,
   schemaVersion: SCHEMA_VERSION,
 };
 
@@ -280,6 +295,18 @@ export const useStore = create<StoreState>()(
       clearSync: () => set({ syncedComplete: [], lastSync: null, playerLevels: {} }),
 
       setProxyBaseUrl: (url) => set({ proxyBaseUrl: url.trim() }),
+
+      setHiscoresBaseUrl: (url) => set({ hiscoresProxyBaseUrl: url.trim() }),
+
+      recordHiscoresSubmit: (score, at) =>
+        set({
+          hiscoresLastSubmittedAt: at,
+          hiscoresLastSubmittedScore: score,
+          hiscoresLastError: null,
+        }),
+
+      recordHiscoresError: (message) =>
+        set({ hiscoresLastError: { at: Date.now(), message } }),
 
       rememberUsername: (name) => {
         const trimmed = name.trim();
@@ -458,6 +485,10 @@ export const useStore = create<StoreState>()(
         playerLevels: state.playerLevels,
         unlockedPactIds: state.unlockedPactIds,
         pactResetsUsed: state.pactResetsUsed,
+        hiscoresProxyBaseUrl: state.hiscoresProxyBaseUrl,
+        hiscoresLastSubmittedAt: state.hiscoresLastSubmittedAt,
+        hiscoresLastSubmittedScore: state.hiscoresLastSubmittedScore,
+        hiscoresLastError: state.hiscoresLastError,
         schemaVersion: state.schemaVersion,
       }),
       // Pre-release: any state persisted under an older schema is wiped.

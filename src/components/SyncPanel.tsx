@@ -14,6 +14,7 @@ export function SyncPanel() {
   const [username, setUsername] = useState(() => recentUsernames[0] ?? '');
   const [status, setStatus] = useState<Status>({ kind: 'idle' });
   const [proxyOpen, setProxyOpen] = useState(false);
+  const [hiscoresOpen, setHiscoresOpen] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
   const applySync = useStore((s) => s.applySync);
   const clearSync = useStore((s) => s.clearSync);
@@ -22,6 +23,8 @@ export function SyncPanel() {
   const manualCount = useStore((s) => s.manualComplete.length);
   const proxyBaseUrl = useStore((s) => s.proxyBaseUrl);
   const setProxyBaseUrl = useStore((s) => s.setProxyBaseUrl);
+  const hiscoresBaseUrl = useStore((s) => s.hiscoresProxyBaseUrl);
+  const setHiscoresBaseUrl = useStore((s) => s.setHiscoresBaseUrl);
 
   async function onWikiSync() {
     setStatus({ kind: 'busy' });
@@ -135,6 +138,26 @@ export function SyncPanel() {
           <p className="hint">
             Direct WikiSync fetches are blocked by CORS from this site. Deploy the 10-line Cloudflare
             Worker in <a href="https://github.com/Breki/demonic-pacts-randomizer/blob/main/docs/cors-worker.md" target="_blank" rel="noreferrer">docs/cors-worker.md</a> and paste its URL above. Free tier; 5-minute setup.
+          </p>
+        </div>
+      )}
+
+      <div className="sync-row sync-proxy-row">
+        <button className="link" onClick={() => setHiscoresOpen((o) => !o)} aria-expanded={hiscoresOpen}>
+          {hiscoresOpen ? '▾' : '▸'} Hiscores URL{hiscoresBaseUrl ? ' (set)' : ''}
+        </button>
+      </div>
+      {hiscoresOpen && (
+        <div className="sync-proxy-body">
+          <input
+            type="text"
+            placeholder="https://dpl-hiscores.workers.dev"
+            value={hiscoresBaseUrl}
+            onChange={(e) => setHiscoresBaseUrl(e.target.value)}
+          />
+          <p className="hint">
+            Worker that stores the community leaderboard. The default points at the shared
+            instance; only override if you've deployed your own.
           </p>
         </div>
       )}

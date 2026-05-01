@@ -30,3 +30,7 @@ npm run build
 ## CORS
 
 WikiSync's read endpoint is intended for the wiki itself, not third parties. If a direct browser fetch is blocked, the app surfaces the error and the user can fall back to the Tasks Tracker plugin import — or deploy the small Cloudflare Worker proxy in [docs/cors-worker.md](docs/cors-worker.md).
+
+## Hiscores
+
+A community leaderboard is wired into the **Hiscores** tab, backed by a second Cloudflare Worker (`dpl-hiscores`) with a KV namespace. The app auto-submits a row after a successful WikiSync run; plugin imports are local-only. To self-host, see [docs/hiscores-worker.md](docs/hiscores-worker.md).

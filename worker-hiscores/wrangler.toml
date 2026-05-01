@@ -1,0 +1,13 @@
+name = "dpl-hiscores"
+main = "src/index.ts"
+compatibility_date = "2025-09-01"
+workers_dev = true
+
+# Run `npx wrangler kv namespace create HISCORES` and
+# `npx wrangler kv namespace create HISCORES --preview`, then paste the
+# returned ids below. The placeholders are intentional so a misconfigured
+# deploy fails loudly instead of silently writing to the wrong namespace.
+[[kv_namespaces]]
+binding = "HISCORES"
+id = "ccb5de1c679d4dbc8e44d36d3576b92a"
+preview_id = "293aa6f66482483daced2ce724f019f1"

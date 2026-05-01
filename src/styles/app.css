@@ -1467,3 +1467,104 @@ input[type='text'] {
   font-size: 11px;
   color: var(--fg-dim);
 }
+
+/* ----- Hiscores tab ----- */
+
+.hiscores {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.hiscores-status {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.hiscores-status .hint {
+  margin: 0;
+}
+.hiscores-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 4px;
+}
+.hiscores-err {
+  margin: 0;
+  font-size: 12px;
+  color: var(--bad);
+}
+.hiscores-error-block {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.hiscores-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  font-variant-numeric: tabular-nums;
+}
+.hiscores-table thead th {
+  text-align: left;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  color: var(--fg-dim);
+  font-weight: 600;
+  padding: 10px 12px;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border);
+}
+.hiscores-table tbody td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+}
+.hiscores-table tbody tr:last-child td {
+  border-bottom: none;
+}
+.hiscores-table tbody tr:nth-child(even) {
+  background: var(--bg-card);
+}
+.hiscores-table th.hiscores-rank,
+.hiscores-table td.hiscores-rank {
+  width: 1%;
+  white-space: nowrap;
+  color: var(--fg-dim);
+}
+.hiscores-table th.hiscores-player,
+.hiscores-table td.hiscores-player {
+  width: auto;
+}
+.hiscores-table th.hiscores-num,
+.hiscores-table td.hiscores-num {
+  text-align: right;
+  white-space: nowrap;
+  width: 1%;
+}
+.hiscores-table tbody td.hiscores-num {
+  font-weight: 600;
+}
+.hiscores-table th.hiscores-when,
+.hiscores-table td.hiscores-when {
+  color: var(--fg-dim);
+  font-size: 12px;
+  white-space: nowrap;
+  width: 1%;
+}
+.hiscores-table tr.hiscore-row-self {
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+}
+.hiscores-table tr.hiscore-row-self td:first-child {
+  border-left: 3px solid var(--accent);
+  padding-left: 9px;
+}
+.hiscores-table tr.hiscore-row-self .hiscores-rank {
+  color: var(--accent-hot);
+  font-weight: 700;
+}
