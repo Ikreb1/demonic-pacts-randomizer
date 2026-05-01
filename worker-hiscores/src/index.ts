@@ -22,7 +22,7 @@ interface HiscoreRow {
 }
 
 const ALLOWED_ORIGINS = new Set<string>([
-  'https://breki.github.io',
+  'https://ikreb1.github.io',
   'http://localhost:5173',
   'http://127.0.0.1:5173',
 ]);

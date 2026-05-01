@@ -56,7 +56,7 @@ finite; `score ∈ [-1_000_000, 10_000_000]`; `completedCount ∈ [0, 1000]`;
 
 CORS allowlist (writes accepted, so no `*`):
 
-- `https://breki.github.io`
+- `https://ikreb1.github.io`
 - `http://localhost:5173`
 - `http://127.0.0.1:5173`
 
