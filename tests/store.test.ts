@@ -178,24 +178,6 @@ describe('store roll-and-lock flow', () => {
     }
   });
 
-  it('toggleManualComplete re-rolls the slot if it held the completed task', () => {
-    useStore.getState().roll();
-    const before = useStore.getState().currentRoll!;
-    const easyId = before.easy!;
-    useStore.getState().toggleManualComplete(easyId);
-    const after = useStore.getState().currentRoll!;
-    expect(after.easy).not.toBe(easyId);
-  });
-
-  it('toggleManualComplete on the active task releases the lock', () => {
-    useStore.getState().roll();
-    useStore.getState().pickTier('easy');
-    const id = useStore.getState().activeTask!;
-    useStore.getState().toggleManualComplete(id);
-    expect(useStore.getState().activeTask).toBeNull();
-    expect(useStore.getState().manualComplete).toContain(id);
-  });
-
   describe('region unlock thresholds', () => {
     function setCompletedCount(n: number) {
       // Mark the first n task IDs as manually completed.
@@ -334,17 +316,6 @@ describe('store roll-and-lock flow', () => {
       expect(selectPendingRegionPicks(useStore.getState())).toBeGreaterThanOrEqual(1);
     });
 
-    it('toggleManualComplete clears currentRoll when it earns a pick', () => {
-      // Seed 79 manual completions so the next toggle crosses the threshold.
-      const seed = ALL_TASKS_LIST.slice(0, 79).map((t) => t.id);
-      useStore.setState({ manualComplete: seed });
-      useStore.getState().roll();
-      expect(useStore.getState().currentRoll).not.toBeNull();
-      const next = ALL_TASKS_LIST.find((t) => !seed.includes(t.id))!;
-      useStore.getState().toggleManualComplete(next.id);
-      expect(useStore.getState().currentRoll).toBeNull();
-      expect(selectPendingRegionPicks(useStore.getState())).toBeGreaterThanOrEqual(1);
-    });
   });
 
   describe('applySync auto-unlocks regions present in synced completions', () => {
@@ -783,25 +754,30 @@ describe('store roll-and-lock flow', () => {
       expect(useStore.getState().score).toBe(after);
     });
 
-    it('excludes the locked active task from half-point credit', () => {
+    it('awards full active-task credit (not half) when the sync completes the locked task', () => {
       // Set up an active task, then sync an arrival containing only that task.
       const easy = ALL_TASKS_LIST.find(
         (t) => t.tier === 'easy' && (t.region === 'General' || t.region === 'Varlamore'),
       )!;
       useStore.setState({ activeTask: easy.id, score: 0 });
       useStore.getState().applySync([easy.id], { username: 'x', at: 0, source: 'wikisync' });
-      // No half-point credit; active is cleared by the existing logic.
-      expect(useStore.getState().score).toBe(0);
+      // Easy has no lower tiers, so the multiplier is 1.0 — full TIER_POINTS.easy.
+      expect(useStore.getState().score).toBe(TIER_POINTS.easy);
       expect(useStore.getState().activeTask).toBeNull();
     });
 
-    it('manual completions remain score-neutral', () => {
-      // Half-points apply only to sync; manual stays as it was.
-      const easy = ALL_TASKS_LIST.find((t) => t.region === 'General' || t.region === 'Varlamore')!;
-      useStore.setState({ score: 0 });
-      useStore.getState().toggleManualComplete(easy.id);
-      expect(useStore.getState().score).toBe(0);
+    it("applies the early-tier multiplier when the synced active task is higher-tier", () => {
+      // Hard task with all easies/mediums still uncompleted in unlocked
+      // regions → multiplier should be 2.0 (max).
+      const hard = ALL_TASKS_LIST.find(
+        (t) => t.tier === 'hard' && (t.region === 'General' || t.region === 'Varlamore'),
+      )!;
+      useStore.setState({ activeTask: hard.id, score: 0, manualComplete: [], syncedComplete: [] });
+      useStore.getState().applySync([hard.id], { username: 'x', at: 0, source: 'wikisync' });
+      expect(useStore.getState().score).toBe(TIER_POINTS.hard * 2);
+      expect(useStore.getState().activeTask).toBeNull();
     });
+
   });
 
   describe('roll respects task dependencies', () => {

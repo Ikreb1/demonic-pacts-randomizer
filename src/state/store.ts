@@ -72,7 +72,6 @@ interface StoreState extends PersistedState {
   // without touching completion counts. Cleared on reload.
   devExtraPendingRegions: number;
   unlockRegion: (region: Region, viaRandom?: boolean) => void;
-  toggleManualComplete: (taskId: number) => void;
   applySync: (completedIds: number[], meta: SyncMeta, levels?: PlayerLevels) => void;
   clearSync: () => void;
   setProxyBaseUrl: (url: string) => void;
@@ -222,27 +221,6 @@ export const useStore = create<StoreState>()(
         });
       },
 
-      toggleManualComplete: (taskId) => {
-        const state = get();
-        const cur = new Set(state.manualComplete);
-        if (cur.has(taskId)) cur.delete(taskId);
-        else cur.add(taskId);
-        const nextManual = [...cur];
-        const completed = new Set([...nextManual, ...state.syncedComplete]);
-        const regions = new Set<Region>(state.unlockedRegions);
-        // If this toggle just earned a region pick, drop the existing roll so
-        // the post-pick auto-roll redraws from the expanded region pool.
-        const willPend = pendingPicksFor(completed.size, state.unlockedRegions.length);
-        const next: Partial<StoreState> = {
-          manualComplete: nextManual,
-          currentRoll: willPend ? null : reconcileRoll(state.currentRoll, regions, completed),
-        };
-        if (state.activeTask !== null && cur.has(state.activeTask)) {
-          next.activeTask = null;
-        }
-        set(next);
-      },
-
       applySync: (completedIds, meta, levels) => {
         const state = get();
         const nextSynced = [...new Set(completedIds)];
@@ -265,8 +243,11 @@ export const useStore = create<StoreState>()(
         const willPend = pendingPicksFor(completed.size, nextUnlockedRegions.length);
         // Half-points for sync-newly-completed tasks: anything that just
         // became complete via this sync (and wasn't already manual/synced
-        // complete) gets ½ × tier points. The locked active task is excluded
-        // — it'll earn full points via markActiveComplete.
+        // complete) gets ½ × tier points. The locked active task is
+        // excluded from the half-points loop and instead awarded its full
+        // markActiveComplete-equivalent score below — completing the
+        // locked task via WikiSync should pay out the same as clicking
+        // "Mark complete" in the app.
         const previousCompleted = new Set([...state.manualComplete, ...state.syncedComplete]);
         let bonus = 0;
         for (const id of nextSynced) {
@@ -275,6 +256,26 @@ export const useStore = create<StoreState>()(
           const task = TASKS_BY_ID.get(id);
           if (!task) continue;
           bonus += Math.round(TIER_POINTS[task.tier] * 0.5);
+        }
+        // Full credit for the active task if this sync just completed it.
+        // Mirrors markActiveComplete: TIER_POINTS × early-tier multiplier
+        // computed against state BEFORE this sync.
+        if (
+          state.activeTask !== null &&
+          nextSynced.includes(state.activeTask) &&
+          !previousCompleted.has(state.activeTask)
+        ) {
+          const activeTaskObj = TASKS_BY_ID.get(state.activeTask);
+          if (activeTaskObj) {
+            bonus += Math.round(
+              TIER_POINTS[activeTaskObj.tier] *
+                computeEarlyTierMultiplier(
+                  activeTaskObj.tier,
+                  previousCompleted,
+                  state.unlockedRegions,
+                ),
+            );
+          }
         }
         const next: Partial<StoreState> = {
           syncedComplete: nextSynced,
