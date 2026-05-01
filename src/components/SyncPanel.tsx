@@ -142,24 +142,32 @@ export function SyncPanel() {
         </div>
       )}
 
-      <div className="sync-row sync-proxy-row">
-        <button className="link" onClick={() => setHiscoresOpen((o) => !o)} aria-expanded={hiscoresOpen}>
-          {hiscoresOpen ? '▾' : '▸'} Hiscores URL{hiscoresBaseUrl ? ' (set)' : ''}
-        </button>
-      </div>
-      {hiscoresOpen && (
-        <div className="sync-proxy-body">
-          <input
-            type="text"
-            placeholder="https://dpl-hiscores.workers.dev"
-            value={hiscoresBaseUrl}
-            onChange={(e) => setHiscoresBaseUrl(e.target.value)}
-          />
-          <p className="hint">
-            Worker that stores the community leaderboard. The default points at the shared
-            instance; only override if you've deployed your own.
-          </p>
-        </div>
+      {import.meta.env.DEV && (
+        <>
+          <div className="sync-row sync-proxy-row">
+            <button
+              className="link"
+              onClick={() => setHiscoresOpen((o) => !o)}
+              aria-expanded={hiscoresOpen}
+            >
+              {hiscoresOpen ? '▾' : '▸'} Hiscores URL{hiscoresBaseUrl ? ' (set)' : ''}
+            </button>
+          </div>
+          {hiscoresOpen && (
+            <div className="sync-proxy-body">
+              <input
+                type="text"
+                placeholder="https://dpl-hiscores.workers.dev"
+                value={hiscoresBaseUrl}
+                onChange={(e) => setHiscoresBaseUrl(e.target.value)}
+              />
+              <p className="hint">
+                Worker that stores the community leaderboard. The default points at the shared
+                instance; only override if you've deployed your own.
+              </p>
+            </div>
+          )}
+        </>
       )}
 
       <div className="sync-row">

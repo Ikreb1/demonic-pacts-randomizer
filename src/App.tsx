@@ -54,7 +54,7 @@ export function App() {
       <aside className="sidebar">
         <RegionFilter />
         <SyncPanel />
-        <DevPanel />
+        {import.meta.env.DEV && <DevPanel />}
         <ResetPanel />
       </aside>
 

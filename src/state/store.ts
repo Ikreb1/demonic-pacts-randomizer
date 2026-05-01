@@ -491,14 +491,20 @@ export const useStore = create<StoreState>()(
         hiscoresLastError: state.hiscoresLastError,
         schemaVersion: state.schemaVersion,
       }),
-      // Pre-release: any state persisted under an older schema is wiped.
-      // The region-unlock model changed from free toggling to threshold-gated picks,
-      // and stale flag-style toggles can't be safely interpreted under the new rules.
+      // Backward-compatible: merge persisted fields onto current defaults
+      // so users don't lose data on a schema bump. `initialPersisted`
+      // backfills any field added since the user's stored version; the
+      // user's own values carry through untouched. We always force
+      // `schemaVersion` to current so the merge isn't repeated next load.
+      //
+      // This generic merge covers ADDITIVE changes only. If you ever need
+      // to rename, retype, or reshape an existing field, add an explicit
+      // per-version migration step before the merge — don't fall through
+      // to a wipe (the app has live users on GitHub Pages).
       migrate: (persisted: unknown) => {
         if (!persisted || typeof persisted !== 'object') return initialPersisted;
         const p = persisted as Partial<PersistedState>;
-        if (p.schemaVersion === SCHEMA_VERSION) return { ...initialPersisted, ...p };
-        return initialPersisted;
+        return { ...initialPersisted, ...p, schemaVersion: SCHEMA_VERSION };
       },
     },
   ),
