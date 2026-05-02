@@ -7,6 +7,7 @@ import {
   selectCompleted,
   selectPendingRegionPicks,
   selectRelicScore,
+  selectTaskEarnedScore,
 } from '../state/store';
 import { eligibleByTier } from '../lib/filters';
 import { TIERS, TIER_LABELS, TIER_POINTS } from '../types';
@@ -35,6 +36,14 @@ export function RandomizerTab() {
   const points = useStore(selectRelicScore);
   const currentRoll = useStore((s) => s.currentRoll);
   const pendingRegionPicks = useStore(selectPendingRegionPicks);
+  // Score the active task would earn on completion, including the early-
+  // tier multiplier. Computed unconditionally so the hook order matches
+  // the no-active-task render path; callers below null-check via
+  // activeTask.
+  const activeEarnedScore = useStore((s) => {
+    const t = selectActiveTask(s);
+    return t ? selectTaskEarnedScore(t, s) : 0;
+  });
 
   const [revealed, setRevealed] = useState<Set<Tier>>(new Set());
   const [pickedTier, setPickedTier] = useState<Tier | null>(null);
@@ -103,21 +112,21 @@ export function RandomizerTab() {
           actions={
             <>
               <button className="primary" onClick={markActiveComplete}>
-                Mark complete (+{TIER_POINTS[activeTask.tier]} pts)
+                Mark complete (+{activeEarnedScore} score)
               </button>
               <button
                 className="link"
                 onClick={() => {
                   if (
                     confirm(
-                      `Abandon this task? You will lose ${penalty} points (2× the tier value) and reroll.`,
+                      `Abandon this task? You will lose ${penalty} score (2× the tier's points) and reroll.`,
                     )
                   ) {
                     abandonActive();
                   }
                 }}
               >
-                Abandon (−{penalty} pts)
+                Abandon (−{penalty} score)
               </button>
             </>
           }
@@ -145,7 +154,7 @@ export function RandomizerTab() {
       <div className="randomizer-toolbar">
         <p className="hint">
           One candidate per tier. Pick exactly one — that becomes your locked task until you mark it complete.
-          Completing earns the tier&rsquo;s points; abandoning costs 2× the tier&rsquo;s points.
+          Completing earns the tier&rsquo;s points; abandoning costs 2× the tier&rsquo;s points off your score.
         </p>
       </div>
       <div className="tier-grid">
