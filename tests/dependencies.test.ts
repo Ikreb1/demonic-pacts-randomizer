@@ -163,6 +163,57 @@ describe('hasUnmetDependency — collection log slot chains', () => {
   });
 });
 
+describe('hasUnmetDependency — speed task chain', () => {
+  it('"Complete 1 Speed Task" is a chain root', () => {
+    expect(hasUnmetDependency(findTask('Complete 1 Speed Task'), new Set())).toBe(false);
+  });
+
+  it('"Complete 5 Speed Tasks" requires "Complete 1 Speed Task"', () => {
+    const child = findTask('Complete 5 Speed Tasks');
+    const parent = findTask('Complete 1 Speed Task');
+    expect(hasUnmetDependency(child, new Set())).toBe(true);
+    expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
+  });
+
+  it('"Complete 30 Speed Tasks" requires the immediate predecessor (20), not the root', () => {
+    const child = findTask('Complete 30 Speed Tasks');
+    const root = findTask('Complete 1 Speed Task');
+    const parent = findTask('Complete 20 Speed Tasks');
+    expect(hasUnmetDependency(child, new Set([root.id]))).toBe(true);
+    expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
+  });
+});
+
+describe('hasUnmetDependency — echo boss chains', () => {
+  it('"Defeat 1 unique Echo Boss" is a chain root', () => {
+    expect(hasUnmetDependency(findTask('Defeat 1 unique Echo Boss'), new Set())).toBe(false);
+  });
+
+  it('"Defeat 4 unique Echo Bosses" requires "Defeat 3 unique Echo Bosses"', () => {
+    const child = findTask('Defeat 4 unique Echo Bosses');
+    const parent = findTask('Defeat 3 unique Echo Bosses');
+    const root = findTask('Defeat 1 unique Echo Boss');
+    expect(hasUnmetDependency(child, new Set())).toBe(true);
+    // Skipping the chain isn't allowed — only the immediate parent satisfies it.
+    expect(hasUnmetDependency(child, new Set([root.id]))).toBe(true);
+    expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
+  });
+
+  it('"Defeat 150 Echo Bosses" requires "Defeat 75 Echo Bosses" (raw count chain)', () => {
+    const child = findTask('Defeat 150 Echo Bosses');
+    const parent = findTask('Defeat 75 Echo Bosses');
+    expect(hasUnmetDependency(child, new Set())).toBe(true);
+    expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
+  });
+
+  it('the unique and total echo chains are independent', () => {
+    // Completing the unique chain doesn't unlock the total chain, and vice versa.
+    const totalChild = findTask('Defeat 75 Echo Bosses');
+    const uniqueParent = findTask('Defeat 1 unique Echo Boss');
+    expect(hasUnmetDependency(totalChild, new Set([uniqueParent.id]))).toBe(true);
+  });
+});
+
 describe('hasUnmetDependency — non-matching tasks pass through', () => {
   it('"Reach Level 99 Cooking" is not gated by anything itself', () => {
     expect(hasUnmetDependency(findTask('Reach Level 99 Cooking'), new Set())).toBe(false);

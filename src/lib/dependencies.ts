@@ -33,6 +33,11 @@ const CLUE_CHAIN = [1, 25, 75] as const;
 const CLUE_TIERS = ['Easy', 'Medium', 'Hard', 'Elite', 'Master'] as const;
 const BOSS_CHAIN = [1, 3, 5, 10] as const;
 const BASE_LEVEL_CHAIN = [5, 10, 20, 30, 40, 50, 60, 70] as const;
+const SPEED_TASK_CHAIN = [1, 5, 10, 20, 30] as const;
+// "Defeat N unique Echo Bosses" — 1 → 4 incremental, with singular "Boss" at N=1.
+const ECHO_UNIQUE_CHAIN = [1, 2, 3, 4] as const;
+// "Defeat N Echo Bosses" — raw kill count, 25 → 75 → 150.
+const ECHO_TOTAL_CHAIN = [25, 75, 150] as const;
 // "Fill N <tier> Clue Collection Log Slots" — each tier has its own chain
 // because the slot counts differ. Master tops out at 25 (no 50/30 step).
 const COLLECTION_LOG_CHAINS: Record<string, readonly number[]> = {
@@ -128,6 +133,42 @@ function parentOf(task: Task): Task | null {
     if (idx > 0) {
       const prev = chain[idx - 1];
       return TASK_BY_NAME.get(`Fill ${prev} ${tier} Clue Collection Log Slots`) ?? null;
+    }
+    return null;
+  }
+
+  // Speed task chain: "Complete 1 Speed Task" → 5 → 10 → 20 → 30.
+  const speedMatch = /^Complete (\d+) Speed Tasks?$/.exec(name);
+  if (speedMatch) {
+    const idx = (SPEED_TASK_CHAIN as readonly number[]).indexOf(parseInt(speedMatch[1], 10));
+    if (idx > 0) {
+      const prev = SPEED_TASK_CHAIN[idx - 1];
+      const prevName = prev === 1 ? 'Complete 1 Speed Task' : `Complete ${prev} Speed Tasks`;
+      return TASK_BY_NAME.get(prevName) ?? null;
+    }
+    return null;
+  }
+
+  // Unique echo boss chain: "Defeat 1 unique Echo Boss" → 2 → 3 → 4.
+  const echoUniqueMatch = /^Defeat (\d+) unique Echo Boss(?:es)?$/.exec(name);
+  if (echoUniqueMatch) {
+    const idx = (ECHO_UNIQUE_CHAIN as readonly number[]).indexOf(parseInt(echoUniqueMatch[1], 10));
+    if (idx > 0) {
+      const prev = ECHO_UNIQUE_CHAIN[idx - 1];
+      const prevName =
+        prev === 1 ? 'Defeat 1 unique Echo Boss' : `Defeat ${prev} unique Echo Bosses`;
+      return TASK_BY_NAME.get(prevName) ?? null;
+    }
+    return null;
+  }
+
+  // Total echo boss kill chain: 25 → 75 → 150 ("Defeat N Echo Bosses", no "unique").
+  const echoTotalMatch = /^Defeat (\d+) Echo Bosses$/.exec(name);
+  if (echoTotalMatch) {
+    const idx = (ECHO_TOTAL_CHAIN as readonly number[]).indexOf(parseInt(echoTotalMatch[1], 10));
+    if (idx > 0) {
+      const prev = ECHO_TOTAL_CHAIN[idx - 1];
+      return TASK_BY_NAME.get(`Defeat ${prev} Echo Bosses`) ?? null;
     }
     return null;
   }
