@@ -29,17 +29,13 @@ const ALWAYS_SKIP_TASK_NAMES: ReadonlySet<string> = new Set([
   'Obtain a Kebab from a random event',
 ]);
 
+// Count chains that don't fit the simple "single regex + count + naming
+// formula" shape — those need bespoke handling in parentOf:
+//   - Clue scrolls: 5 tiers × 3 counts, with singular/plural at N=1.
+//   - Collection log slots: per-tier chain values.
+//   - "Obtain N Million X XP": gated on the per-skill 99 milestone, not
+//     on the previous milestone, so it isn't a count chain at all.
 const CLUE_CHAIN = [1, 25, 75] as const;
-const CLUE_TIERS = ['Easy', 'Medium', 'Hard', 'Elite', 'Master'] as const;
-const BOSS_CHAIN = [1, 3, 5, 10] as const;
-const BASE_LEVEL_CHAIN = [5, 10, 20, 30, 40, 50, 60, 70] as const;
-const SPEED_TASK_CHAIN = [1, 5, 10, 20, 30] as const;
-// "Defeat N unique Echo Bosses" — 1 → 4 incremental, with singular "Boss" at N=1.
-const ECHO_UNIQUE_CHAIN = [1, 2, 3, 4] as const;
-// "Defeat N Echo Bosses" — raw kill count, 25 → 75 → 150.
-const ECHO_TOTAL_CHAIN = [25, 75, 150] as const;
-// "Fill N <tier> Clue Collection Log Slots" — each tier has its own chain
-// because the slot counts differ. Master tops out at 25 (no 50/30 step).
 const COLLECTION_LOG_CHAINS: Record<string, readonly number[]> = {
   Easy: [5, 20, 50],
   Medium: [5, 20, 40],
@@ -56,19 +52,292 @@ const SKILL_NAMES = [
 ] as const;
 const SKILL_NAME_SET: ReadonlySet<string> = new Set(SKILL_NAMES);
 
+// All "do this thing N times" chains follow the same shape: a regex with
+// one numeric capture, a hardcoded list of valid counts in ascending
+// order, and a function that builds the predecessor's task name. Many
+// boss families share the canonical 50/150/300 chain so we factor that
+// out; everything else lists its own counts so the values are visible at
+// the call site without any indirection.
+interface CountChain {
+  re: RegExp;
+  chain: readonly number[];
+  format: (n: number) => string;
+}
+
+const BOSS_50_150_300 = [50, 150, 300] as const;
+
+const COUNT_CHAINS: readonly CountChain[] = [
+  // Leagues progression (active gameplay)
+  {
+    re: /^Complete (\d+) Speed Tasks?$/,
+    chain: [1, 5, 10, 20, 30],
+    format: (n) => (n === 1 ? 'Complete 1 Speed Task' : `Complete ${n} Speed Tasks`),
+  },
+  {
+    re: /^Defeat (\d+) unique Echo Boss(?:es)?$/,
+    chain: [1, 2, 3, 4],
+    format: (n) => (n === 1 ? 'Defeat 1 unique Echo Boss' : `Defeat ${n} unique Echo Bosses`),
+  },
+  {
+    re: /^Defeat (\d+) Echo Bosses$/,
+    chain: [25, 75, 150],
+    format: (n) => `Defeat ${n} Echo Bosses`,
+  },
+
+  // "Complete all tasks for N bosses": 1 → 3 → 5 → 10. Singular at N=1.
+  {
+    re: /^Complete all tasks for (\d+) (?:boss|bosses)$/,
+    chain: [1, 3, 5, 10],
+    format: (n) =>
+      n === 1 ? 'Complete all tasks for 1 boss' : `Complete all tasks for ${n} bosses`,
+  },
+
+  // Level milestones (auto-progress in-game but still nice to gate so
+  // higher tiers don't get rolled out of order).
+  {
+    re: /^Reach Base Level (\d+)$/,
+    chain: [5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95],
+    format: (n) => `Reach Base Level ${n}`,
+  },
+  {
+    re: /^Reach Combat Level (\d+)$/,
+    chain: [25, 50, 75, 100, 110, 120, 126],
+    format: (n) => `Reach Combat Level ${n}`,
+  },
+  {
+    re: /^Reach Total Level (\d+)$/,
+    chain: [100, 250, 666, 750, 1000, 1250, 1500, 1750, 2000, 2100, 2200, 2277],
+    format: (n) => `Reach Total Level ${n}`,
+  },
+  {
+    re: /^Achieve Your First Level (\d+)$/,
+    chain: [5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95],
+    format: (n) => `Achieve Your First Level ${n}`,
+  },
+
+  // Activity counts
+  {
+    re: /^Complete (\d+) Hunter Rumours$/,
+    chain: [10, 25, 50],
+    format: (n) => `Complete ${n} Hunter Rumours`,
+  },
+  {
+    re: /^Defeat (\d+) Superior slayer creatures$/,
+    chain: [10, 20, 25, 50, 75, 100],
+    format: (n) => `Defeat ${n} Superior slayer creatures`,
+  },
+  {
+    re: /^Floor (\d+) of the Hallowed Sepulchre$/,
+    chain: [1, 2, 3, 4, 5],
+    format: (n) => `Floor ${n} of the Hallowed Sepulchre`,
+  },
+  {
+    re: /^Room (\d+) of Pyramid Plunder$/,
+    chain: [1, 2, 3, 4, 5, 6, 7, 8],
+    format: (n) => `Room ${n} of Pyramid Plunder`,
+  },
+  {
+    re: /^Get (\d+) Target points$/,
+    chain: [250, 750, 1000],
+    format: (n) => `Get ${n} Target points`,
+  },
+  {
+    re: /^Giants' Foundry (\d+) handins$/,
+    chain: [10, 25, 50],
+    format: (n) => `Giants' Foundry ${n} handins`,
+  },
+  {
+    re: /^Giants' Foundry (\d+) quality sword$/,
+    chain: [50, 125, 150],
+    format: (n) => `Giants' Foundry ${n} quality sword`,
+  },
+  {
+    re: /^Equip (\d+) Black Chinchompas$/,
+    chain: [100, 250, 500],
+    format: (n) => `Equip ${n} Black Chinchompas`,
+  },
+  {
+    re: /^Complete the Inferno (\d+) Times$/,
+    chain: [5, 10, 15],
+    format: (n) => `Complete the Inferno ${n} Times`,
+  },
+  {
+    re: /^(\d+) Chambers of Xeric$/,
+    chain: [1, 25, 50],
+    format: (n) => `${n} Chambers of Xeric`,
+  },
+  {
+    re: /^(\d+) Combat Achievements$/,
+    chain: [50, 100, 150, 200, 250],
+    format: (n) => `${n} Combat Achievements`,
+  },
+  {
+    re: /^Gain (\d+) Unique Items From Hard Clues$/,
+    chain: [5, 20, 50],
+    format: (n) => `Gain ${n} Unique Items From Hard Clues`,
+  },
+  {
+    re: /^(\d+) Collection log slots$/,
+    chain: [5, 15, 30, 50, 100, 200, 350, 500, 750],
+    format: (n) => `${n} Collection log slots`,
+  },
+
+  // Boss kill chains. The exact in-game name uses inconsistent
+  // capitalization for "times"/"Times" — preserved per task.
+  {
+    re: /^Defeat Vardorvis (\d+) times$/,
+    chain: BOSS_50_150_300,
+    format: (n) => `Defeat Vardorvis ${n} times`,
+  },
+  {
+    re: /^Defeat Sarachnis (\d+) Times$/,
+    chain: BOSS_50_150_300,
+    format: (n) => `Defeat Sarachnis ${n} Times`,
+  },
+  {
+    re: /^Defeat (\d+) Lizardmen Shaman$/,
+    chain: BOSS_50_150_300,
+    format: (n) => `Defeat ${n} Lizardmen Shaman`,
+  },
+  {
+    re: /^Defeat Callisto (\d+) times$/,
+    chain: BOSS_50_150_300,
+    format: (n) => `Defeat Callisto ${n} times`,
+  },
+  {
+    re: /^Defeat Cerberus (\d+) times$/,
+    chain: BOSS_50_150_300,
+    format: (n) => `Defeat Cerberus ${n} times`,
+  },
+  {
+    re: /^Defeat Duke Sucellus (\d+) times$/,
+    chain: BOSS_50_150_300,
+    format: (n) => `Defeat Duke Sucellus ${n} times`,
+  },
+  {
+    re: /^Defeat Each Dagannoth King (\d+) Times$/,
+    chain: BOSS_50_150_300,
+    format: (n) => `Defeat Each Dagannoth King ${n} Times`,
+  },
+  {
+    re: /^Defeat Leviathan (\d+) times$/,
+    chain: BOSS_50_150_300,
+    format: (n) => `Defeat Leviathan ${n} times`,
+  },
+  {
+    re: /^Defeat Phantom Muspah (\d+) times$/,
+    chain: BOSS_50_150_300,
+    format: (n) => `Defeat Phantom Muspah ${n} times`,
+  },
+  {
+    re: /^Defeat Venenatis (\d+) times$/,
+    chain: BOSS_50_150_300,
+    format: (n) => `Defeat Venenatis ${n} times`,
+  },
+  {
+    re: /^Defeat Vet'ion (\d+) times$/,
+    chain: BOSS_50_150_300,
+    format: (n) => `Defeat Vet'ion ${n} times`,
+  },
+  {
+    re: /^Defeat Vorkath (\d+) Times$/,
+    chain: BOSS_50_150_300,
+    format: (n) => `Defeat Vorkath ${n} Times`,
+  },
+  {
+    re: /^Defeat Whisperer (\d+) times$/,
+    chain: BOSS_50_150_300,
+    format: (n) => `Defeat Whisperer ${n} times`,
+  },
+  {
+    re: /^Defeat Zulrah (\d+) Times$/,
+    chain: BOSS_50_150_300,
+    format: (n) => `Defeat Zulrah ${n} Times`,
+  },
+  {
+    re: /^Defeat the Alchemical Hydra (\d+) Times$/,
+    chain: BOSS_50_150_300,
+    format: (n) => `Defeat the Alchemical Hydra ${n} Times`,
+  },
+  {
+    re: /^Defeat the Kraken Boss (\d+) Times$/,
+    chain: BOSS_50_150_300,
+    format: (n) => `Defeat the Kraken Boss ${n} Times`,
+  },
+  {
+    re: /^Defeat the Abyssal Sire (\d+) Times$/,
+    chain: BOSS_50_150_300,
+    format: (n) => `Defeat the Abyssal Sire ${n} Times`,
+  },
+  {
+    re: /^Defeat Araxxor (\d+) Times$/,
+    chain: BOSS_50_150_300,
+    format: (n) => `Defeat Araxxor ${n} Times`,
+  },
+
+  // Bosses with non-standard chain values
+  {
+    re: /^Defeat (\d+) Demonic Gorillas$/,
+    chain: [150, 300, 500],
+    format: (n) => `Defeat ${n} Demonic Gorillas`,
+  },
+  {
+    re: /^Defeat the Corporeal Beast (\d+) Times$/,
+    chain: [50, 150, 250],
+    format: (n) => `Defeat the Corporeal Beast ${n} Times`,
+  },
+  {
+    re: /^Defeat Nex (\d+) Times$/,
+    chain: [50, 100, 200],
+    format: (n) => `Defeat Nex ${n} Times`,
+  },
+  {
+    re: /^Defeat the Wintertodt (\d+) times$/,
+    chain: [10, 25, 50],
+    format: (n) => `Defeat the Wintertodt ${n} times`,
+  },
+  {
+    re: /^Defeat the Moons of Peril (\d+) times$/,
+    chain: [10, 25, 50],
+    format: (n) => `Defeat the Moons of Peril ${n} times`,
+  },
+  {
+    re: /^Defeat The Nightmare (\d+) times$/,
+    chain: [25, 50, 150],
+    format: (n) => `Defeat The Nightmare ${n} times`,
+  },
+  {
+    re: /^Defeat Any God Wars Dungeon Boss (\d+) Times$/,
+    chain: [100, 250, 500],
+    format: (n) => `Defeat Any God Wars Dungeon Boss ${n} Times`,
+  },
+];
+
+function lookupCountChain(name: string): Task | null {
+  for (const { re, chain, format } of COUNT_CHAINS) {
+    const m = re.exec(name);
+    if (!m) continue;
+    const idx = chain.indexOf(parseInt(m[1], 10));
+    if (idx <= 0) return null;
+    return TASK_BY_NAME.get(format(chain[idx - 1])) ?? null;
+  }
+  return null;
+}
+
 export function isAlwaysSkippedFromRoll(task: Task): boolean {
   return ALWAYS_SKIP_TASK_NAMES.has(task.name);
 }
 
 // Returns the parent task whose completion gates the given task, per the
-// rules below. Returns null when the task has no parent rule, or when the
-// rule fires but the parent isn't found in tasks.json (defensive — we'd
-// rather show a task than block it on a bad lookup).
+// rules below. Returns null when the task has no parent rule, or when
+// the rule fires but the parent isn't found in tasks.json (defensive —
+// we'd rather show a task than block it on a bad lookup).
 function parentOf(task: Task): Task | null {
   const name = task.name;
 
   // Clue chain: "1 Easy Clue Scroll" → "25 Easy Clue Scrolls" → "75 Easy Clue Scrolls"
-  // (and the same for Medium/Hard/Elite/Master).
+  // (and the same for Medium/Hard/Elite). Master only has the N=1 entry,
+  // so the chain naturally terminates above.
   const clueMatch = /^(\d+) (Easy|Medium|Hard|Elite|Master) Clue Scrolls?$/.exec(name);
   if (clueMatch) {
     const count = parseInt(clueMatch[1], 10);
@@ -81,45 +350,17 @@ function parentOf(task: Task): Task | null {
     }
     return null;
   }
-  // The "Master" tier only has the "1 Master Clue Scroll" task in tasks.json
-  // (no 25 or 75 master variants), so the chain naturally terminates above.
-  void CLUE_TIERS;
 
-  // Boss chain: 1 → 3 → 5 → 10 bosses.
-  const bossMatch = /^Complete all tasks for (1 boss|3 bosses|5 bosses|10 bosses)$/.exec(name);
-  if (bossMatch) {
-    const n = parseInt(bossMatch[1], 10);
-    const idx = (BOSS_CHAIN as readonly number[]).indexOf(n);
-    if (idx > 0) {
-      const prev = BOSS_CHAIN[idx - 1];
-      const prevName =
-        prev === 1 ? `Complete all tasks for 1 boss` : `Complete all tasks for ${prev} bosses`;
-      return TASK_BY_NAME.get(prevName) ?? null;
-    }
-    return null;
-  }
-
-  // Base level chain: 5 → 10 → 20 → … → 70.
-  const baseMatch = /^Reach Base Level (\d+)$/.exec(name);
-  if (baseMatch) {
-    const n = parseInt(baseMatch[1], 10);
-    const idx = (BASE_LEVEL_CHAIN as readonly number[]).indexOf(n);
-    if (idx > 0) {
-      const prev = BASE_LEVEL_CHAIN[idx - 1];
-      return TASK_BY_NAME.get(`Reach Base Level ${prev}`) ?? null;
-    }
-    return null;
-  }
-
-  // Skill XP milestone: any "Obtain N Million Skill XP" requires the skill's
-  // 99 first. Aggregate "in 5 non-combat skills" tasks don't match because
-  // their second token isn't a single skill name.
+  // Skill XP milestone: "Obtain N Million Skill XP" requires that skill's
+  // 99 first. (Within-skill milestones — 25M / 35M / 50M for the same
+  // skill — aren't chained, since hitting the higher one autocompletes
+  // the lower ones in-game.)
   const xpMatch = /^Obtain \d+ Million ([A-Za-z]+) XP$/.exec(name);
   if (xpMatch && SKILL_NAME_SET.has(xpMatch[1])) {
     return TASK_BY_NAME.get(`Reach Level 99 ${xpMatch[1]}`) ?? null;
   }
 
-  // Collection log slot chain: "Fill N Tier Clue Collection Log Slots".
+  // Collection log slot chain: "Fill N <tier> Clue Collection Log Slots".
   // Per-tier chain since slot counts differ; the chain root has no parent.
   const colMatch = /^Fill (\d+) (Easy|Medium|Hard|Elite|Master) Clue Collection Log Slots$/.exec(
     name,
@@ -137,43 +378,8 @@ function parentOf(task: Task): Task | null {
     return null;
   }
 
-  // Speed task chain: "Complete 1 Speed Task" → 5 → 10 → 20 → 30.
-  const speedMatch = /^Complete (\d+) Speed Tasks?$/.exec(name);
-  if (speedMatch) {
-    const idx = (SPEED_TASK_CHAIN as readonly number[]).indexOf(parseInt(speedMatch[1], 10));
-    if (idx > 0) {
-      const prev = SPEED_TASK_CHAIN[idx - 1];
-      const prevName = prev === 1 ? 'Complete 1 Speed Task' : `Complete ${prev} Speed Tasks`;
-      return TASK_BY_NAME.get(prevName) ?? null;
-    }
-    return null;
-  }
-
-  // Unique echo boss chain: "Defeat 1 unique Echo Boss" → 2 → 3 → 4.
-  const echoUniqueMatch = /^Defeat (\d+) unique Echo Boss(?:es)?$/.exec(name);
-  if (echoUniqueMatch) {
-    const idx = (ECHO_UNIQUE_CHAIN as readonly number[]).indexOf(parseInt(echoUniqueMatch[1], 10));
-    if (idx > 0) {
-      const prev = ECHO_UNIQUE_CHAIN[idx - 1];
-      const prevName =
-        prev === 1 ? 'Defeat 1 unique Echo Boss' : `Defeat ${prev} unique Echo Bosses`;
-      return TASK_BY_NAME.get(prevName) ?? null;
-    }
-    return null;
-  }
-
-  // Total echo boss kill chain: 25 → 75 → 150 ("Defeat N Echo Bosses", no "unique").
-  const echoTotalMatch = /^Defeat (\d+) Echo Bosses$/.exec(name);
-  if (echoTotalMatch) {
-    const idx = (ECHO_TOTAL_CHAIN as readonly number[]).indexOf(parseInt(echoTotalMatch[1], 10));
-    if (idx > 0) {
-      const prev = ECHO_TOTAL_CHAIN[idx - 1];
-      return TASK_BY_NAME.get(`Defeat ${prev} Echo Bosses`) ?? null;
-    }
-    return null;
-  }
-
-  return null;
+  // Everything else flows through the COUNT_CHAINS table.
+  return lookupCountChain(name);
 }
 
 export function hasUnmetDependency(task: Task, completed: ReadonlySet<number>): boolean {

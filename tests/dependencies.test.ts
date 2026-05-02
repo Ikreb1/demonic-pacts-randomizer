@@ -214,6 +214,82 @@ describe('hasUnmetDependency — echo boss chains', () => {
   });
 });
 
+describe('hasUnmetDependency — extended count chains', () => {
+  // Representative tests across the COUNT_CHAINS table. Not every family
+  // is worth a dedicated test (the dispatch logic is shared) — these
+  // pin down the awkward edges: chains with non-standard count values,
+  // case-sensitive name suffixes, multi-word formats.
+
+  it('Reach Combat Level chains through all 7 stops (25→50→75→100→110→120→126)', () => {
+    const child = findTask('Reach Combat Level 126');
+    const parent = findTask('Reach Combat Level 120');
+    const root = findTask('Reach Combat Level 25');
+    expect(hasUnmetDependency(child, new Set())).toBe(true);
+    expect(hasUnmetDependency(child, new Set([root.id]))).toBe(true);
+    expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
+  });
+
+  it('Reach Total Level uses immediate predecessor only (1500 needs 1250, not 1000)', () => {
+    const child = findTask('Reach Total Level 1500');
+    const grandparent = findTask('Reach Total Level 1000');
+    const parent = findTask('Reach Total Level 1250');
+    expect(hasUnmetDependency(child, new Set([grandparent.id]))).toBe(true);
+    expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
+  });
+
+  it('Reach Base Level chain extends through 95 (the previously-missing tail)', () => {
+    const child = findTask('Reach Base Level 95');
+    const parent = findTask('Reach Base Level 90');
+    expect(hasUnmetDependency(child, new Set())).toBe(true);
+    expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
+  });
+
+  it('Floor N of the Hallowed Sepulchre chains 1→5', () => {
+    const child = findTask('Floor 5 of the Hallowed Sepulchre');
+    const parent = findTask('Floor 4 of the Hallowed Sepulchre');
+    expect(hasUnmetDependency(child, new Set())).toBe(true);
+    expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
+  });
+
+  it('Defeat Vardorvis 300 times requires Vardorvis 150 (50/150/300 family)', () => {
+    const child = findTask('Defeat Vardorvis 300 times');
+    const parent = findTask('Defeat Vardorvis 150 times');
+    expect(hasUnmetDependency(child, new Set())).toBe(true);
+    expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
+  });
+
+  it("Defeat Nex 200 Times uses the 50/100/200 chain, not the standard 50/150/300", () => {
+    // Important: Nex's chain values differ from the canonical boss chain.
+    const child = findTask('Defeat Nex 200 Times');
+    const parent = findTask('Defeat Nex 100 Times');
+    expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
+    // 150 isn't even a valid Nex task; sanity-check the chain isn't picking
+    // up the wrong predecessor by id collision.
+    expect(hasUnmetDependency(child, new Set())).toBe(true);
+  });
+
+  it('250 Combat Achievements requires 200 Combat Achievements', () => {
+    const child = findTask('250 Combat Achievements');
+    const parent = findTask('200 Combat Achievements');
+    expect(hasUnmetDependency(child, new Set())).toBe(true);
+    expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
+  });
+
+  it('"50 Chambers of Xeric" requires "25 Chambers of Xeric"', () => {
+    const child = findTask('50 Chambers of Xeric');
+    const parent = findTask('25 Chambers of Xeric');
+    expect(hasUnmetDependency(child, new Set())).toBe(true);
+    expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
+  });
+
+  it('Room 8 of Pyramid Plunder chains through Room 7', () => {
+    const child = findTask('Room 8 of Pyramid Plunder');
+    const parent = findTask('Room 7 of Pyramid Plunder');
+    expect(hasUnmetDependency(child, new Set())).toBe(true);
+    expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
+  });
+});
+
 describe('hasUnmetDependency — non-matching tasks pass through', () => {
   it('"Reach Level 99 Cooking" is not gated by anything itself', () => {
     expect(hasUnmetDependency(findTask('Reach Level 99 Cooking'), new Set())).toBe(false);
