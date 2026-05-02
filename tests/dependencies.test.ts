@@ -307,6 +307,26 @@ describe('hasUnmetDependency — extended count chains', () => {
     expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
   });
 
+  it('"5 Unique Items From Hard Clues" requires the singular "Gain a Unique Item From a Hard Clue"', () => {
+    const child = findTask('Gain 5 Unique Items From Hard Clues');
+    const parent = findTask('Gain a Unique Item From a Hard Clue');
+    expect(hasUnmetDependency(child, new Set())).toBe(true);
+    expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
+  });
+
+  it('"10 Unique Items From an Elite Clue" requires the singular "an Elite Clue" root', () => {
+    // Article-handling sanity: "Elite" gets "an", not "a".
+    const child = findTask('Gain 10 Unique Items From Elite Clues');
+    const parent = findTask('Gain a Unique Item From an Elite Clue');
+    expect(hasUnmetDependency(child, new Set())).toBe(true);
+    expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
+  });
+
+  it('the singular-root tasks themselves have no parent', () => {
+    expect(hasUnmetDependency(findTask('Gain a Unique Item From an Easy Clue'), new Set())).toBe(false);
+    expect(hasUnmetDependency(findTask('Gain a Unique Item From a Master Clue'), new Set())).toBe(false);
+  });
+
   it('per-tier unique-item chains are independent (Master parent doesn\'t satisfy Easy)', () => {
     const easy35 = findTask('Gain 35 Unique Items From Easy Clues');
     const masterParent = findTask('Gain 10 Unique Items From Master Clues');
