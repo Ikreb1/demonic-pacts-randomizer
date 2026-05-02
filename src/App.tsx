@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { RandomizerTab } from './components/RandomizerTab';
 import { CategoriesTab } from './components/CategoriesTab';
 import { EligibleTab } from './components/EligibleTab';
+import { RollableTab } from './components/RollableTab';
 import { PactsTab } from './components/PactsTab';
 import { HiscoresTab } from './components/HiscoresTab';
 import { RegionFilter } from './components/RegionFilter';
@@ -13,7 +14,7 @@ import { RelicUnlockModal } from './components/RelicUnlockModal';
 import { useStore, selectRelicScore } from './state/store';
 import { submitHiscoreFromState } from './lib/hiscoresAutoSubmit';
 
-type TabId = 'randomizer' | 'categories' | 'eligible' | 'pacts' | 'hiscores';
+type TabId = 'randomizer' | 'categories' | 'eligible' | 'rollable' | 'pacts' | 'hiscores';
 
 // Debounce window: a flurry of completions in quick succession (e.g. a
 // sync that lands a dozen new tasks at once) coalesces into one PUT.
@@ -86,6 +87,14 @@ export function App() {
           </button>
           <button
             role="tab"
+            aria-selected={tab === 'rollable'}
+            className={tab === 'rollable' ? 'tab tab-active' : 'tab'}
+            onClick={() => setTab('rollable')}
+          >
+            Rollable
+          </button>
+          <button
+            role="tab"
             aria-selected={tab === 'pacts'}
             className={tab === 'pacts' ? 'tab tab-active' : 'tab'}
             onClick={() => setTab('pacts')}
@@ -105,6 +114,7 @@ export function App() {
           {tab === 'randomizer' && <RandomizerTab />}
           {tab === 'categories' && <CategoriesTab />}
           {tab === 'eligible' && <EligibleTab />}
+          {tab === 'rollable' && <RollableTab />}
           {tab === 'pacts' && <PactsTab />}
           {tab === 'hiscores' && <HiscoresTab />}
         </div>
