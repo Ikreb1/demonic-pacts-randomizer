@@ -336,6 +336,19 @@ describe('hasUnmetDependency — extended count chains', () => {
   });
 });
 
+describe('hasUnmetDependency — slayer task chain', () => {
+  it('"Complete 1 Slayer Task" is the chain root', () => {
+    expect(hasUnmetDependency(findTask('Complete 1 Slayer Task'), new Set())).toBe(false);
+  });
+
+  it('"Complete 200 Slayer Tasks" requires "Complete 1 Slayer Task"', () => {
+    const child = findTask('Complete 200 Slayer Tasks');
+    const parent = findTask('Complete 1 Slayer Task');
+    expect(hasUnmetDependency(child, new Set())).toBe(true);
+    expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
+  });
+});
+
 describe('hasUnmetDependency — non-matching tasks pass through', () => {
   it('"Reach Level 99 Cooking" is not gated by anything itself', () => {
     expect(hasUnmetDependency(findTask('Reach Level 99 Cooking'), new Set())).toBe(false);

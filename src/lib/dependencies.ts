@@ -196,6 +196,12 @@ const COUNT_CHAINS: readonly CountChain[] = [
       n === 1 ? 'Gain a Unique Item From a Medium Clue' : `Gain ${n} Unique Items From Medium Clues`,
   },
   {
+    re: /^Complete (\d+) Slayer Tasks?$/,
+    chain: [1, 200],
+    format: (n) =>
+      n === 1 ? 'Complete 1 Slayer Task' : `Complete ${n} Slayer Tasks`,
+  },
+  {
     re: /^Gain (\d+) Unique Items From Hard Clues$/,
     chain: [1, 5, 20, 50],
     format: (n) =>
