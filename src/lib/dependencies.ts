@@ -27,6 +27,14 @@ const ALWAYS_SKIP_TASK_NAMES: ReadonlySet<string> = new Set([
   'Complete the Prison Pete random event',
   'Complete the Surprise Exam random event',
   'Obtain a Kebab from a random event',
+  // Random-event-rewarded outfits. Pieces drop only from their specific
+  // random event (Gravedigger / Mime / Sandwich Lady / Drill Demon), so
+  // these are time-gated in the same way as the events themselves.
+  // (The Alchemist's outfit is a shop/minigame reward, NOT here.)
+  'Equip a piece of Zombie Outfit',
+  'Equip a piece of Mime Outfit',
+  "Equip a piece of Beekeeper's Outfit",
+  'Equip a piece of Camouflage outfit',
 ]);
 
 // Count chains that don't fit the simple "single regex + count + naming

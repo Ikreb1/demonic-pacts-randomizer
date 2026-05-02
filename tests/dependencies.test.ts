@@ -31,6 +31,17 @@ describe('isAlwaysSkippedFromRoll', () => {
     expect(isAlwaysSkippedFromRoll(findTask('Obtain a Kebab from a random event'))).toBe(true);
   });
 
+  it('skips random-event-rewarded outfit tasks (drops only from the event)', () => {
+    expect(isAlwaysSkippedFromRoll(findTask('Equip a piece of Zombie Outfit'))).toBe(true);
+    expect(isAlwaysSkippedFromRoll(findTask('Equip a piece of Mime Outfit'))).toBe(true);
+    expect(isAlwaysSkippedFromRoll(findTask("Equip a piece of Beekeeper's Outfit"))).toBe(true);
+    expect(isAlwaysSkippedFromRoll(findTask('Equip a piece of Camouflage outfit'))).toBe(true);
+  });
+
+  it('does NOT skip the Alchemist\'s outfit (shop/minigame reward, not random event)', () => {
+    expect(isAlwaysSkippedFromRoll(findTask('Equip a piece of Alchemists outfit'))).toBe(false);
+  });
+
   it('does not skip ordinary tasks', () => {
     expect(isAlwaysSkippedFromRoll(findTask('1 Easy Clue Scroll'))).toBe(false);
     expect(isAlwaysSkippedFromRoll(findTask('Reach Level 99 Cooking'))).toBe(false);
