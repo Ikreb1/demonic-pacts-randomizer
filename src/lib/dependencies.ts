@@ -179,10 +179,34 @@ const COUNT_CHAINS: readonly CountChain[] = [
     chain: [50, 100, 150, 200, 250],
     format: (n) => `${n} Combat Achievements`,
   },
+  // "Gain N Unique Items From <Tier> Clues" — count varies per tier, so
+  // each tier gets its own entry. Singular "Gain a Unique Item From a/an
+  // <Tier> Clue" tasks (count=1 root) aren't chained: they auto-progress
+  // alongside higher counts, so locking one isn't a wasted slot risk.
+  {
+    re: /^Gain (\d+) Unique Items From Easy Clues$/,
+    chain: [10, 35],
+    format: (n) => `Gain ${n} Unique Items From Easy Clues`,
+  },
+  {
+    re: /^Gain (\d+) Unique Items From Medium Clues$/,
+    chain: [10, 25],
+    format: (n) => `Gain ${n} Unique Items From Medium Clues`,
+  },
   {
     re: /^Gain (\d+) Unique Items From Hard Clues$/,
     chain: [5, 20, 50],
     format: (n) => `Gain ${n} Unique Items From Hard Clues`,
+  },
+  {
+    re: /^Gain (\d+) Unique Items From Elite Clues$/,
+    chain: [10, 25],
+    format: (n) => `Gain ${n} Unique Items From Elite Clues`,
+  },
+  {
+    re: /^Gain (\d+) Unique Items From Master Clues$/,
+    chain: [10, 25],
+    format: (n) => `Gain ${n} Unique Items From Master Clues`,
   },
   {
     re: /^(\d+) Collection log slots$/,

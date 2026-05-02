@@ -299,6 +299,21 @@ describe('hasUnmetDependency — extended count chains', () => {
     expect(hasUnmetDependency(child, new Set())).toBe(true);
     expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
   });
+
+  it('"25 Unique Items From Master Clues" requires "10 Unique Items From Master Clues"', () => {
+    const child = findTask('Gain 25 Unique Items From Master Clues');
+    const parent = findTask('Gain 10 Unique Items From Master Clues');
+    expect(hasUnmetDependency(child, new Set())).toBe(true);
+    expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
+  });
+
+  it('per-tier unique-item chains are independent (Master parent doesn\'t satisfy Easy)', () => {
+    const easy35 = findTask('Gain 35 Unique Items From Easy Clues');
+    const masterParent = findTask('Gain 10 Unique Items From Master Clues');
+    const easyParent = findTask('Gain 10 Unique Items From Easy Clues');
+    expect(hasUnmetDependency(easy35, new Set([masterParent.id]))).toBe(true);
+    expect(hasUnmetDependency(easy35, new Set([easyParent.id]))).toBe(false);
+  });
 });
 
 describe('hasUnmetDependency — non-matching tasks pass through', () => {
