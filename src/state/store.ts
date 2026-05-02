@@ -93,6 +93,9 @@ interface StoreState extends PersistedState {
 }
 
 const SCHEMA_VERSION = 8;
+// Single source of truth for the localStorage key — referenced by the
+// persist config below and by the Export/Import progress UI in ResetPanel.
+export const PERSIST_KEY = 'demonic-pacts-randomizer';
 const DEFAULT_PROXY_BASE_URL = 'https://dpl-wikisync-proxy.breki.workers.dev';
 const RECENT_USERNAMES_MAX = 5;
 export const RANDOM_REGION_BONUS = 500;
@@ -468,7 +471,7 @@ export const useStore = create<StoreState>()(
       },
     }),
     {
-      name: 'demonic-pacts-randomizer',
+      name: PERSIST_KEY,
       storage: createJSONStorage(() => localStorage),
       version: SCHEMA_VERSION,
       partialize: (state): PersistedState => ({
