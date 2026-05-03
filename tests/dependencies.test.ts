@@ -29,6 +29,7 @@ describe('isAlwaysSkippedFromRoll', () => {
     expect(isAlwaysSkippedFromRoll(findTask('Complete the Prison Pete random event'))).toBe(true);
     expect(isAlwaysSkippedFromRoll(findTask('Complete the Surprise Exam random event'))).toBe(true);
     expect(isAlwaysSkippedFromRoll(findTask('Obtain a Kebab from a random event'))).toBe(true);
+    expect(isAlwaysSkippedFromRoll(findTask('Trade a herb with Jekyll'))).toBe(true);
   });
 
   it('skips random-event-rewarded outfit tasks (drops only from the event)', () => {
@@ -344,6 +345,13 @@ describe('hasUnmetDependency — slayer task chain', () => {
   it('"Complete 200 Slayer Tasks" requires "Complete 1 Slayer Task"', () => {
     const child = findTask('Complete 200 Slayer Tasks');
     const parent = findTask('Complete 1 Slayer Task');
+    expect(hasUnmetDependency(child, new Set())).toBe(true);
+    expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
+  });
+
+  it('"Steal 100 Valuables" requires "Steal 25 Valuables"', () => {
+    const child = findTask('Steal 100 Valuables');
+    const parent = findTask('Steal 25 Valuables');
     expect(hasUnmetDependency(child, new Set())).toBe(true);
     expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
   });

@@ -27,6 +27,7 @@ const ALWAYS_SKIP_TASK_NAMES: ReadonlySet<string> = new Set([
   'Complete the Prison Pete random event',
   'Complete the Surprise Exam random event',
   'Obtain a Kebab from a random event',
+  'Trade a herb with Jekyll',
   // Random-event-rewarded outfits. Pieces drop only from their specific
   // random event (Gravedigger / Mime / Sandwich Lady / Drill Demon), so
   // these are time-gated in the same way as the events themselves.
@@ -200,6 +201,11 @@ const COUNT_CHAINS: readonly CountChain[] = [
     chain: [1, 200],
     format: (n) =>
       n === 1 ? 'Complete 1 Slayer Task' : `Complete ${n} Slayer Tasks`,
+  },
+  {
+    re: /^Steal (\d+) Valuables$/,
+    chain: [25, 100],
+    format: (n) => `Steal ${n} Valuables`,
   },
   {
     re: /^Gain (\d+) Unique Items From Hard Clues$/,
