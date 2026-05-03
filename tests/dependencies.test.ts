@@ -270,6 +270,61 @@ describe('hasUnmetDependency — extended count chains', () => {
     expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
   });
 
+  it('Defeat Vardorvis 50 times requires the singular "Defeat Vardorvis" first-kill task', () => {
+    const child = findTask('Defeat Vardorvis 50 times');
+    const parent = findTask('Defeat Vardorvis');
+    expect(hasUnmetDependency(child, new Set())).toBe(true);
+    expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
+  });
+
+  it('Defeat the Abyssal Sire 50 Times requires "Defeat the Abyssal Sire" (first-kill)', () => {
+    const child = findTask('Defeat the Abyssal Sire 50 Times');
+    const parent = findTask('Defeat the Abyssal Sire');
+    expect(hasUnmetDependency(child, new Set())).toBe(true);
+    expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
+  });
+
+  it('Defeat the Royal Titans 50 times requires the first-kill task', () => {
+    const child = findTask('Defeat the Royal Titans 50 times');
+    const parent = findTask('Defeat the Royal Titans');
+    expect(hasUnmetDependency(child, new Set())).toBe(true);
+    expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
+  });
+
+  it('Defeat the Kalphite Queen 150 Times requires 50 (and 50 requires the singular)', () => {
+    const c150 = findTask('Defeat the Kalphite Queen 150 Times');
+    const c50 = findTask('Defeat the Kalphite Queen 50 Times');
+    const root = findTask('Defeat the Kalphite Queen');
+    expect(hasUnmetDependency(c150, new Set([root.id]))).toBe(true);
+    expect(hasUnmetDependency(c150, new Set([c50.id]))).toBe(false);
+    expect(hasUnmetDependency(c50, new Set([root.id]))).toBe(false);
+  });
+
+  it('Defeat Tempoross 10 times requires "Defeat Tempoross 1 time" (singular w/ "1 time" form)', () => {
+    const child = findTask('Defeat Tempoross 10 times');
+    const parent = findTask('Defeat Tempoross 1 time');
+    expect(hasUnmetDependency(child, new Set())).toBe(true);
+    expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
+    // The "1 time" task itself is the chain root.
+    expect(hasUnmetDependency(parent, new Set())).toBe(false);
+  });
+
+  it('Defeat Yama 50 times requires "Defeat Yama 1 time"', () => {
+    const child = findTask('Defeat Yama 50 times');
+    const parent = findTask('Defeat Yama 1 time');
+    expect(hasUnmetDependency(child, new Set())).toBe(true);
+    expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
+  });
+
+  it('Defeat the Giant Mole 150 Times chains through 50 to the singular root', () => {
+    const c150 = findTask('Defeat the Giant Mole 150 Times');
+    const c50 = findTask('Defeat the Giant Mole 50 Times');
+    const root = findTask('Defeat the Giant Mole');
+    expect(hasUnmetDependency(c150, new Set([root.id]))).toBe(true);
+    expect(hasUnmetDependency(c150, new Set([c50.id]))).toBe(false);
+    expect(hasUnmetDependency(c50, new Set([root.id]))).toBe(false);
+  });
+
   it("Defeat Nex 200 Times uses the 50/100/200 chain, not the standard 50/150/300", () => {
     // Important: Nex's chain values differ from the canonical boss chain.
     const child = findTask('Defeat Nex 200 Times');

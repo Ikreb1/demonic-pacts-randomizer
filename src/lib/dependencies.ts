@@ -74,6 +74,9 @@ interface CountChain {
 }
 
 const BOSS_50_150_300 = [50, 150, 300] as const;
+// Bosses where a separate "Defeat <Boss>" first-kill task exists; the
+// singular task is the chain root (treated as N=1).
+const BOSS_1_50_150_300 = [1, 50, 150, 300] as const;
 
 const COUNT_CHAINS: readonly CountChain[] = [
   // Leagues progression (active gameplay)
@@ -235,8 +238,8 @@ const COUNT_CHAINS: readonly CountChain[] = [
   // capitalization for "times"/"Times" — preserved per task.
   {
     re: /^Defeat Vardorvis (\d+) times$/,
-    chain: BOSS_50_150_300,
-    format: (n) => `Defeat Vardorvis ${n} times`,
+    chain: BOSS_1_50_150_300,
+    format: (n) => (n === 1 ? 'Defeat Vardorvis' : `Defeat Vardorvis ${n} times`),
   },
   {
     re: /^Defeat Sarachnis (\d+) Times$/,
@@ -250,18 +253,18 @@ const COUNT_CHAINS: readonly CountChain[] = [
   },
   {
     re: /^Defeat Callisto (\d+) times$/,
-    chain: BOSS_50_150_300,
-    format: (n) => `Defeat Callisto ${n} times`,
+    chain: BOSS_1_50_150_300,
+    format: (n) => (n === 1 ? 'Defeat Callisto' : `Defeat Callisto ${n} times`),
   },
   {
     re: /^Defeat Cerberus (\d+) times$/,
-    chain: BOSS_50_150_300,
-    format: (n) => `Defeat Cerberus ${n} times`,
+    chain: BOSS_1_50_150_300,
+    format: (n) => (n === 1 ? 'Defeat Cerberus' : `Defeat Cerberus ${n} times`),
   },
   {
     re: /^Defeat Duke Sucellus (\d+) times$/,
-    chain: BOSS_50_150_300,
-    format: (n) => `Defeat Duke Sucellus ${n} times`,
+    chain: BOSS_1_50_150_300,
+    format: (n) => (n === 1 ? 'Defeat Duke Sucellus' : `Defeat Duke Sucellus ${n} times`),
   },
   {
     re: /^Defeat Each Dagannoth King (\d+) Times$/,
@@ -270,38 +273,38 @@ const COUNT_CHAINS: readonly CountChain[] = [
   },
   {
     re: /^Defeat Leviathan (\d+) times$/,
-    chain: BOSS_50_150_300,
-    format: (n) => `Defeat Leviathan ${n} times`,
+    chain: BOSS_1_50_150_300,
+    format: (n) => (n === 1 ? 'Defeat Leviathan' : `Defeat Leviathan ${n} times`),
   },
   {
     re: /^Defeat Phantom Muspah (\d+) times$/,
-    chain: BOSS_50_150_300,
-    format: (n) => `Defeat Phantom Muspah ${n} times`,
+    chain: BOSS_1_50_150_300,
+    format: (n) => (n === 1 ? 'Defeat Phantom Muspah' : `Defeat Phantom Muspah ${n} times`),
   },
   {
     re: /^Defeat Venenatis (\d+) times$/,
-    chain: BOSS_50_150_300,
-    format: (n) => `Defeat Venenatis ${n} times`,
+    chain: BOSS_1_50_150_300,
+    format: (n) => (n === 1 ? 'Defeat Venenatis' : `Defeat Venenatis ${n} times`),
   },
   {
     re: /^Defeat Vet'ion (\d+) times$/,
-    chain: BOSS_50_150_300,
-    format: (n) => `Defeat Vet'ion ${n} times`,
+    chain: BOSS_1_50_150_300,
+    format: (n) => (n === 1 ? "Defeat Vet'ion" : `Defeat Vet'ion ${n} times`),
   },
   {
     re: /^Defeat Vorkath (\d+) Times$/,
-    chain: BOSS_50_150_300,
-    format: (n) => `Defeat Vorkath ${n} Times`,
+    chain: BOSS_1_50_150_300,
+    format: (n) => (n === 1 ? 'Defeat Vorkath' : `Defeat Vorkath ${n} Times`),
   },
   {
     re: /^Defeat Whisperer (\d+) times$/,
-    chain: BOSS_50_150_300,
-    format: (n) => `Defeat Whisperer ${n} times`,
+    chain: BOSS_1_50_150_300,
+    format: (n) => (n === 1 ? 'Defeat Whisperer' : `Defeat Whisperer ${n} times`),
   },
   {
     re: /^Defeat Zulrah (\d+) Times$/,
-    chain: BOSS_50_150_300,
-    format: (n) => `Defeat Zulrah ${n} Times`,
+    chain: BOSS_1_50_150_300,
+    format: (n) => (n === 1 ? 'Defeat Zulrah' : `Defeat Zulrah ${n} Times`),
   },
   {
     re: /^Defeat the Alchemical Hydra (\d+) Times$/,
@@ -315,8 +318,9 @@ const COUNT_CHAINS: readonly CountChain[] = [
   },
   {
     re: /^Defeat the Abyssal Sire (\d+) Times$/,
-    chain: BOSS_50_150_300,
-    format: (n) => `Defeat the Abyssal Sire ${n} Times`,
+    chain: BOSS_1_50_150_300,
+    format: (n) =>
+      n === 1 ? 'Defeat the Abyssal Sire' : `Defeat the Abyssal Sire ${n} Times`,
   },
   {
     re: /^Defeat Araxxor (\d+) Times$/,
@@ -332,13 +336,14 @@ const COUNT_CHAINS: readonly CountChain[] = [
   },
   {
     re: /^Defeat the Corporeal Beast (\d+) Times$/,
-    chain: [50, 150, 250],
-    format: (n) => `Defeat the Corporeal Beast ${n} Times`,
+    chain: [1, 50, 150, 250],
+    format: (n) =>
+      n === 1 ? 'Defeat the Corporeal Beast' : `Defeat the Corporeal Beast ${n} Times`,
   },
   {
     re: /^Defeat Nex (\d+) Times$/,
-    chain: [50, 100, 200],
-    format: (n) => `Defeat Nex ${n} Times`,
+    chain: [1, 50, 100, 200],
+    format: (n) => (n === 1 ? 'Defeat Nex' : `Defeat Nex ${n} Times`),
   },
   {
     re: /^Defeat the Wintertodt (\d+) times$/,
@@ -347,18 +352,71 @@ const COUNT_CHAINS: readonly CountChain[] = [
   },
   {
     re: /^Defeat the Moons of Peril (\d+) times$/,
-    chain: [10, 25, 50],
-    format: (n) => `Defeat the Moons of Peril ${n} times`,
+    chain: [1, 10, 25, 50],
+    format: (n) =>
+      n === 1 ? 'Defeat the Moons of Peril' : `Defeat the Moons of Peril ${n} times`,
   },
   {
     re: /^Defeat The Nightmare (\d+) times$/,
-    chain: [25, 50, 150],
-    format: (n) => `Defeat The Nightmare ${n} times`,
+    chain: [1, 25, 50, 150],
+    format: (n) => (n === 1 ? 'Defeat The Nightmare' : `Defeat The Nightmare ${n} times`),
   },
   {
     re: /^Defeat Any God Wars Dungeon Boss (\d+) Times$/,
     chain: [100, 250, 500],
     format: (n) => `Defeat Any God Wars Dungeon Boss ${n} Times`,
+  },
+
+  // Bosses missed in the first pass — chains gated on a "Defeat <Boss>"
+  // first-kill task where one exists.
+  {
+    re: /^Defeat the Royal Titans (\d+) times$/,
+    chain: [1, 50],
+    format: (n) =>
+      n === 1 ? 'Defeat the Royal Titans' : `Defeat the Royal Titans ${n} times`,
+  },
+  {
+    re: /^Defeat the Giant Mole (\d+) Times$/,
+    chain: [1, 50, 150],
+    format: (n) => (n === 1 ? 'Defeat the Giant Mole' : `Defeat the Giant Mole ${n} Times`),
+  },
+  {
+    re: /^Defeat Zalcano (\d+) Times$/,
+    chain: [1, 50, 100],
+    format: (n) => (n === 1 ? 'Defeat Zalcano' : `Defeat Zalcano ${n} Times`),
+  },
+  {
+    re: /^Defeat the Grotesque Guardians (\d+) Times$/,
+    chain: [1, 50, 150],
+    format: (n) =>
+      n === 1 ? 'Defeat the Grotesque Guardians' : `Defeat the Grotesque Guardians ${n} Times`,
+  },
+  {
+    re: /^Defeat the Kalphite Queen (\d+) Times$/,
+    chain: [1, 50, 150],
+    format: (n) =>
+      n === 1 ? 'Defeat the Kalphite Queen' : `Defeat the Kalphite Queen ${n} Times`,
+  },
+
+  // Tempoross / Yama use "Defeat X 1 time" (singular noun) for the
+  // first-kill task — the regex needs to match "time" optionally
+  // pluralized so the N=1 entry hits the chain too.
+  {
+    re: /^Defeat Tempoross (\d+) times?$/,
+    chain: [1, 10, 25],
+    format: (n) => (n === 1 ? 'Defeat Tempoross 1 time' : `Defeat Tempoross ${n} times`),
+  },
+  {
+    re: /^Defeat Yama (\d+) times?$/,
+    chain: [1, 50, 150],
+    format: (n) => (n === 1 ? 'Defeat Yama 1 time' : `Defeat Yama ${n} times`),
+  },
+
+  // Sol Heredit has no first-kill task in tasks.json — count chain only.
+  {
+    re: /^Defeat Sol Heredit (\d+) times$/,
+    chain: [5, 10],
+    format: (n) => `Defeat Sol Heredit ${n} times`,
   },
 ];
 
