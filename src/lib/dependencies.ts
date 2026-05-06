@@ -431,6 +431,13 @@ function lookupCountChain(name: string): Task | null {
   return null;
 }
 
+// One-off "equip <item>" tasks where the item is a guaranteed-only drop
+// from a specific boss. Without the kill task as parent, these can roll
+// before the user has any access to the drop source.
+const EQUIPMENT_PARENT_NAMES: Readonly<Record<string, string>> = {
+  'Equip a Zamorakian Spear': "Defeat K'ril Tsutsaroth",
+};
+
 export function isAlwaysSkippedFromRoll(task: Task): boolean {
   return ALWAYS_SKIP_TASK_NAMES.has(task.name);
 }
@@ -484,6 +491,10 @@ function parentOf(task: Task): Task | null {
     }
     return null;
   }
+
+  // One-off equipment drops gated on a kill task.
+  const equipParent = EQUIPMENT_PARENT_NAMES[name];
+  if (equipParent) return TASK_BY_NAME.get(equipParent) ?? null;
 
   // Everything else flows through the COUNT_CHAINS table.
   return lookupCountChain(name);

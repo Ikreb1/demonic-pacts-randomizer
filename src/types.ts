@@ -106,5 +106,5 @@ export interface PactsFile {
   pacts: Pact[];
 }
 
-export const MAX_PACT_RESETS = 5;
+export const MAX_PACT_RESETS = 6;
 export const MAX_PACTS_UNLOCKED = 40;

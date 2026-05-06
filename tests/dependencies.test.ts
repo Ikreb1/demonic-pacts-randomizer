@@ -392,6 +392,15 @@ describe('hasUnmetDependency — extended count chains', () => {
   });
 });
 
+describe('hasUnmetDependency — one-off equipment drops', () => {
+  it("Equip a Zamorakian Spear requires Defeat K'ril Tsutsaroth", () => {
+    const child = findTask('Equip a Zamorakian Spear');
+    const parent = findTask("Defeat K'ril Tsutsaroth");
+    expect(hasUnmetDependency(child, new Set())).toBe(true);
+    expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
+  });
+});
+
 describe('hasUnmetDependency — slayer task chain', () => {
   it('"Complete 1 Slayer Task" is the chain root', () => {
     expect(hasUnmetDependency(findTask('Complete 1 Slayer Task'), new Set())).toBe(false);
