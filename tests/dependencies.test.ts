@@ -392,12 +392,55 @@ describe('hasUnmetDependency — extended count chains', () => {
   });
 });
 
-describe('hasUnmetDependency — one-off equipment drops', () => {
+describe('hasUnmetDependency — one-off cross-chain dependencies', () => {
   it("Equip a Zamorakian Spear requires Defeat K'ril Tsutsaroth", () => {
     const child = findTask('Equip a Zamorakian Spear');
     const parent = findTask("Defeat K'ril Tsutsaroth");
     expect(hasUnmetDependency(child, new Set())).toBe(true);
     expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
+  });
+
+  it('Moons of Peril armour piece requires the boss-kill task', () => {
+    const child = findTask('Equip any piece of armour from the moons of peril');
+    const parent = findTask('Defeat the Moons of Peril');
+    expect(hasUnmetDependency(child, new Set())).toBe(true);
+    expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
+  });
+
+  it('Full Prospector Outfit requires obtaining 20 Golden Nuggets', () => {
+    const child = findTask('Equip a Full Prospector Outfit');
+    const parent = findTask('Obtain 20 Golden Nuggets');
+    expect(hasUnmetDependency(child, new Set())).toBe(true);
+    expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
+  });
+
+  it('"Build all Quetzal landing sites" requires the singular "Build a" first', () => {
+    const child = findTask('Build all Quetzal landing sites');
+    const parent = findTask('Build a Quetzal Landing Site');
+    expect(hasUnmetDependency(child, new Set())).toBe(true);
+    expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
+  });
+
+  it('Echo Bosses total chain root (25) requires one unique Echo Boss kill', () => {
+    const child = findTask('Defeat 25 Echo Bosses');
+    const parent = findTask('Defeat 1 unique Echo Boss');
+    expect(hasUnmetDependency(child, new Set())).toBe(true);
+    expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
+  });
+
+  it('Echo Item equip chain links 1 unique kill → one → 2 → 3 → four', () => {
+    const kill = findTask('Defeat 1 unique Echo Boss');
+    const e1 = findTask('Equip one unique Echo Item');
+    const e2 = findTask('Equip 2 unique Echo Items');
+    const e3 = findTask('Equip 3 unique Echo Items');
+    const e4 = findTask('Equip four unique Echo Items');
+
+    expect(hasUnmetDependency(e1, new Set([kill.id]))).toBe(false);
+    expect(hasUnmetDependency(e2, new Set([e1.id]))).toBe(false);
+    expect(hasUnmetDependency(e3, new Set([e2.id]))).toBe(false);
+    expect(hasUnmetDependency(e4, new Set([e3.id]))).toBe(false);
+    // Skipping a step doesn't satisfy the immediate parent.
+    expect(hasUnmetDependency(e3, new Set([kill.id, e1.id]))).toBe(true);
   });
 });
 
@@ -416,6 +459,27 @@ describe('hasUnmetDependency — slayer task chain', () => {
   it('"Steal 100 Valuables" requires "Steal 25 Valuables"', () => {
     const child = findTask('Steal 100 Valuables');
     const parent = findTask('Steal 25 Valuables');
+    expect(hasUnmetDependency(child, new Set())).toBe(true);
+    expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
+  });
+
+  it('"Craft 2500 Essence Into Runes" requires "Craft 200 Essence Into Runes"', () => {
+    const child = findTask('Craft 2500 Essence Into Runes');
+    const parent = findTask('Craft 200 Essence Into Runes');
+    expect(hasUnmetDependency(child, new Set())).toBe(true);
+    expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
+  });
+
+  it('"Defeat Amoxliatl 50 Times" requires "Defeat Amoxliatl 1 Time"', () => {
+    const child = findTask('Defeat Amoxliatl 50 Times');
+    const parent = findTask('Defeat Amoxliatl 1 Time');
+    expect(hasUnmetDependency(child, new Set())).toBe(true);
+    expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
+  });
+
+  it('"Complete 10 Hunter Rumours" requires the singular "Complete a Hunter Rumour"', () => {
+    const child = findTask('Complete 10 Hunter Rumours');
+    const parent = findTask('Complete a Hunter Rumour');
     expect(hasUnmetDependency(child, new Set())).toBe(true);
     expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
   });

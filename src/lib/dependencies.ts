@@ -130,8 +130,18 @@ const COUNT_CHAINS: readonly CountChain[] = [
   // Activity counts
   {
     re: /^Complete (\d+) Hunter Rumours$/,
-    chain: [10, 25, 50],
-    format: (n) => `Complete ${n} Hunter Rumours`,
+    chain: [1, 10, 25, 50],
+    format: (n) => (n === 1 ? 'Complete a Hunter Rumour' : `Complete ${n} Hunter Rumours`),
+  },
+  {
+    re: /^Craft (\d+) Essence Into Runes$/,
+    chain: [200, 2500],
+    format: (n) => `Craft ${n} Essence Into Runes`,
+  },
+  {
+    re: /^Defeat Amoxliatl (\d+) Times?$/,
+    chain: [1, 50],
+    format: (n) => (n === 1 ? 'Defeat Amoxliatl 1 Time' : `Defeat Amoxliatl ${n} Times`),
   },
   {
     re: /^Defeat (\d+) Superior slayer creatures$/,
@@ -431,11 +441,30 @@ function lookupCountChain(name: string): Task | null {
   return null;
 }
 
-// One-off "equip <item>" tasks where the item is a guaranteed-only drop
-// from a specific boss. Without the kill task as parent, these can roll
-// before the user has any access to the drop source.
-const EQUIPMENT_PARENT_NAMES: Readonly<Record<string, string>> = {
+// One-off cross-chain dependencies — tasks where the parent doesn't fit
+// any of the count-chain or singular-root patterns above. Most are
+// "equip <item>" tasks gated on a specific boss kill, but the table
+// also covers a few capstone/cross-chain hops (e.g. the totals chain
+// rooted on a unique-kill task) that don't reduce to a count regex.
+const EXPLICIT_PARENTS: Readonly<Record<string, string>> = {
+  // Equipment drops gated on the boss that drops them.
   'Equip a Zamorakian Spear': "Defeat K'ril Tsutsaroth",
+  'Equip any piece of armour from the moons of peril': 'Defeat the Moons of Peril',
+  // Outfit assembled from a grind reward.
+  'Equip a Full Prospector Outfit': 'Obtain 20 Golden Nuggets',
+  // "Build all" capstone gated on the singular "Build a" first.
+  'Build all Quetzal landing sites': 'Build a Quetzal Landing Site',
+  // Echo Bosses total kill chain — the root requires at least one unique
+  // kill, since a "kill 25 echo bosses" without ever having killed one
+  // is contradictory.
+  'Defeat 25 Echo Bosses': 'Defeat 1 unique Echo Boss',
+  // Echo Item equip chain — the first equip requires a unique kill;
+  // subsequent counts chain through their predecessor (note the irregular
+  // naming: "one" and "four" spelled out, "2" / "3" digits).
+  'Equip one unique Echo Item': 'Defeat 1 unique Echo Boss',
+  'Equip 2 unique Echo Items': 'Equip one unique Echo Item',
+  'Equip 3 unique Echo Items': 'Equip 2 unique Echo Items',
+  'Equip four unique Echo Items': 'Equip 3 unique Echo Items',
 };
 
 export function isAlwaysSkippedFromRoll(task: Task): boolean {
@@ -492,9 +521,9 @@ function parentOf(task: Task): Task | null {
     return null;
   }
 
-  // One-off equipment drops gated on a kill task.
-  const equipParent = EQUIPMENT_PARENT_NAMES[name];
-  if (equipParent) return TASK_BY_NAME.get(equipParent) ?? null;
+  // One-off cross-chain dependencies (equipment drops, capstones, etc.)
+  const explicitParent = EXPLICIT_PARENTS[name];
+  if (explicitParent) return TASK_BY_NAME.get(explicitParent) ?? null;
 
   // Everything else flows through the COUNT_CHAINS table.
   return lookupCountChain(name);
