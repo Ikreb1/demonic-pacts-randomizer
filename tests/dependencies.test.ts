@@ -441,6 +441,43 @@ describe('hasUnmetDependency — one-off cross-chain dependencies', () => {
     expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
   });
 
+  it('boss-drop equipment is gated on the corresponding first-kill task', () => {
+    const pairs: Array<[string, string]> = [
+      ['Equip a Saradomin Sword', 'Defeat Commander Zilyana'],
+      ['Equip a Full Bandos Armour Set', 'Defeat General Graardor'],
+      ['Equip a Full Armadyl Armour Set', "Defeat Kree'arra"],
+      ['Equip a Full Set of Torva Armour', 'Defeat Nex'],
+      ['Equip a Zaryte Crossbow', 'Defeat Nex'],
+      ['Equip a Tyrannical Ring', 'Defeat Callisto'],
+      ['Equip a Treasonous Ring', 'Defeat Venenatis'],
+      ['Equip a Ring of the Gods', "Defeat Vet'ion"],
+      ['Equip a Dragonbone Necklace', 'Defeat Vorkath'],
+      ['Equip a Serpentine Helm', 'Defeat Zulrah'],
+      ['Equip an Elysian Spirit Shield', 'Defeat the Corporeal Beast'],
+      ['Equip a Berserker Ring', 'Defeat the Dagannoth Kings Without Leaving'],
+      ['Equip Every Dagannoth King Ring', 'Defeat the Dagannoth Kings Without Leaving'],
+      ['Equip the Ultor Ring', 'Defeat Vardorvis'],
+      ['Equip the Magus Ring', 'Defeat Duke Sucellus'],
+      ['Equip the Bellator Ring', 'Defeat Whisperer'],
+      ['Equip the Venator Ring', 'Defeat Leviathan'],
+      ['Equip the Venator Bow', 'Defeat Phantom Muspah'],
+      ['Equip the Noxious Halberd', 'Defeat Araxxor 1 Time'],
+      ['Equip a Dragon Hunter Lance', 'Defeat the Alchemical Hydra 1 Time'],
+      ['Equip a Twinflame staff', 'Defeat the Royal Titans'],
+      ['Equip an Occult Necklace', 'Defeat a Smoke Devil'],
+      ['Equip Glacial Temotli', 'Defeat Amoxliatl 1 Time'],
+      ["Equip a Full Inquisitor's Set", 'Defeat The Nightmare'],
+      ['Equip a Granite Hammer or Granite Ring', 'Defeat the Grotesque Guardians'],
+      ['Equip a piece of Hueycoatl armour', 'Defeat Hueycoatl 1 Time'],
+    ];
+    for (const [child, parent] of pairs) {
+      const c = findTask(child);
+      const p = findTask(parent);
+      expect(hasUnmetDependency(c, new Set())).toBe(true);
+      expect(hasUnmetDependency(c, new Set([p.id]))).toBe(false);
+    }
+  });
+
   it('Echo Item equip chain links 1 unique kill → one → 2 → 3 → four', () => {
     const kill = findTask('Defeat 1 unique Echo Boss');
     const e1 = findTask('Equip one unique Echo Item');

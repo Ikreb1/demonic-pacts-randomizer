@@ -447,29 +447,114 @@ function lookupCountChain(name: string): Task | null {
 // also covers a few capstone/cross-chain hops (e.g. the totals chain
 // rooted on a unique-kill task) that don't reduce to a count regex.
 const EXPLICIT_PARENTS: Readonly<Record<string, string>> = {
-  // Equipment drops gated on the boss that drops them.
-  'Equip a Zamorakian Spear': "Defeat K'ril Tsutsaroth",
-  'Equip any piece of armour from the moons of peril': 'Defeat the Moons of Peril',
-  // Each full Moon set requires a single piece first (which itself is
-  // gated on the boss kill above — the chain progresses transitively).
-  'Equip full Blood Moon armour': 'Equip any piece of armour from the moons of peril',
-  'Equip full Blue Moon armour': 'Equip any piece of armour from the moons of peril',
-  'Equip full Eclipse Moon armour': 'Equip any piece of armour from the moons of peril',
-  // Outfit assembled from a grind reward.
+  // ----- Outfits / capstones gated on grind/quest progression -----
   'Equip a Full Prospector Outfit': 'Obtain 20 Golden Nuggets',
-  // "Build all" capstone gated on the singular "Build a" first.
   'Build all Quetzal landing sites': 'Build a Quetzal Landing Site',
-  // Echo Bosses total kill chain — the root requires at least one unique
-  // kill, since a "kill 25 echo bosses" without ever having killed one
-  // is contradictory.
+
+  // ----- Echo content -----
+  // Total-kill chain root requires at least one unique kill.
   'Defeat 25 Echo Bosses': 'Defeat 1 unique Echo Boss',
-  // Echo Item equip chain — the first equip requires a unique kill;
-  // subsequent counts chain through their predecessor (note the irregular
-  // naming: "one" and "four" spelled out, "2" / "3" digits).
+  // Echo Item equip chain (irregular naming: "one"/"2"/"3"/"four").
   'Equip one unique Echo Item': 'Defeat 1 unique Echo Boss',
   'Equip 2 unique Echo Items': 'Equip one unique Echo Item',
   'Equip 3 unique Echo Items': 'Equip 2 unique Echo Items',
   'Equip four unique Echo Items': 'Equip 3 unique Echo Items',
+
+  // ----- Moons of Peril -----
+  'Equip any piece of armour from the moons of peril': 'Defeat the Moons of Peril',
+  // Each full Moon set requires a single piece first (transitive: piece → boss).
+  'Equip full Blood Moon armour': 'Equip any piece of armour from the moons of peril',
+  'Equip full Blue Moon armour': 'Equip any piece of armour from the moons of peril',
+  'Equip full Eclipse Moon armour': 'Equip any piece of armour from the moons of peril',
+
+  // ----- God Wars Dungeon -----
+  // K'ril
+  'Equip a Zamorakian Spear': "Defeat K'ril Tsutsaroth",
+  'Equip a Staff of the Dead': "Defeat K'ril Tsutsaroth",
+  // Commander Zilyana
+  'Equip a Saradomin Sword': 'Defeat Commander Zilyana',
+  // General Graardor
+  'Equip a Piece of the Bandos Armour Set': 'Defeat General Graardor',
+  'Equip a Full Bandos Armour Set': 'Defeat General Graardor',
+  // Kree'arra
+  'Equip a Piece of the Armadyl Armour Set': "Defeat Kree'arra",
+  'Equip a Full Armadyl Armour Set': "Defeat Kree'arra",
+
+  // ----- Nex -----
+  'Equip a Piece of Torva Armour': 'Defeat Nex',
+  'Equip a Full Set of Torva Armour': 'Defeat Nex',
+  'Equip some Zaryte Vambraces': 'Defeat Nex',
+  'Equip a Zaryte Crossbow': 'Defeat Nex',
+
+  // ----- Cerberus -----
+  'Equip Some Primordial, Pegasian or Eternal Boots': 'Defeat Cerberus',
+  'Equip all of the Cerberus Boots': 'Defeat Cerberus',
+
+  // ----- Wilderness rings -----
+  'Equip a Tyrannical Ring': 'Defeat Callisto',
+  'Equip a Treasonous Ring': 'Defeat Venenatis',
+  'Equip a Ring of the Gods': "Defeat Vet'ion",
+
+  // ----- Solo dragon-class bosses -----
+  'Equip a Dragonbone Necklace': 'Defeat Vorkath',
+  'Equip a Serpentine Helm': 'Defeat Zulrah',
+
+  // ----- Corporeal Beast (sigils) -----
+  'Equip a Spectral or Arcane Spirit Shield': 'Defeat the Corporeal Beast',
+  'Equip a Blessed Spirit Shield': 'Defeat the Corporeal Beast',
+  'Equip an Elysian Spirit Shield': 'Defeat the Corporeal Beast',
+
+  // ----- Dagannoth Kings -----
+  'Equip a Berserker Ring': 'Defeat the Dagannoth Kings Without Leaving',
+  'Equip a Warrior Ring': 'Defeat the Dagannoth Kings Without Leaving',
+  "Equip a Seer's Ring": 'Defeat the Dagannoth Kings Without Leaving',
+  "Equip an Archer's Ring": 'Defeat the Dagannoth Kings Without Leaving',
+  'Equip a Mud Battlestaff': 'Defeat the Dagannoth Kings Without Leaving',
+  'Equip a Seercull': 'Defeat the Dagannoth Kings Without Leaving',
+  'Equip Every Dagannoth King Ring': 'Defeat the Dagannoth Kings Without Leaving',
+
+  // ----- Grotesque Guardians -----
+  'Equip a Granite Hammer or Granite Ring': 'Defeat the Grotesque Guardians',
+
+  // ----- The Nightmare -----
+  'Equip a Nightmare Staff': 'Defeat The Nightmare',
+  'Equip a Nightmare Staff With an Orb': 'Defeat The Nightmare',
+  "Equip a Piece of the Inquisitor's Set": 'Defeat The Nightmare',
+  "Equip a Full Inquisitor's Set": 'Defeat The Nightmare',
+  "Equip an Inquisitor's Mace": 'Defeat The Nightmare',
+
+  // ----- Hueycoatl (Varlamore) -----
+  'Equip a piece of Hueycoatl armour': 'Defeat Hueycoatl 1 Time',
+  'Equip full Hueycoatl armour': 'Defeat Hueycoatl 1 Time',
+
+  // ----- Amoxliatl (Frost Naguas drop too, but Amoxliatl is a clean source) -----
+  'Equip Glacial Temotli': 'Defeat Amoxliatl 1 Time',
+
+  // ----- Desert Treasure 2 awakened bosses -----
+  'Equip the Ultor Ring': 'Defeat Vardorvis',
+  'Equip the Magus Ring': 'Defeat Duke Sucellus',
+  'Equip the Bellator Ring': 'Defeat Whisperer',
+  'Equip the Venator Ring': 'Defeat Leviathan',
+  'Equip an Ice Ancient Sceptre': 'Defeat Duke Sucellus',
+
+  // ----- Phantom Muspah -----
+  'Equip the Venator Bow': 'Defeat Phantom Muspah',
+  'Equip the Ancient Sceptre': 'Defeat Phantom Muspah',
+
+  // ----- Araxxor -----
+  'Equip the Noxious Halberd': 'Defeat Araxxor 1 Time',
+  'Equip the Amulet of Rancour': 'Defeat Araxxor 1 Time',
+
+  // ----- Alchemical Hydra -----
+  'Equip a Brimstone Ring': 'Defeat the Alchemical Hydra 1 Time',
+  'Equip Ferocious Gloves': 'Defeat the Alchemical Hydra 1 Time',
+  'Equip a Dragon Hunter Lance': 'Defeat the Alchemical Hydra 1 Time',
+
+  // ----- Royal Titans -----
+  'Equip a Twinflame staff': 'Defeat the Royal Titans',
+
+  // ----- Smoke devils (regular slayer mob, not just Therm) -----
+  'Equip an Occult Necklace': 'Defeat a Smoke Devil',
 };
 
 export function isAlwaysSkippedFromRoll(task: Task): boolean {
