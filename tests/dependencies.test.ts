@@ -427,6 +427,13 @@ describe('hasUnmetDependency — one-off cross-chain dependencies', () => {
     expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
   });
 
+  it('"Create a Quetzal Whistle" requires Complete 10 Hunter Rumours', () => {
+    const child = findTask('Create a Quetzal Whistle');
+    const parent = findTask('Complete 10 Hunter Rumours');
+    expect(hasUnmetDependency(child, new Set())).toBe(true);
+    expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
+  });
+
   it('"Build all Quetzal landing sites" requires the singular "Build a" first', () => {
     const child = findTask('Build all Quetzal landing sites');
     const parent = findTask('Build a Quetzal Landing Site');

@@ -453,6 +453,8 @@ const EXPLICIT_PARENTS: Readonly<Record<string, string>> = {
   // ----- Outfits / capstones gated on grind/quest progression -----
   'Equip a Full Prospector Outfit': 'Obtain 20 Golden Nuggets',
   'Build all Quetzal landing sites': 'Build a Quetzal Landing Site',
+  // The whistle is a Hunter Rumour reward — gated on the rumour grind.
+  'Create a Quetzal Whistle': 'Complete 10 Hunter Rumours',
 
   // ----- Echo content -----
   // Total-kill chain root requires at least one unique kill.
