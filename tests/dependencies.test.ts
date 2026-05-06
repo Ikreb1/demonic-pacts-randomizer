@@ -407,6 +407,19 @@ describe('hasUnmetDependency — one-off cross-chain dependencies', () => {
     expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
   });
 
+  it('Full Blood/Blue/Eclipse Moon sets each require the "any piece" task', () => {
+    const piece = findTask('Equip any piece of armour from the moons of peril');
+    for (const name of [
+      'Equip full Blood Moon armour',
+      'Equip full Blue Moon armour',
+      'Equip full Eclipse Moon armour',
+    ]) {
+      const child = findTask(name);
+      expect(hasUnmetDependency(child, new Set())).toBe(true);
+      expect(hasUnmetDependency(child, new Set([piece.id]))).toBe(false);
+    }
+  });
+
   it('Full Prospector Outfit requires obtaining 20 Golden Nuggets', () => {
     const child = findTask('Equip a Full Prospector Outfit');
     const parent = findTask('Obtain 20 Golden Nuggets');

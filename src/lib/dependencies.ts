@@ -450,6 +450,11 @@ const EXPLICIT_PARENTS: Readonly<Record<string, string>> = {
   // Equipment drops gated on the boss that drops them.
   'Equip a Zamorakian Spear': "Defeat K'ril Tsutsaroth",
   'Equip any piece of armour from the moons of peril': 'Defeat the Moons of Peril',
+  // Each full Moon set requires a single piece first (which itself is
+  // gated on the boss kill above — the chain progresses transitively).
+  'Equip full Blood Moon armour': 'Equip any piece of armour from the moons of peril',
+  'Equip full Blue Moon armour': 'Equip any piece of armour from the moons of peril',
+  'Equip full Eclipse Moon armour': 'Equip any piece of armour from the moons of peril',
   // Outfit assembled from a grind reward.
   'Equip a Full Prospector Outfit': 'Obtain 20 Golden Nuggets',
   // "Build all" capstone gated on the singular "Build a" first.
