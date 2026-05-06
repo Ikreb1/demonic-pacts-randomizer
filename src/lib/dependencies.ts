@@ -145,8 +145,11 @@ const COUNT_CHAINS: readonly CountChain[] = [
   },
   {
     re: /^Defeat (\d+) Superior slayer creatures$/,
-    chain: [10, 20, 25, 50, 75, 100],
-    format: (n) => `Defeat ${n} Superior slayer creatures`,
+    chain: [1, 10, 20, 25, 50, 75, 100],
+    format: (n) =>
+      n === 1
+        ? 'Defeat a Superior slayer creature'
+        : `Defeat ${n} Superior slayer creatures`,
   },
   {
     re: /^Floor (\d+) of the Hallowed Sepulchre$/,

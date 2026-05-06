@@ -527,6 +527,13 @@ describe('hasUnmetDependency — slayer task chain', () => {
     expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
   });
 
+  it('"Defeat 10 Superior slayer creatures" requires the singular "Defeat a Superior slayer creature"', () => {
+    const child = findTask('Defeat 10 Superior slayer creatures');
+    const parent = findTask('Defeat a Superior slayer creature');
+    expect(hasUnmetDependency(child, new Set())).toBe(true);
+    expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
+  });
+
   it('"Complete 10 Hunter Rumours" requires the singular "Complete a Hunter Rumour"', () => {
     const child = findTask('Complete 10 Hunter Rumours');
     const parent = findTask('Complete a Hunter Rumour');
