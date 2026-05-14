@@ -607,6 +607,9 @@ const EXPLICIT_PARENTS: Readonly<Record<string, string>> = {
   // ----- Abyssal Sire -----
   'Equip an Abyssal Bludgeon': 'Defeat the Abyssal Sire',
 
+  // ----- Shadows of Custodia -----
+  'Equip an Antler guard': 'Complete Shadows of Custodia',
+
   // ----- Corrupted Gauntlet -----
   // Regular Gauntlet must be completed once before Corrupted is accessible.
   // Song of the Elves is auto-completed by the Tirannwn area unlock.

@@ -441,6 +441,13 @@ describe('hasUnmetDependency — one-off cross-chain dependencies', () => {
     expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
   });
 
+  it('Antler guard requires Complete Shadows of Custodia', () => {
+    const child = findTask('Equip an Antler guard');
+    const parent = findTask('Complete Shadows of Custodia');
+    expect(hasUnmetDependency(child, new Set())).toBe(true);
+    expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
+  });
+
   it('200M XP aggregate tasks chain on 100M of the same category', () => {
     const pairs: Array<[string, string]> = [
       ['Obtain 200 Million XP in a combat skill', 'Obtain 100 Million XP in a combat skill'],
