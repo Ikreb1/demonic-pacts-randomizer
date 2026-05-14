@@ -560,6 +560,42 @@ const EXPLICIT_PARENTS: Readonly<Record<string, string>> = {
 
   // ----- Smoke devils (regular slayer mob, not just Therm) -----
   'Equip an Occult Necklace': 'Defeat a Smoke Devil',
+
+  // ----- Combat Achievements (per-boss) gated on the boss's first-kill -----
+  // You can't "Complete all the CAs for X" before you've killed X once.
+  // Skipped: Kraken (no first-kill task in data), Godwars Dungeon (5+ bosses
+  // required, no clean single parent), Fight Caves / Inferno / Theatre of
+  // Blood (no first-completion task — only 5/10/25-times entries).
+  'Amoxliatl Combat Achievements': 'Defeat Amoxliatl 1 Time',
+  'Hueycoatl Combat Achievements': 'Defeat Hueycoatl 1 Time',
+  'Kalphite Queen Combat Achievements': 'Defeat the Kalphite Queen',
+  'Mole Combat Achievements': 'Defeat the Giant Mole',
+  'Royal Titans Combat Achievements': 'Defeat the Royal Titans',
+  'Thermonuclear Smoke Devil Combat Achievements': 'Defeat the Thermonuclear Smoke Devil',
+  'Zalcano Combat Achievements': 'Defeat Zalcano',
+  'Abyssal Sire Combat Achievements': 'Defeat the Abyssal Sire',
+  'Perilous Moons Combat Achievements': 'Defeat the Moons of Peril',
+  'Vardorvis Combat Achievements': 'Defeat Vardorvis',
+  'Alchemical Hydra Combat Achievements': 'Defeat the Alchemical Hydra 1 Time',
+  'Araxxor Combat Achievements': 'Defeat Araxxor 1 Time',
+  'Dagannoth Kings Combat Achievements': 'Defeat the Dagannoth Kings Without Leaving',
+  'Duke Sucellus Combat Achievements': 'Defeat Duke Sucellus',
+  'Gauntlet Combat Achievements': 'Complete the Gauntlet',
+  'Grotesque Guardians Combat Achievements': 'Defeat the Grotesque Guardians',
+  'Phantom Muspah Combat Achievements': 'Defeat Phantom Muspah',
+  "Phosani's Nightmare Combat Achievements": "Defeat Phosani's Nightmare",
+  'The Leviathan Combat Achievements': 'Defeat Leviathan',
+  'The Nightmare Combat Achievements': 'Defeat The Nightmare',
+  'The Whisperer Combat Achievements': 'Defeat Whisperer',
+  'Vorkath Combat Achievements': 'Defeat Vorkath',
+  'Zulrah Combat Achievements': 'Defeat Zulrah',
+  'Colosseum Combat Achievements': 'Complete Wave 1 of Fortis Colosseum',
+  // tasks.json has the per-boss name with a typo ("Mokhiatl") — preserved
+  // verbatim. Note also the lowercase "achievements" on the child name.
+  'Doom of Mokhaiotl Combat achievements': 'Defeat the Doom of Mokhiatl',
+  'Chambers of Xeric Combat Achievements': '1 Chambers of Xeric',
+  'Tombs of Amascut Combat Achievements': 'Complete Tombs of Amascut',
+  "TzHaar-Ket-Rak's Combat Achievements": "Complete Tzhaar-Ket-Rak's first challenge",
 };
 
 export function isAlwaysSkippedFromRoll(task: Task): boolean {

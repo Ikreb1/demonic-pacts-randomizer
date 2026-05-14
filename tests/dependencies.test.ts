@@ -549,6 +549,68 @@ describe('hasUnmetDependency — slayer task chain', () => {
   });
 });
 
+describe('hasUnmetDependency — per-boss Combat Achievements', () => {
+  // Spot-check a representative sample across the different parent shapes:
+  // "1 Time" suffix, plain "Defeat <Boss>", "Defeat the <Boss>", and the
+  // raid/colosseum/CoX/ToA first-completion variants.
+  it('"Vorkath Combat Achievements" requires "Defeat Vorkath"', () => {
+    const child = findTask('Vorkath Combat Achievements');
+    const parent = findTask('Defeat Vorkath');
+    expect(hasUnmetDependency(child, new Set())).toBe(true);
+    expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
+  });
+
+  it('"Araxxor Combat Achievements" requires "Defeat Araxxor 1 Time"', () => {
+    const child = findTask('Araxxor Combat Achievements');
+    const parent = findTask('Defeat Araxxor 1 Time');
+    expect(hasUnmetDependency(child, new Set())).toBe(true);
+    expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
+  });
+
+  it('"Mole Combat Achievements" requires "Defeat the Giant Mole"', () => {
+    const child = findTask('Mole Combat Achievements');
+    const parent = findTask('Defeat the Giant Mole');
+    expect(hasUnmetDependency(child, new Set())).toBe(true);
+    expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
+  });
+
+  it('"Chambers of Xeric Combat Achievements" requires "1 Chambers of Xeric"', () => {
+    const child = findTask('Chambers of Xeric Combat Achievements');
+    const parent = findTask('1 Chambers of Xeric');
+    expect(hasUnmetDependency(child, new Set())).toBe(true);
+    expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
+  });
+
+  it('"Tombs of Amascut Combat Achievements" requires "Complete Tombs of Amascut"', () => {
+    const child = findTask('Tombs of Amascut Combat Achievements');
+    const parent = findTask('Complete Tombs of Amascut');
+    expect(hasUnmetDependency(child, new Set())).toBe(true);
+    expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
+  });
+
+  it('"Colosseum Combat Achievements" requires "Complete Wave 1 of Fortis Colosseum"', () => {
+    const child = findTask('Colosseum Combat Achievements');
+    const parent = findTask('Complete Wave 1 of Fortis Colosseum');
+    expect(hasUnmetDependency(child, new Set())).toBe(true);
+    expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
+  });
+
+  it("\"TzHaar-Ket-Rak's Combat Achievements\" requires the first challenge", () => {
+    const child = findTask("TzHaar-Ket-Rak's Combat Achievements");
+    const parent = findTask("Complete Tzhaar-Ket-Rak's first challenge");
+    expect(hasUnmetDependency(child, new Set())).toBe(true);
+    expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
+  });
+
+  it('"Doom of Mokhaiotl Combat achievements" requires "Defeat the Doom of Mokhiatl"', () => {
+    // Both names preserve typos / casing exactly as in tasks.json.
+    const child = findTask('Doom of Mokhaiotl Combat achievements');
+    const parent = findTask('Defeat the Doom of Mokhiatl');
+    expect(hasUnmetDependency(child, new Set())).toBe(true);
+    expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
+  });
+});
+
 describe('hasUnmetDependency — non-matching tasks pass through', () => {
   it('"Reach Level 99 Cooking" is not gated by anything itself', () => {
     expect(hasUnmetDependency(findTask('Reach Level 99 Cooking'), new Set())).toBe(false);
