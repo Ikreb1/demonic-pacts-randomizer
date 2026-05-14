@@ -576,6 +576,20 @@ const EXPLICIT_PARENTS: Readonly<Record<string, string>> = {
   'Complete the Corrupted Gauntlet 100 Times': 'Complete the Corrupted Gauntlet 50 Times',
   'Complete the Corrupted Gauntlet in 4:30': 'Complete the Corrupted Gauntlet',
 
+  // ----- Quest-gated unlocks (quest is fully playable in Leagues VI) -----
+  // Sins of the Father gates Darkmeyer, the blood-shard amulet, and the
+  // Hallowed Sepulchre. Floor 1 is the count-chain root for Floors 2–5,
+  // so this gate cascades through the count chain to the rest of the floors.
+  'Create the long rope shortcut in Darkmeyer': 'Complete Sins of the Father',
+  'Create an Amulet of Blood Fury': 'Complete Sins of the Father',
+  'Floor 1 of the Hallowed Sepulchre': 'Complete Sins of the Father',
+  // Beneath Cursed Sands gates the Divine Rune pouch and Tombs of Amascut.
+  'Create the Divine Rune pouch': 'Complete Beneath Cursed Sands',
+  'Complete Tombs of Amascut': 'Complete Beneath Cursed Sands',
+  // Enhanced crystal weapons require regular Gauntlet completion per the
+  // in-game task text.
+  'Equip an Enhanced Crystal Weapon': 'Complete the Gauntlet',
+
   // ----- Combat Achievements (per-boss) gated on the boss's first-kill -----
   // You can't "Complete all the CAs for X" before you've killed X once.
   // Skipped: Kraken (no first-kill task in data), Godwars Dungeon (5+ bosses

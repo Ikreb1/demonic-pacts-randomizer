@@ -528,6 +528,30 @@ describe('hasUnmetDependency — one-off cross-chain dependencies', () => {
     // Skipping the middle step doesn't satisfy 100's immediate parent.
     expect(hasUnmetDependency(cg100, new Set([gauntlet.id, cg.id]))).toBe(true);
   });
+
+  it('quest-gated unlocks gate on the matching quest completion task', () => {
+    const pairs: Array<[string, string]> = [
+      ['Create the long rope shortcut in Darkmeyer', 'Complete Sins of the Father'],
+      ['Create an Amulet of Blood Fury', 'Complete Sins of the Father'],
+      ['Floor 1 of the Hallowed Sepulchre', 'Complete Sins of the Father'],
+      ['Create the Divine Rune pouch', 'Complete Beneath Cursed Sands'],
+      ['Complete Tombs of Amascut', 'Complete Beneath Cursed Sands'],
+      ['Equip an Enhanced Crystal Weapon', 'Complete the Gauntlet'],
+    ];
+    for (const [child, parent] of pairs) {
+      const c = findTask(child);
+      const p = findTask(parent);
+      expect(hasUnmetDependency(c, new Set())).toBe(true);
+      expect(hasUnmetDependency(c, new Set([p.id]))).toBe(false);
+    }
+  });
+
+  it('Hallowed Sepulchre Floor 2 still chains on Floor 1 (count chain intact)', () => {
+    const floor1 = findTask('Floor 1 of the Hallowed Sepulchre');
+    const floor2 = findTask('Floor 2 of the Hallowed Sepulchre');
+    expect(hasUnmetDependency(floor2, new Set([floor1.id]))).toBe(false);
+    expect(hasUnmetDependency(floor2, new Set())).toBe(true);
+  });
 });
 
 describe('hasUnmetDependency — slayer task chain', () => {
