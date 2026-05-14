@@ -441,6 +441,25 @@ describe('hasUnmetDependency — one-off cross-chain dependencies', () => {
     expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
   });
 
+  it("Tzhaar-Ket-Rak chain links first → second → ... → sixth → Special", () => {
+    const c1 = findTask("Complete Tzhaar-Ket-Rak's first challenge");
+    const c2 = findTask("Complete Tzhaar-Ket-Rak's second challenge");
+    const c3 = findTask("Complete Tzhaar-Ket-Rak's third challenge");
+    const c4 = findTask("Complete Tzhaar-Ket-Rak's fourth challenge");
+    const c5 = findTask("Complete Tzhaar-Ket-Rak's fifth challenge");
+    const c6 = findTask("Complete Tzhaar-Ket-Rak's sixth challenge");
+    const cSp = findTask("Complete Tzhaar-Ket-Rak's Special challenge");
+
+    expect(hasUnmetDependency(c2, new Set([c1.id]))).toBe(false);
+    expect(hasUnmetDependency(c3, new Set([c2.id]))).toBe(false);
+    expect(hasUnmetDependency(c4, new Set([c3.id]))).toBe(false);
+    expect(hasUnmetDependency(c5, new Set([c4.id]))).toBe(false);
+    expect(hasUnmetDependency(c6, new Set([c5.id]))).toBe(false);
+    expect(hasUnmetDependency(cSp, new Set([c6.id]))).toBe(false);
+    // Skipping a step doesn't satisfy the immediate parent.
+    expect(hasUnmetDependency(cSp, new Set([c1.id, c5.id]))).toBe(true);
+  });
+
   it('"Create a Quetzal Whistle" requires Complete 10 Hunter Rumours', () => {
     const child = findTask('Create a Quetzal Whistle');
     const parent = findTask('Complete 10 Hunter Rumours');

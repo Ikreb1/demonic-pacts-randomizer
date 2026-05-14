@@ -635,6 +635,16 @@ const EXPLICIT_PARENTS: Readonly<Record<string, string>> = {
   // Count-chain root: 25 → singular; 50 → 25 flows through COUNT_CHAINS.
   'Complete Tombs of Amascut 25 times': 'Complete Tombs of Amascut',
 
+  // ----- Tzhaar-Ket-Rak's Challenges (1 → 6 → Special) -----
+  // Named by ordinal words ("first", "second", …) so they don't fit the
+  // count-chain regex; each challenge unlocks the next.
+  "Complete Tzhaar-Ket-Rak's second challenge": "Complete Tzhaar-Ket-Rak's first challenge",
+  "Complete Tzhaar-Ket-Rak's third challenge": "Complete Tzhaar-Ket-Rak's second challenge",
+  "Complete Tzhaar-Ket-Rak's fourth challenge": "Complete Tzhaar-Ket-Rak's third challenge",
+  "Complete Tzhaar-Ket-Rak's fifth challenge": "Complete Tzhaar-Ket-Rak's fourth challenge",
+  "Complete Tzhaar-Ket-Rak's sixth challenge": "Complete Tzhaar-Ket-Rak's fifth challenge",
+  "Complete Tzhaar-Ket-Rak's Special challenge": "Complete Tzhaar-Ket-Rak's sixth challenge",
+
   // ----- Misc orphan chains (singular root, no count-chain pattern) -----
   'Snare a Bird 20 times': 'Snare a Bird',
   'Room 8 of Pyramid Plunder 25 Times': 'Room 8 of Pyramid Plunder',
