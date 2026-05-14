@@ -610,6 +610,21 @@ const EXPLICIT_PARENTS: Readonly<Record<string, string>> = {
   // ----- Shadows of Custodia -----
   'Equip an Antler guard': 'Complete Shadows of Custodia',
 
+  // ----- Fortis Colosseum content -----
+  // All Colosseum-tied tasks gate on the first wave; Sunfire Fanatic
+  // follows the Moon-armor pattern (full → piece → Wave 1).
+  'Equip Tonalztics of Ralos': 'Complete Wave 1 of Fortis Colosseum',
+  "Equip Blessed Dizana's Quiver": 'Complete Wave 1 of Fortis Colosseum',
+  'Equip a piece of Sunfire Fanatic': 'Complete Wave 1 of Fortis Colosseum',
+  'Equip full Sunfire Fanatic': 'Equip a piece of Sunfire Fanatic',
+  'Complete Wave 12 of Fortis Colosseum': 'Complete Wave 1 of Fortis Colosseum',
+  // Sol Heredit count chain ([5, 10]) is rootless — anchor it on Wave 1.
+  'Defeat Sol Heredit 5 times': 'Complete Wave 1 of Fortis Colosseum',
+  'Use the Bank Chest inside Fortis Colosseum': 'Complete Wave 1 of Fortis Colosseum',
+  'Use the Fortis Salute emote': 'Complete Wave 1 of Fortis Colosseum',
+  'Obtain 40,000 Glory': 'Complete Wave 1 of Fortis Colosseum',
+  'Obtain 58,000 Glory': 'Complete Wave 1 of Fortis Colosseum',
+
   // ----- Corrupted Gauntlet -----
   // Regular Gauntlet must be completed once before Corrupted is accessible.
   // Song of the Elves is auto-completed by the Tirannwn area unlock.

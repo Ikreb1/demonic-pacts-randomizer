@@ -448,6 +448,43 @@ describe('hasUnmetDependency — one-off cross-chain dependencies', () => {
     expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
   });
 
+  it('Fortis Colosseum content gates on Complete Wave 1', () => {
+    const pairs: Array<[string, string]> = [
+      ['Equip Tonalztics of Ralos', 'Complete Wave 1 of Fortis Colosseum'],
+      ["Equip Blessed Dizana's Quiver", 'Complete Wave 1 of Fortis Colosseum'],
+      ['Equip a piece of Sunfire Fanatic', 'Complete Wave 1 of Fortis Colosseum'],
+      ['Complete Wave 12 of Fortis Colosseum', 'Complete Wave 1 of Fortis Colosseum'],
+      ['Defeat Sol Heredit 5 times', 'Complete Wave 1 of Fortis Colosseum'],
+      ['Use the Bank Chest inside Fortis Colosseum', 'Complete Wave 1 of Fortis Colosseum'],
+      ['Use the Fortis Salute emote', 'Complete Wave 1 of Fortis Colosseum'],
+      ['Obtain 40,000 Glory', 'Complete Wave 1 of Fortis Colosseum'],
+      ['Obtain 58,000 Glory', 'Complete Wave 1 of Fortis Colosseum'],
+    ];
+    for (const [child, parent] of pairs) {
+      const c = findTask(child);
+      const p = findTask(parent);
+      expect(hasUnmetDependency(c, new Set())).toBe(true);
+      expect(hasUnmetDependency(c, new Set([p.id]))).toBe(false);
+    }
+  });
+
+  it('Sunfire Fanatic full → piece, piece → Wave 1', () => {
+    const wave1 = findTask('Complete Wave 1 of Fortis Colosseum');
+    const piece = findTask('Equip a piece of Sunfire Fanatic');
+    const full = findTask('Equip full Sunfire Fanatic');
+    expect(hasUnmetDependency(piece, new Set([wave1.id]))).toBe(false);
+    expect(hasUnmetDependency(full, new Set([piece.id]))).toBe(false);
+    // Skipping the piece doesn't satisfy full's immediate parent.
+    expect(hasUnmetDependency(full, new Set([wave1.id]))).toBe(true);
+  });
+
+  it('Sol Heredit 10 times still chains on Sol Heredit 5 times (count chain intact)', () => {
+    const s5 = findTask('Defeat Sol Heredit 5 times');
+    const s10 = findTask('Defeat Sol Heredit 10 times');
+    expect(hasUnmetDependency(s10, new Set([s5.id]))).toBe(false);
+    expect(hasUnmetDependency(s10, new Set())).toBe(true);
+  });
+
   it('200M XP aggregate tasks chain on 100M of the same category', () => {
     const pairs: Array<[string, string]> = [
       ['Obtain 200 Million XP in a combat skill', 'Obtain 100 Million XP in a combat skill'],
