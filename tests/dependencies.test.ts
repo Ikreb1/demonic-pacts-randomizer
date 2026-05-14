@@ -538,6 +538,8 @@ describe('hasUnmetDependency — one-off cross-chain dependencies', () => {
       ['Create the Divine Rune pouch', 'Complete Beneath Cursed Sands'],
       ['Complete Tombs of Amascut', 'Complete Beneath Cursed Sands'],
       ['Equip an Enhanced Crystal Weapon', 'Complete the Gauntlet'],
+      ['Defeat the Doom of Mokhiatl', 'Complete the Final Dawn'],
+      ['Equip Earthbound Tecpatl', 'Defeat the Doom of Mokhiatl'],
     ];
     for (const [child, parent] of pairs) {
       const c = findTask(child);
