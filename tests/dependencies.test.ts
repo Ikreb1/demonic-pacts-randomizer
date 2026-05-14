@@ -579,6 +579,34 @@ describe('hasUnmetDependency — one-off cross-chain dependencies', () => {
     // Skipping 25 doesn't satisfy 50's immediate parent.
     expect(hasUnmetDependency(t50, new Set([root.id]))).toBe(true);
   });
+
+  it('misc orphan tasks gate on their singular-root task', () => {
+    const pairs: Array<[string, string]> = [
+      ['Snare a Bird 20 times', 'Snare a Bird'],
+      ['Room 8 of Pyramid Plunder 25 Times', 'Room 8 of Pyramid Plunder'],
+      ['Defeat Vorkath 5 Times Without Special Damage', 'Defeat Vorkath'],
+      ['Defeat Vorkath 15 Times Without Leaving', 'Defeat Vorkath'],
+      ['Successfully pickpocket a Citizen 10 times in a row', 'Pickpocket a Citizen'],
+    ];
+    for (const [child, parent] of pairs) {
+      const c = findTask(child);
+      const p = findTask(parent);
+      expect(hasUnmetDependency(c, new Set())).toBe(true);
+      expect(hasUnmetDependency(c, new Set([p.id]))).toBe(false);
+    }
+  });
+
+  it('Hueycoatl and Mimic count chains link N → 1 Time', () => {
+    const huey1 = findTask('Defeat Hueycoatl 1 Time');
+    const huey50 = findTask('Defeat Hueycoatl 50 Times');
+    expect(hasUnmetDependency(huey50, new Set([huey1.id]))).toBe(false);
+    expect(hasUnmetDependency(huey50, new Set())).toBe(true);
+
+    const mimic1 = findTask('Defeat the Mimic 1 Time');
+    const mimic5 = findTask('Defeat the Mimic 5 Times');
+    expect(hasUnmetDependency(mimic5, new Set([mimic1.id]))).toBe(false);
+    expect(hasUnmetDependency(mimic5, new Set())).toBe(true);
+  });
 });
 
 describe('hasUnmetDependency — slayer task chain', () => {

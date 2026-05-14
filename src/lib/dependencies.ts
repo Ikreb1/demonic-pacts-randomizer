@@ -432,6 +432,20 @@ const COUNT_CHAINS: readonly CountChain[] = [
     format: (n) => `Defeat Sol Heredit ${n} times`,
   },
 
+  // Hueycoatl: only the singular and 50-kill variants exist.
+  {
+    re: /^Defeat Hueycoatl (\d+) Times?$/,
+    chain: [1, 50],
+    format: (n) => (n === 1 ? 'Defeat Hueycoatl 1 Time' : `Defeat Hueycoatl ${n} Times`),
+  },
+
+  // The Mimic (Treasure Trail rare): singular and 5-kill variants.
+  {
+    re: /^Defeat the Mimic (\d+) Times?$/,
+    chain: [1, 5],
+    format: (n) => (n === 1 ? 'Defeat the Mimic 1 Time' : `Defeat the Mimic ${n} Times`),
+  },
+
   // Tombs of Amascut: singular root "Complete Tombs of Amascut" has its
   // own EXPLICIT_PARENTS entry; the 25 → 50 leg flows through this chain.
   {
@@ -609,6 +623,15 @@ const EXPLICIT_PARENTS: Readonly<Record<string, string>> = {
   "Equip the Osmumten's Fang (or)": 'Complete Tombs of Amascut',
   // Count-chain root: 25 → singular; 50 → 25 flows through COUNT_CHAINS.
   'Complete Tombs of Amascut 25 times': 'Complete Tombs of Amascut',
+
+  // ----- Misc orphan chains (singular root, no count-chain pattern) -----
+  'Snare a Bird 20 times': 'Snare a Bird',
+  'Room 8 of Pyramid Plunder 25 Times': 'Room 8 of Pyramid Plunder',
+  // Constrained Vorkath variants gate on the base first-kill, mirroring
+  // the boss-drop-equip pattern.
+  'Defeat Vorkath 5 Times Without Special Damage': 'Defeat Vorkath',
+  'Defeat Vorkath 15 Times Without Leaving': 'Defeat Vorkath',
+  'Successfully pickpocket a Citizen 10 times in a row': 'Pickpocket a Citizen',
 
   // ----- Combat Achievements (per-boss) gated on the boss's first-kill -----
   // You can't "Complete all the CAs for X" before you've killed X once.
