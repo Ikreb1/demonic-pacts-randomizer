@@ -613,10 +613,11 @@ const EXPLICIT_PARENTS: Readonly<Record<string, string>> = {
   // Enhanced crystal weapons require regular Gauntlet completion per the
   // in-game task text.
   'Equip an Enhanced Crystal Weapon': 'Complete the Gauntlet',
-  // The Final Dawn gates Doom of Mokhaiotl access; Earthbound Tecpatl is a
-  // Mokhaiotl drop so gate it on the first kill (cascades to Final Dawn).
+  // The Final Dawn gates Doom of Mokhaiotl access and the Earthbound
+  // Tecpatl unlock (the tecpatl is not a Mokhaiotl drop, it's a separate
+  // quest reward).
   'Defeat the Doom of Mokhiatl': 'Complete the Final Dawn',
-  'Equip Earthbound Tecpatl': 'Defeat the Doom of Mokhiatl',
+  'Equip Earthbound Tecpatl': 'Complete the Final Dawn',
 
   // ----- Tombs of Amascut drops + count-chain root -----
   // All unique drops gate on at least one ToA completion (cascades through
