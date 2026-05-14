@@ -431,6 +431,14 @@ const COUNT_CHAINS: readonly CountChain[] = [
     chain: [5, 10],
     format: (n) => `Defeat Sol Heredit ${n} times`,
   },
+
+  // Tombs of Amascut: singular root "Complete Tombs of Amascut" has its
+  // own EXPLICIT_PARENTS entry; the 25 → 50 leg flows through this chain.
+  {
+    re: /^Complete Tombs of Amascut (\d+) times$/,
+    chain: [25, 50],
+    format: (n) => `Complete Tombs of Amascut ${n} times`,
+  },
 ];
 
 function lookupCountChain(name: string): Task | null {
@@ -589,6 +597,18 @@ const EXPLICIT_PARENTS: Readonly<Record<string, string>> = {
   // Enhanced crystal weapons require regular Gauntlet completion per the
   // in-game task text.
   'Equip an Enhanced Crystal Weapon': 'Complete the Gauntlet',
+
+  // ----- Tombs of Amascut drops + count-chain root -----
+  // All unique drops gate on at least one ToA completion (cascades through
+  // "Complete Tombs of Amascut" → Beneath Cursed Sands).
+  'Equip the Lightbearer': 'Complete Tombs of Amascut',
+  'Equip a Piece of Masori Armour': 'Complete Tombs of Amascut',
+  'Equip a full set of Masori': 'Complete Tombs of Amascut',
+  'Equip the Elidinis Ward': 'Complete Tombs of Amascut',
+  "Equip the Osmumten's Fang": 'Complete Tombs of Amascut',
+  "Equip the Osmumten's Fang (or)": 'Complete Tombs of Amascut',
+  // Count-chain root: 25 → singular; 50 → 25 flows through COUNT_CHAINS.
+  'Complete Tombs of Amascut 25 times': 'Complete Tombs of Amascut',
 
   // ----- Combat Achievements (per-boss) gated on the boss's first-kill -----
   // You can't "Complete all the CAs for X" before you've killed X once.

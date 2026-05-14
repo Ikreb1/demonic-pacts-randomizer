@@ -552,6 +552,33 @@ describe('hasUnmetDependency — one-off cross-chain dependencies', () => {
     expect(hasUnmetDependency(floor2, new Set([floor1.id]))).toBe(false);
     expect(hasUnmetDependency(floor2, new Set())).toBe(true);
   });
+
+  it('ToA-drop equip tasks gate on "Complete Tombs of Amascut"', () => {
+    const pairs: Array<[string, string]> = [
+      ['Equip the Lightbearer', 'Complete Tombs of Amascut'],
+      ['Equip a Piece of Masori Armour', 'Complete Tombs of Amascut'],
+      ['Equip a full set of Masori', 'Complete Tombs of Amascut'],
+      ['Equip the Elidinis Ward', 'Complete Tombs of Amascut'],
+      ["Equip the Osmumten's Fang", 'Complete Tombs of Amascut'],
+      ["Equip the Osmumten's Fang (or)", 'Complete Tombs of Amascut'],
+    ];
+    for (const [child, parent] of pairs) {
+      const c = findTask(child);
+      const p = findTask(parent);
+      expect(hasUnmetDependency(c, new Set())).toBe(true);
+      expect(hasUnmetDependency(c, new Set([p.id]))).toBe(false);
+    }
+  });
+
+  it('ToA count chain: 25 → singular, 50 → 25', () => {
+    const root = findTask('Complete Tombs of Amascut');
+    const t25 = findTask('Complete Tombs of Amascut 25 times');
+    const t50 = findTask('Complete Tombs of Amascut 50 times');
+    expect(hasUnmetDependency(t25, new Set([root.id]))).toBe(false);
+    expect(hasUnmetDependency(t50, new Set([t25.id]))).toBe(false);
+    // Skipping 25 doesn't satisfy 50's immediate parent.
+    expect(hasUnmetDependency(t50, new Set([root.id]))).toBe(true);
+  });
 });
 
 describe('hasUnmetDependency — slayer task chain', () => {
