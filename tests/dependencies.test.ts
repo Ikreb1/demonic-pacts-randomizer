@@ -434,6 +434,13 @@ describe('hasUnmetDependency — one-off cross-chain dependencies', () => {
     expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
   });
 
+  it('Full Virtus requires equipping any Virtus piece first', () => {
+    const child = findTask('Equip full Virtus');
+    const parent = findTask('Equip a piece of Virtus');
+    expect(hasUnmetDependency(child, new Set())).toBe(true);
+    expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
+  });
+
   it('"Create a Quetzal Whistle" requires Complete 10 Hunter Rumours', () => {
     const child = findTask('Create a Quetzal Whistle');
     const parent = findTask('Complete 10 Hunter Rumours');

@@ -574,6 +574,8 @@ const EXPLICIT_PARENTS: Readonly<Record<string, string>> = {
   'Equip the Bellator Ring': 'Defeat Whisperer',
   'Equip the Venator Ring': 'Defeat Leviathan',
   'Equip an Ice Ancient Sceptre': 'Defeat Duke Sucellus',
+  // Virtus drops from any DT2 boss — gate the full set on any piece.
+  'Equip full Virtus': 'Equip a piece of Virtus',
 
   // ----- Phantom Muspah -----
   'Equip the Venator Bow': 'Defeat Phantom Muspah',
