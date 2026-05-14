@@ -660,6 +660,16 @@ describe('hasUnmetDependency — one-off cross-chain dependencies', () => {
     }
   });
 
+  it('Deep delve count chain: 25 → 1, 75 → 25', () => {
+    const d1 = findTask('Complete 1 Deep delve');
+    const d25 = findTask('Complete 25 Deep delves');
+    const d75 = findTask('Complete 75 Deep delves');
+    expect(hasUnmetDependency(d25, new Set([d1.id]))).toBe(false);
+    expect(hasUnmetDependency(d75, new Set([d25.id]))).toBe(false);
+    // Skipping the middle step doesn't satisfy 75's immediate parent.
+    expect(hasUnmetDependency(d75, new Set([d1.id]))).toBe(true);
+  });
+
   it('Hueycoatl and Mimic count chains link N → 1 Time', () => {
     const huey1 = findTask('Defeat Hueycoatl 1 Time');
     const huey50 = findTask('Defeat Hueycoatl 50 Times');

@@ -453,6 +453,14 @@ const COUNT_CHAINS: readonly CountChain[] = [
     chain: [25, 50],
     format: (n) => `Complete Tombs of Amascut ${n} times`,
   },
+
+  // Deep delves: Doom of Mokhaiotl at delve level 8 or above.
+  // Singular noun at N=1, plural at higher counts.
+  {
+    re: /^Complete (\d+) Deep delves?$/,
+    chain: [1, 25, 75],
+    format: (n) => (n === 1 ? 'Complete 1 Deep delve' : `Complete ${n} Deep delves`),
+  },
 ];
 
 function lookupCountChain(name: string): Task | null {
