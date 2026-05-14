@@ -452,9 +452,16 @@ function lookupCountChain(name: string): Task | null {
 const EXPLICIT_PARENTS: Readonly<Record<string, string>> = {
   // ----- Outfits / capstones gated on grind/quest progression -----
   'Equip a Full Prospector Outfit': 'Obtain 20 Golden Nuggets',
+  // Landing sites cost 10 quetzal feed; feed drops from the Basic tier of
+  // Hunter Rumours upward, so a single rumour is the minimum gate. Twilight's
+  // Promise (the other prereq) is auto-completed in Leagues VI.
+  'Build a Quetzal Landing Site': 'Complete a Hunter Rumour',
   'Build all Quetzal landing sites': 'Build a Quetzal Landing Site',
+  'Travel using the Quetzal Transport System': 'Build a Quetzal Landing Site',
   // The whistle is a Hunter Rumour reward — gated on the rumour grind.
   'Create a Quetzal Whistle': 'Complete 10 Hunter Rumours',
+  // In-game task text: "Completed 50 Hunter Rumours".
+  'Cook 100 Moonlight Antelopes': 'Complete 50 Hunter Rumours',
 
   // ----- Echo content -----
   // Total-kill chain root requires at least one unique kill.

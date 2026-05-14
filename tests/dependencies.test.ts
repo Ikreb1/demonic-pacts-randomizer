@@ -441,6 +441,20 @@ describe('hasUnmetDependency — one-off cross-chain dependencies', () => {
     expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
   });
 
+  it('Quetzal + Moonlight Antelope tasks gate on Hunter Rumour progress', () => {
+    const pairs: Array<[string, string]> = [
+      ['Build a Quetzal Landing Site', 'Complete a Hunter Rumour'],
+      ['Travel using the Quetzal Transport System', 'Build a Quetzal Landing Site'],
+      ['Cook 100 Moonlight Antelopes', 'Complete 50 Hunter Rumours'],
+    ];
+    for (const [child, parent] of pairs) {
+      const c = findTask(child);
+      const p = findTask(parent);
+      expect(hasUnmetDependency(c, new Set())).toBe(true);
+      expect(hasUnmetDependency(c, new Set([p.id]))).toBe(false);
+    }
+  });
+
   it('Echo Bosses total chain root (25) requires one unique Echo Boss kill', () => {
     const child = findTask('Defeat 25 Echo Bosses');
     const parent = findTask('Defeat 1 unique Echo Boss');
