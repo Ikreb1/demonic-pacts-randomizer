@@ -551,6 +551,7 @@ describe('hasUnmetDependency — one-off cross-chain dependencies', () => {
       ["Equip a Full Inquisitor's Set", 'Defeat The Nightmare'],
       ['Equip a Granite Hammer or Granite Ring', 'Defeat the Grotesque Guardians'],
       ['Equip a piece of Hueycoatl armour', 'Defeat Hueycoatl 1 Time'],
+      ['Equip an Abyssal Bludgeon', 'Defeat the Abyssal Sire'],
     ];
     for (const [child, parent] of pairs) {
       const c = findTask(child);

@@ -596,6 +596,9 @@ const EXPLICIT_PARENTS: Readonly<Record<string, string>> = {
   // ----- Smoke devils (regular slayer mob, not just Therm) -----
   'Equip an Occult Necklace': 'Defeat a Smoke Devil',
 
+  // ----- Abyssal Sire -----
+  'Equip an Abyssal Bludgeon': 'Defeat the Abyssal Sire',
+
   // ----- Corrupted Gauntlet -----
   // Regular Gauntlet must be completed once before Corrupted is accessible.
   // Song of the Elves is auto-completed by the Tirannwn area unlock.
