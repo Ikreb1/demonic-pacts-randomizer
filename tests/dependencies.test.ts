@@ -441,6 +441,20 @@ describe('hasUnmetDependency — one-off cross-chain dependencies', () => {
     expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
   });
 
+  it('200M XP aggregate tasks chain on 100M of the same category', () => {
+    const pairs: Array<[string, string]> = [
+      ['Obtain 200 Million XP in a combat skill', 'Obtain 100 Million XP in a combat skill'],
+      ['Obtain 200 Million XP in any non-combat skill', 'Obtain 100 Million XP in any non-combat skill'],
+      ['Obtain 100 Million XP in any non-combat skill', 'Obtain 50 Million XP in 3 non-combat skills'],
+    ];
+    for (const [child, parent] of pairs) {
+      const c = findTask(child);
+      const p = findTask(parent);
+      expect(hasUnmetDependency(c, new Set())).toBe(true);
+      expect(hasUnmetDependency(c, new Set([p.id]))).toBe(false);
+    }
+  });
+
   it('Combat Achievements tier chain links Easy → Medium → Hard → Elite', () => {
     const easy = findTask('Combat Achievements Easy Tier');
     const medium = findTask('Combat Achievements Medium Tier');

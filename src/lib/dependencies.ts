@@ -641,6 +641,13 @@ const EXPLICIT_PARENTS: Readonly<Record<string, string>> = {
   'Combat Achievements Hard Tier': 'Combat Achievements Medium Tier',
   'Combat Achievements Elite Tier': 'Combat Achievements Hard Tier',
 
+  // ----- Aggregate combat / non-combat XP milestones -----
+  // 200M caps chain on the 100M task of the same category. The non-combat
+  // 100M chains down to the "3 non-combat skills at 50M" aggregate.
+  'Obtain 200 Million XP in a combat skill': 'Obtain 100 Million XP in a combat skill',
+  'Obtain 200 Million XP in any non-combat skill': 'Obtain 100 Million XP in any non-combat skill',
+  'Obtain 100 Million XP in any non-combat skill': 'Obtain 50 Million XP in 3 non-combat skills',
+
   // ----- Tzhaar-Ket-Rak's Challenges (1 → 6 → Special) -----
   // Named by ordinal words ("first", "second", …) so they don't fit the
   // count-chain regex; each challenge unlocks the next.
