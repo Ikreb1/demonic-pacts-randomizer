@@ -24,6 +24,12 @@ const CAPSTONE_DECAY_BASE = 0.45;
 const REMOTENESS_UNIFORM = 0.2;
 const REMOTENESS_DEADBAND = 1;
 const REMOTENESS_DEEP_BONUS = 0.6;
+// Boost applied to major-tier pacts directly adjacent to the center node
+// (the three combat-branch roots — melee, ranged, magic). Keeps the early
+// game reliably opening a combat direction before drifting into first-ring
+// minors. 3× shifts the first-pick share of those majors from ~67% to ~86%
+// without forcing a deterministic opening.
+const FIRST_MAJOR_BOOST = 3;
 
 /**
  * Pick the next pact to unlock, weighted toward nodes that lead to a
@@ -60,7 +66,8 @@ export function rollNextPact(
   // capstones (e.g. the planner's bottom row at 9 hops vs. top at 7) a
   // virtual head-start so the walk visits them at comparable rates.
   const remoteness = capstoneRemoteness(pacts);
-  const weights = frontier.map((p) => weightFor(p, pacts, capstoneIds, remoteness));
+  const firstMajors = firstMajorIds(pacts);
+  const weights = frontier.map((p) => weightFor(p, pacts, capstoneIds, remoteness, firstMajors));
   const totalRaw = weights.reduce((a, b) => a + b, 0);
   // Defensive fallback: if every frontier candidate weights 0 (e.g. no
   // capstones reachable from anywhere on the frontier), fall back to a
@@ -80,6 +87,7 @@ function weightFor(
   pacts: readonly Pact[],
   capstoneIds: ReadonlySet<string>,
   remoteness: ReadonlyMap<string, number>,
+  firstMajors: ReadonlySet<string>,
 ): number {
   // Effective distance to each unclaimed capstone, with the planner's
   // geometric inequality smoothed out: capstones that sit further from
@@ -101,6 +109,7 @@ function weightFor(
   }
   if (bestScore === 0) return 0;
   if (p.kind === 'minor') bestScore *= MINOR_WEIGHT_MULT;
+  if (firstMajors.has(p.id)) bestScore *= FIRST_MAJOR_BOOST;
   return bestScore;
 }
 
@@ -136,6 +145,29 @@ function capstoneRemoteness(pacts: readonly Pact[]): Map<string, number> {
     out.set(p.id, d - minCenterDist);
   }
   REMOTENESS_CACHE.set(pacts, out);
+  return out;
+}
+
+// Major-tier pacts adjacent to the centre node — the "first" combat-branch
+// roots that earn FIRST_MAJOR_BOOST whenever they're on the frontier.
+// Today these are node2 (ranged), node44 (magic), node74 (melee), but the
+// detection is purely structural so the boost survives a data regen.
+const FIRST_MAJORS_CACHE = new WeakMap<readonly Pact[], Set<string>>();
+
+function firstMajorIds(pacts: readonly Pact[]): Set<string> {
+  const cached = FIRST_MAJORS_CACHE.get(pacts);
+  if (cached) return cached;
+  const center = pacts.find((p) => (p.x ?? 0) === 0 && (p.y ?? 0) === 0) ?? pacts[0];
+  const out = new Set<string>();
+  if (!center) {
+    FIRST_MAJORS_CACHE.set(pacts, out);
+    return out;
+  }
+  for (const p of pacts) {
+    if (p.kind !== 'major') continue;
+    if (p.prerequisites.includes(center.id)) out.add(p.id);
+  }
+  FIRST_MAJORS_CACHE.set(pacts, out);
   return out;
 }
 

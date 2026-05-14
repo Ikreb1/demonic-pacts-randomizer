@@ -73,6 +73,32 @@ describe('rollNextPact', () => {
     expect(majorCount).toBeGreaterThan(minorCount * 2);
   });
 
+  it('boosts majors adjacent to the centre node beyond the minor-downweight delta', () => {
+    // Synthetic graph: a centre at (0,0), an adjacent major (boost-eligible)
+    // and an adjacent minor. Both lead to a 1-hop capstone via separate
+    // branches so their capstone-distance weights are equal — any deviation
+    // beyond the 2× ratio implied by MINOR_WEIGHT_MULT alone must come from
+    // the FIRST_MAJOR_BOOST.
+    const fixture: Pact[] = [
+      { id: 'centre', name: 'centre', kind: 'major', branch: 'c', prerequisites: ['boost_major', 'plain_minor'], effect: '', x: 0, y: 0 },
+      { id: 'boost_major', name: 'boost', kind: 'major', branch: 'b', prerequisites: ['centre', 'b_cap'], effect: '' },
+      { id: 'b_cap', name: 'b cap', kind: 'capstone', branch: 'b', prerequisites: ['boost_major'], effect: '' },
+      { id: 'plain_minor', name: 'minor', kind: 'minor', branch: 'm', prerequisites: ['centre', 'm_cap'], effect: '' },
+      { id: 'm_cap', name: 'm cap', kind: 'capstone', branch: 'm', prerequisites: ['plain_minor'], effect: '' },
+    ];
+    let majorCount = 0;
+    let minorCount = 0;
+    for (let i = 0; i < 800; i++) {
+      const picked = rollNextPact(fixture, new Set(['centre']), Math.random);
+      if (picked === 'boost_major') majorCount++;
+      if (picked === 'plain_minor') minorCount++;
+    }
+    // Without boost the ratio would be 2× (minor downweight only). With a
+    // 3× boost on the major the expected ratio is 6×; assert > 4× to leave
+    // headroom for Math.random jitter at 800 trials.
+    expect(majorCount).toBeGreaterThan(minorCount * 4);
+  });
+
   it('falls back to uniform when no capstone is reachable from the frontier', () => {
     // Synthetic fixture: one unlocked seed plus two adjacent dead-end nodes,
     // no capstones at all. Weights collapse to 0 → uniform fallback picks
@@ -120,6 +146,25 @@ describe('rollNextPact — full-run regional spread', () => {
     }
     return capsHit;
   }
+
+  it('the first roll from the centre is biased toward the first-ring majors', () => {
+    // The first-ring minors are closer to nearby capstones than the
+    // first-ring majors (distance 6 vs 7–8), which gives them a non-trivial
+    // raw weight. Without boost the major share is ~50%; with 3× boost it
+    // climbs to ~75%. Assert > 65% to comfortably clear the unboosted
+    // baseline while leaving headroom for Math.random jitter at 400 trials.
+    const firstRingMajors = new Set(
+      ALL_PACTS.filter((p) => p.kind === 'major' && p.prerequisites.includes(CENTER_ID)).map((p) => p.id),
+    );
+    expect(firstRingMajors.size).toBeGreaterThan(0);
+    const trials = 400;
+    let majorPicks = 0;
+    for (let t = 0; t < trials; t++) {
+      const picked = rollNextPact(ALL_PACTS, new Set([CENTER_ID]), Math.random);
+      if (picked && firstRingMajors.has(picked)) majorPicks++;
+    }
+    expect(majorPicks / trials).toBeGreaterThan(0.65);
+  });
 
   it('the planner has capstones in all three regions (sanity)', () => {
     const counts = { 'upper-left': 0, 'upper-right': 0, lower: 0 };
