@@ -701,7 +701,9 @@ const EXPLICIT_PARENTS: Readonly<Record<string, string>> = {
   'Doom of Mokhaiotl Combat achievements': 'Defeat the Doom of Mokhiatl',
   'Chambers of Xeric Combat Achievements': '1 Chambers of Xeric',
   'Tombs of Amascut Combat Achievements': 'Complete Tombs of Amascut',
-  "TzHaar-Ket-Rak's Combat Achievements": "Complete Tzhaar-Ket-Rak's first challenge",
+  // Tzhaar-Ket-Rak CAs require completing all six challenges; gating on the
+  // sixth transitively covers 1–5 via the challenge chain.
+  "TzHaar-Ket-Rak's Combat Achievements": "Complete Tzhaar-Ket-Rak's sixth challenge",
 };
 
 export function isAlwaysSkippedFromRoll(task: Task): boolean {

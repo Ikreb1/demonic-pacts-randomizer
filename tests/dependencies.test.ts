@@ -766,9 +766,9 @@ describe('hasUnmetDependency — per-boss Combat Achievements', () => {
     expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
   });
 
-  it("\"TzHaar-Ket-Rak's Combat Achievements\" requires the first challenge", () => {
+  it("\"TzHaar-Ket-Rak's Combat Achievements\" requires the sixth challenge", () => {
     const child = findTask("TzHaar-Ket-Rak's Combat Achievements");
-    const parent = findTask("Complete Tzhaar-Ket-Rak's first challenge");
+    const parent = findTask("Complete Tzhaar-Ket-Rak's sixth challenge");
     expect(hasUnmetDependency(child, new Set())).toBe(true);
     expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
   });
