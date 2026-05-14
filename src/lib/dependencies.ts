@@ -484,6 +484,8 @@ const EXPLICIT_PARENTS: Readonly<Record<string, string>> = {
   'Create a Quetzal Whistle': 'Complete 10 Hunter Rumours',
   // In-game task text: "Completed 50 Hunter Rumours".
   'Cook 100 Moonlight Antelopes': 'Complete 50 Hunter Rumours',
+  // Huntsman's Kit drops from Hunter Rumour Hunters' Loot Sacks.
+  "Obtain the Huntsman's Kit": 'Complete a Hunter Rumour',
 
   // ----- Echo content -----
   // Total-kill chain root requires at least one unique kill.
