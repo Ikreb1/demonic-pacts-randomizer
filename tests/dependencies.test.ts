@@ -441,6 +441,19 @@ describe('hasUnmetDependency — one-off cross-chain dependencies', () => {
     expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
   });
 
+  it('Combat Achievements tier chain links Easy → Medium → Hard → Elite', () => {
+    const easy = findTask('Combat Achievements Easy Tier');
+    const medium = findTask('Combat Achievements Medium Tier');
+    const hard = findTask('Combat Achievements Hard Tier');
+    const elite = findTask('Combat Achievements Elite Tier');
+
+    expect(hasUnmetDependency(medium, new Set([easy.id]))).toBe(false);
+    expect(hasUnmetDependency(hard, new Set([medium.id]))).toBe(false);
+    expect(hasUnmetDependency(elite, new Set([hard.id]))).toBe(false);
+    // Skipping a step doesn't satisfy the immediate parent.
+    expect(hasUnmetDependency(elite, new Set([easy.id, medium.id]))).toBe(true);
+  });
+
   it("Tzhaar-Ket-Rak chain links first → second → ... → sixth → Special", () => {
     const c1 = findTask("Complete Tzhaar-Ket-Rak's first challenge");
     const c2 = findTask("Complete Tzhaar-Ket-Rak's second challenge");

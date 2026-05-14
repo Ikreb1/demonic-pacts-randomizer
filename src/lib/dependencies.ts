@@ -635,6 +635,12 @@ const EXPLICIT_PARENTS: Readonly<Record<string, string>> = {
   // Count-chain root: 25 → singular; 50 → 25 flows through COUNT_CHAINS.
   'Complete Tombs of Amascut 25 times': 'Complete Tombs of Amascut',
 
+  // ----- Combat Achievements tier chain -----
+  // Each tier unlocks after enough points from lower tiers.
+  'Combat Achievements Medium Tier': 'Combat Achievements Easy Tier',
+  'Combat Achievements Hard Tier': 'Combat Achievements Medium Tier',
+  'Combat Achievements Elite Tier': 'Combat Achievements Hard Tier',
+
   // ----- Tzhaar-Ket-Rak's Challenges (1 → 6 → Special) -----
   // Named by ordinal words ("first", "second", …) so they don't fit the
   // count-chain regex; each challenge unlocks the next.
