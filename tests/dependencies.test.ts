@@ -513,6 +513,21 @@ describe('hasUnmetDependency — one-off cross-chain dependencies', () => {
     // Skipping a step doesn't satisfy the immediate parent.
     expect(hasUnmetDependency(e3, new Set([kill.id, e1.id]))).toBe(true);
   });
+
+  it('Corrupted Gauntlet chain links regular → singular → 50 → 100, plus 4:30 → singular', () => {
+    const gauntlet = findTask('Complete the Gauntlet');
+    const cg = findTask('Complete the Corrupted Gauntlet');
+    const cg50 = findTask('Complete the Corrupted Gauntlet 50 Times');
+    const cg100 = findTask('Complete the Corrupted Gauntlet 100 Times');
+    const cgFast = findTask('Complete the Corrupted Gauntlet in 4:30');
+
+    expect(hasUnmetDependency(cg, new Set([gauntlet.id]))).toBe(false);
+    expect(hasUnmetDependency(cg50, new Set([cg.id]))).toBe(false);
+    expect(hasUnmetDependency(cg100, new Set([cg50.id]))).toBe(false);
+    expect(hasUnmetDependency(cgFast, new Set([cg.id]))).toBe(false);
+    // Skipping the middle step doesn't satisfy 100's immediate parent.
+    expect(hasUnmetDependency(cg100, new Set([gauntlet.id, cg.id]))).toBe(true);
+  });
 });
 
 describe('hasUnmetDependency — slayer task chain', () => {

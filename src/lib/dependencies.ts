@@ -568,6 +568,14 @@ const EXPLICIT_PARENTS: Readonly<Record<string, string>> = {
   // ----- Smoke devils (regular slayer mob, not just Therm) -----
   'Equip an Occult Necklace': 'Defeat a Smoke Devil',
 
+  // ----- Corrupted Gauntlet -----
+  // Regular Gauntlet must be completed once before Corrupted is accessible.
+  // Song of the Elves is auto-completed by the Tirannwn area unlock.
+  'Complete the Corrupted Gauntlet': 'Complete the Gauntlet',
+  'Complete the Corrupted Gauntlet 50 Times': 'Complete the Corrupted Gauntlet',
+  'Complete the Corrupted Gauntlet 100 Times': 'Complete the Corrupted Gauntlet 50 Times',
+  'Complete the Corrupted Gauntlet in 4:30': 'Complete the Corrupted Gauntlet',
+
   // ----- Combat Achievements (per-boss) gated on the boss's first-kill -----
   // You can't "Complete all the CAs for X" before you've killed X once.
   // Skipped: Kraken (no first-kill task in data), Godwars Dungeon (5+ bosses
