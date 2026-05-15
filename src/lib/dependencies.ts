@@ -519,6 +519,7 @@ const EXPLICIT_PARENTS: Readonly<Record<string, string>> = {
   'Equip a Staff of the Dead': "Defeat K'ril Tsutsaroth",
   // Commander Zilyana
   'Equip a Saradomin Sword': 'Defeat Commander Zilyana',
+  'Equip an Armadyl Crossbow': 'Defeat Commander Zilyana',
   // General Graardor
   'Equip a Piece of the Bandos Armour Set': 'Defeat General Graardor',
   'Equip a Full Bandos Armour Set': 'Defeat General Graardor',
