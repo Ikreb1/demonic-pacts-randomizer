@@ -662,6 +662,11 @@ describe('hasUnmetDependency — one-off cross-chain dependencies', () => {
       ['Equip an Enhanced Crystal Weapon', 'Complete the Gauntlet'],
       ['Defeat the Doom of Mokhiatl', 'Complete the Final Dawn'],
       ['Equip Earthbound Tecpatl', 'Complete the Final Dawn'],
+      ["Giants' Foundry 10 handins", 'Complete Sleeping Giants'],
+      ["Giants' Foundry 50 quality sword", 'Complete Sleeping Giants'],
+      ["Drink Kovac's grog", 'Complete Sleeping Giants'],
+      ["Equip a full set of the Smith's outfit", 'Complete Sleeping Giants'],
+      ['Equip the Colossal Blade', 'Complete Sleeping Giants'],
     ];
     for (const [child, parent] of pairs) {
       const c = findTask(child);

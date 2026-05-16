@@ -652,6 +652,14 @@ const EXPLICIT_PARENTS: Readonly<Record<string, string>> = {
   // Enhanced crystal weapons require regular Gauntlet completion per the
   // in-game task text.
   'Equip an Enhanced Crystal Weapon': 'Complete the Gauntlet',
+  // Sleeping Giants gates Giants' Foundry access. Two chain roots
+  // (handins / quality sword) and the standalone reward-shop tasks all
+  // need the quest first.
+  "Giants' Foundry 10 handins": 'Complete Sleeping Giants',
+  "Giants' Foundry 50 quality sword": 'Complete Sleeping Giants',
+  "Drink Kovac's grog": 'Complete Sleeping Giants',
+  "Equip a full set of the Smith's outfit": 'Complete Sleeping Giants',
+  'Equip the Colossal Blade': 'Complete Sleeping Giants',
   // The Final Dawn gates Doom of Mokhaiotl access and the Earthbound
   // Tecpatl unlock (the tecpatl is not a Mokhaiotl drop, it's a separate
   // quest reward).
