@@ -178,6 +178,33 @@ describe('store roll-and-lock flow', () => {
     }
   });
 
+  it('reconcileCurrentRoll replaces a slot whose task has an unmet parent', () => {
+    const child = ALL_TASKS_LIST.find((t) => t.name === 'Equip a Saradomin Sword')!;
+    const parent = ALL_TASKS_LIST.find((t) => t.name === 'Defeat Commander Zilyana')!;
+    expect(child).toBeDefined();
+    expect(parent).toBeDefined();
+    // Plant the gated child in its tier slot, with the parent NOT completed.
+    // Asgarnia must be unlocked so the slot has eligible replacements when
+    // reconcile picks a new task for that tier.
+    useStore.setState({
+      unlockedRegions: ['General', 'Asgarnia'],
+      manualComplete: [],
+      syncedComplete: [],
+      currentRoll: { easy: null, medium: null, hard: child.id, elite: null, master: null },
+    });
+    useStore.getState().reconcileCurrentRoll();
+    const after = useStore.getState().currentRoll!;
+    expect(after.hard).not.toBe(child.id);
+  });
+
+  it('reconcileCurrentRoll leaves currentRoll alone when every slot is still eligible', () => {
+    useStore.getState().roll();
+    const before = useStore.getState().currentRoll;
+    useStore.getState().reconcileCurrentRoll();
+    // Reference equality — no spurious set when nothing needed reconciling.
+    expect(useStore.getState().currentRoll).toBe(before);
+  });
+
   describe('region unlock thresholds', () => {
     function setCompletedCount(n: number) {
       // Mark the first n task IDs as manually completed.

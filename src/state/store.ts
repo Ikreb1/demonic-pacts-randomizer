@@ -78,6 +78,7 @@ interface StoreState extends PersistedState {
   rememberUsername: (name: string) => void;
   forgetUsername: (name: string) => void;
   roll: () => void;
+  reconcileCurrentRoll: () => void;
   pickTier: (tier: Tier) => void;
   markActiveComplete: () => void;
   abandonActive: () => void;
@@ -337,6 +338,21 @@ export const useStore = create<StoreState>()(
         const regions = new Set<Region>(unlockedRegions);
         const result = rollOnePerTier(ALL_TASKS, regions, completed);
         set({ currentRoll: result });
+      },
+
+      // Re-evaluate every tier slot in currentRoll against the live
+      // dependency/region/completion rules. Triggered on app mount so a
+      // dependency added between sessions doesn't leave a now-ineligible
+      // task in the persisted roll. activeTask is intentionally left
+      // untouched — that's a user commitment, not a derived candidate.
+      reconcileCurrentRoll: () => {
+        const state = get();
+        const completed = new Set([...state.manualComplete, ...state.syncedComplete]);
+        const regions = new Set<Region>(state.unlockedRegions);
+        const reconciled = reconcileRoll(state.currentRoll, regions, completed);
+        if (reconciled !== state.currentRoll) {
+          set({ currentRoll: reconciled });
+        }
       },
 
       pickTier: (tier) => {

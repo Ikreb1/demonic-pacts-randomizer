@@ -45,6 +45,15 @@ export function App() {
     };
   }, []);
 
+  // Re-validate the persisted roll once on mount. If a dependency was
+  // added between sessions, a slot's task may no longer be eligible —
+  // reconcileCurrentRoll silently swaps it for a random eligible
+  // replacement from the same tier (or sets the slot null if the tier
+  // pool is empty).
+  useEffect(() => {
+    useStore.getState().reconcileCurrentRoll();
+  }, []);
+
   return (
     <div className="app">
       <header className="app-header">
