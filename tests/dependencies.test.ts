@@ -117,17 +117,32 @@ describe('hasUnmetDependency — base level chain', () => {
   });
 });
 
-describe('hasUnmetDependency — skill XP milestones gated by 99', () => {
-  it('"Obtain 50 Million Cooking XP" requires "Reach Level 99 Cooking"', () => {
-    const child = findTask('Obtain 50 Million Cooking XP');
-    const parent = findTask('Reach Level 99 Cooking');
-    expect(hasUnmetDependency(child, new Set())).toBe(true);
-    expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
+describe('hasUnmetDependency — skill XP milestones', () => {
+  it('non-combat skills chain 50M → 35M → 25M → Level 99', () => {
+    const xp50 = findTask('Obtain 50 Million Cooking XP');
+    const xp35 = findTask('Obtain 35 Million Cooking XP');
+    const xp25 = findTask('Obtain 25 Million Cooking XP');
+    const lvl99 = findTask('Reach Level 99 Cooking');
+
+    expect(hasUnmetDependency(xp50, new Set([xp35.id]))).toBe(false);
+    expect(hasUnmetDependency(xp35, new Set([xp25.id]))).toBe(false);
+    expect(hasUnmetDependency(xp25, new Set([lvl99.id]))).toBe(false);
+    // Skipping a step doesn't satisfy the immediate parent.
+    expect(hasUnmetDependency(xp50, new Set([xp25.id, lvl99.id]))).toBe(true);
   });
 
   it('"Obtain 25 Million Slayer XP" requires "Reach Level 99 Slayer"', () => {
     const child = findTask('Obtain 25 Million Slayer XP');
     const parent = findTask('Reach Level 99 Slayer');
+    expect(hasUnmetDependency(child, new Set())).toBe(true);
+    expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
+  });
+
+  it('combat-skill 50M XP roots on Level 99 (no 25M/35M variants exist)', () => {
+    // Attack/Strength/Defence/Hitpoints/Magic/Ranged only have 50M tasks
+    // in tasks.json — the chain collapses to a direct 50M → Level 99 gate.
+    const child = findTask('Obtain 50 Million Strength XP');
+    const parent = findTask('Reach Level 99 Strength');
     expect(hasUnmetDependency(child, new Set())).toBe(true);
     expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
   });

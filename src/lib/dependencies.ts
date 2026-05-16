@@ -42,8 +42,11 @@ const ALWAYS_SKIP_TASK_NAMES: ReadonlySet<string> = new Set([
 // formula" shape — those need bespoke handling in parentOf:
 //   - Clue scrolls: 5 tiers × 3 counts, with singular/plural at N=1.
 //   - Collection log slots: per-tier chain values.
-//   - "Obtain N Million X XP": gated on the per-skill 99 milestone, not
-//     on the previous milestone, so it isn't a count chain at all.
+//   - "Obtain N Million X XP": non-combat skills chain 25M → 35M → 50M
+//     rooted on the skill's Level 99 milestone. Combat skills only have
+//     a 50M task in tasks.json (no 25M/35M variants) so 50M roots
+//     directly on Level 99. Not regular count chains because of the
+//     mixed-skill availability.
 const CLUE_CHAIN = [1, 25, 75] as const;
 const COLLECTION_LOG_CHAINS: Record<string, readonly number[]> = {
   Easy: [5, 20, 50],
@@ -765,13 +768,25 @@ function parentOf(task: Task): Task | null {
     return null;
   }
 
-  // Skill XP milestone: "Obtain N Million Skill XP" requires that skill's
-  // 99 first. (Within-skill milestones — 25M / 35M / 50M for the same
-  // skill — aren't chained, since hitting the higher one autocompletes
-  // the lower ones in-game.)
-  const xpMatch = /^Obtain \d+ Million ([A-Za-z]+) XP$/.exec(name);
-  if (xpMatch && SKILL_NAME_SET.has(xpMatch[1])) {
-    return TASK_BY_NAME.get(`Reach Level 99 ${xpMatch[1]}`) ?? null;
+  // Skill XP milestone: chain 25M → 35M → 50M per skill, rooted on the
+  // skill's Level 99 task. Combat skills (Attack/Strength/Defence/
+  // Hitpoints/Magic/Ranged) only have a 50M variant in tasks.json — for
+  // those, 50M roots directly on Level 99.
+  const xpMatch = /^Obtain (\d+) Million ([A-Za-z]+) XP$/.exec(name);
+  if (xpMatch && SKILL_NAME_SET.has(xpMatch[2])) {
+    const amount = parseInt(xpMatch[1], 10);
+    const skill = xpMatch[2];
+    if (amount === 50) {
+      return (
+        TASK_BY_NAME.get(`Obtain 35 Million ${skill} XP`) ??
+        TASK_BY_NAME.get(`Reach Level 99 ${skill}`) ??
+        null
+      );
+    }
+    if (amount === 35) {
+      return TASK_BY_NAME.get(`Obtain 25 Million ${skill} XP`) ?? null;
+    }
+    return TASK_BY_NAME.get(`Reach Level 99 ${skill}`) ?? null;
   }
 
   // Collection log slot chain: "Fill N <tier> Clue Collection Log Slots".
