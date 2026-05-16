@@ -591,6 +591,9 @@ const EXPLICIT_PARENTS: Readonly<Record<string, string>> = {
   // Virtus drops from any DT2 boss — gate the full set on any piece.
   'Equip full Virtus': 'Equip a piece of Virtus',
 
+  // ----- Infinity (Mage Training Arena reward) -----
+  'Equip a Full Infinity Robe Set': 'Equip a Piece of the Infinity Robe Set',
+
   // ----- Phantom Muspah -----
   'Equip the Venator Bow': 'Defeat Phantom Muspah',
   'Equip the Ancient Sceptre': 'Defeat Phantom Muspah',

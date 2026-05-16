@@ -456,6 +456,13 @@ describe('hasUnmetDependency — one-off cross-chain dependencies', () => {
     expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
   });
 
+  it('Full Infinity requires equipping a piece of Infinity first', () => {
+    const child = findTask('Equip a Full Infinity Robe Set');
+    const parent = findTask('Equip a Piece of the Infinity Robe Set');
+    expect(hasUnmetDependency(child, new Set())).toBe(true);
+    expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
+  });
+
   it('Antler guard requires Complete Shadows of Custodia', () => {
     const child = findTask('Equip an Antler guard');
     const parent = findTask('Complete Shadows of Custodia');
