@@ -652,6 +652,11 @@ const EXPLICIT_PARENTS: Readonly<Record<string, string>> = {
   // Enhanced crystal weapons require regular Gauntlet completion per the
   // in-game task text.
   'Equip an Enhanced Crystal Weapon': 'Complete the Gauntlet',
+  // Tempoross drops gate on the first kill.
+  'Equip the Tome of Water': 'Defeat Tempoross 1 time',
+  'Obtain the Big Harpoonfish': 'Defeat Tempoross 1 time',
+  'Obtain the Fish Barrel': 'Defeat Tempoross 1 time',
+
   // Sleeping Giants gates Giants' Foundry access. Two chain roots
   // (handins / quality sword) and the standalone reward-shop tasks all
   // need the quest first.

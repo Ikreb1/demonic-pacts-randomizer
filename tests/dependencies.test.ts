@@ -667,6 +667,9 @@ describe('hasUnmetDependency — one-off cross-chain dependencies', () => {
       ["Drink Kovac's grog", 'Complete Sleeping Giants'],
       ["Equip a full set of the Smith's outfit", 'Complete Sleeping Giants'],
       ['Equip the Colossal Blade', 'Complete Sleeping Giants'],
+      ['Equip the Tome of Water', 'Defeat Tempoross 1 time'],
+      ['Obtain the Big Harpoonfish', 'Defeat Tempoross 1 time'],
+      ['Obtain the Fish Barrel', 'Defeat Tempoross 1 time'],
     ];
     for (const [child, parent] of pairs) {
       const c = findTask(child);
