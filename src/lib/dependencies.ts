@@ -525,11 +525,11 @@ const EXPLICIT_PARENTS: Readonly<Record<string, string>> = {
   'Equip a Full Bandos Armour Set': 'Equip a Piece of the Bandos Armour Set',
   // Kree'arra
   'Equip a Piece of the Armadyl Armour Set': "Defeat Kree'arra",
-  'Equip a Full Armadyl Armour Set': "Defeat Kree'arra",
+  'Equip a Full Armadyl Armour Set': 'Equip a Piece of the Armadyl Armour Set',
 
   // ----- Nex -----
   'Equip a Piece of Torva Armour': 'Defeat Nex',
-  'Equip a Full Set of Torva Armour': 'Defeat Nex',
+  'Equip a Full Set of Torva Armour': 'Equip a Piece of Torva Armour',
   'Equip some Zaryte Vambraces': 'Defeat Nex',
   'Equip a Zaryte Crossbow': 'Defeat Nex',
 
@@ -567,12 +567,12 @@ const EXPLICIT_PARENTS: Readonly<Record<string, string>> = {
   'Equip a Nightmare Staff': 'Defeat The Nightmare',
   'Equip a Nightmare Staff With an Orb': 'Defeat The Nightmare',
   "Equip a Piece of the Inquisitor's Set": 'Defeat The Nightmare',
-  "Equip a Full Inquisitor's Set": 'Defeat The Nightmare',
+  "Equip a Full Inquisitor's Set": "Equip a Piece of the Inquisitor's Set",
   "Equip an Inquisitor's Mace": 'Defeat The Nightmare',
 
   // ----- Hueycoatl (Varlamore) -----
   'Equip a piece of Hueycoatl armour': 'Defeat Hueycoatl 1 Time',
-  'Equip full Hueycoatl armour': 'Defeat Hueycoatl 1 Time',
+  'Equip full Hueycoatl armour': 'Equip a piece of Hueycoatl armour',
 
   // ----- Amoxliatl (Frost Naguas drop too, but Amoxliatl is a clean source) -----
   'Equip Glacial Temotli': 'Defeat Amoxliatl 1 Time',
@@ -658,7 +658,7 @@ const EXPLICIT_PARENTS: Readonly<Record<string, string>> = {
   // "Complete Tombs of Amascut" → Beneath Cursed Sands).
   'Equip the Lightbearer': 'Complete Tombs of Amascut',
   'Equip a Piece of Masori Armour': 'Complete Tombs of Amascut',
-  'Equip a full set of Masori': 'Complete Tombs of Amascut',
+  'Equip a full set of Masori': 'Equip a Piece of Masori Armour',
   'Equip the Elidinis Ward': 'Complete Tombs of Amascut',
   "Equip the Osmumten's Fang": 'Complete Tombs of Amascut',
   "Equip the Osmumten's Fang (or)": 'Complete Tombs of Amascut',
