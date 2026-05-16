@@ -551,6 +551,7 @@ describe('hasUnmetDependency — one-off cross-chain dependencies', () => {
       ['Travel using the Quetzal Transport System', 'Build a Quetzal Landing Site'],
       ['Cook 100 Moonlight Antelopes', 'Complete 50 Hunter Rumours'],
       ["Obtain the Huntsman's Kit", 'Complete a Hunter Rumour'],
+      ['Equip full Guild Hunter Outfit', 'Complete a Hunter Rumour'],
     ];
     for (const [child, parent] of pairs) {
       const c = findTask(child);
