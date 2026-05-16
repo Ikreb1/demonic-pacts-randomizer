@@ -34,6 +34,7 @@ const {
   selectPactResetsRemaining,
   selectEligiblePactCount,
   selectPactRollsRemaining,
+  selectIsDevUser,
   relicsForTier,
 } = await import('../src/state/store');
 const {
@@ -991,6 +992,28 @@ describe('store roll-and-lock flow', () => {
       expect(s.hiscoresLastSubmittedAt).toBeNull();
       expect(s.hiscoresLastSubmittedScore).toBeNull();
       expect(s.hiscoresLastError).toBeNull();
+    });
+  });
+
+  describe('selectIsDevUser', () => {
+    it('returns false when lastSync is null', () => {
+      useStore.setState({ lastSync: null });
+      expect(selectIsDevUser(useStore.getState())).toBe(false);
+    });
+
+    it('returns true for the dev username (lowercase)', () => {
+      useStore.setState({ lastSync: { username: 'atvinnugamer', at: 0, source: 'wikisync' } });
+      expect(selectIsDevUser(useStore.getState())).toBe(true);
+    });
+
+    it('returns true for the dev username (mixed case)', () => {
+      useStore.setState({ lastSync: { username: 'AtvinnuGamer', at: 0, source: 'wikisync' } });
+      expect(selectIsDevUser(useStore.getState())).toBe(true);
+    });
+
+    it('returns false for any other username', () => {
+      useStore.setState({ lastSync: { username: 'someone-else', at: 0, source: 'wikisync' } });
+      expect(selectIsDevUser(useStore.getState())).toBe(false);
     });
   });
 });

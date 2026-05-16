@@ -7,6 +7,7 @@ import {
   selectEligiblePactCount,
   selectPactRollsRemaining,
   selectPactById,
+  selectIsDevUser,
 } from '../state/store';
 import { MAX_PACT_RESETS, MAX_PACTS_UNLOCKED } from '../types';
 import { PactsTree } from './PactsTree';
@@ -18,6 +19,7 @@ export function PactsTab() {
   const rollsRemaining = useStore(selectPactRollsRemaining);
   const rollPact = useStore((s) => s.rollPact);
   const resetPacts = useStore((s) => s.resetPacts);
+  const showWeights = useStore(selectIsDevUser);
   const [recentId, setRecentId] = useState<string | null>(null);
 
   const unlockedSet = new Set(unlocked);
@@ -110,7 +112,12 @@ export function PactsTab() {
         </p>
       )}
 
-      <PactsTree pacts={ALL_PACTS_LIST} unlocked={unlockedSet} recentId={recentId} />
+      <PactsTree
+        pacts={ALL_PACTS_LIST}
+        unlocked={unlockedSet}
+        recentId={recentId}
+        showWeights={showWeights}
+      />
     </div>
   );
 }

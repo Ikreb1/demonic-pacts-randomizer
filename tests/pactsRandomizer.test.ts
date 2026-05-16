@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { rollNextPact } from '../src/lib/pactsRandomizer';
+import { rollNextPact, frontierWeightShares } from '../src/lib/pactsRandomizer';
 import type { Pact } from '../src/types';
 import pactsFile from '../src/data/pacts.json';
 
@@ -278,5 +278,34 @@ describe('rollNextPact — full-run regional spread', () => {
     // saturation. Empirically we measure ~1.05× (basically flat); 1.5×
     // is a generous ceiling for Math.random jitter at 400 trials.
     expect(maxSat / minSat).toBeLessThan(1.5);
+  });
+});
+
+describe('frontierWeightShares', () => {
+  it('returns an empty map when nothing is unlocked (no frontier)', () => {
+    const all = (pactsFile as { pacts: Pact[] }).pacts;
+    expect(frontierWeightShares(all, new Set()).size).toBe(0);
+  });
+
+  it('returns an empty map when every node is unlocked (no frontier)', () => {
+    const all = (pactsFile as { pacts: Pact[] }).pacts;
+    const allIds = new Set(all.map((p) => p.id));
+    expect(frontierWeightShares(all, allIds).size).toBe(0);
+  });
+
+  it('shares sum to ≈ 1.0 and only frontier nodes appear', () => {
+    const all = (pactsFile as { pacts: Pact[] }).pacts;
+    const center = all.find((p) => (p.x ?? 0) === 0 && (p.y ?? 0) === 0)!;
+    const unlocked = new Set([center.id]);
+    const shares = frontierWeightShares(all, unlocked);
+    // Every entry must be a frontier node — not unlocked, and adjacent to
+    // something that is.
+    for (const id of shares.keys()) {
+      expect(unlocked.has(id)).toBe(false);
+      const p = all.find((x) => x.id === id)!;
+      expect(p.prerequisites.some((req) => unlocked.has(req))).toBe(true);
+    }
+    const total = [...shares.values()].reduce((a, b) => a + b, 0);
+    expect(Math.abs(total - 1)).toBeLessThan(1e-9);
   });
 });

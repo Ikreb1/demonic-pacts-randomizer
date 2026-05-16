@@ -1,10 +1,12 @@
 import { useMemo, useState } from 'react';
 import type { Pact, PactKind } from '../types';
+import { frontierWeightShares } from '../lib/pactsRandomizer';
 
 interface Props {
   pacts: readonly Pact[];
   unlocked: ReadonlySet<string>;
   recentId: string | null;
+  showWeights?: boolean;
 }
 
 interface Layout {
@@ -37,10 +39,17 @@ const ROW_HEIGHT = 110;
 const PADDING = 60;
 const NODE_GAP = 70;
 
-export function PactsTree({ pacts, unlocked, recentId }: Props) {
+export function PactsTree({ pacts, unlocked, recentId, showWeights = false }: Props) {
   const layout = useMemo(() => computeLayout(pacts), [pacts]);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const hovered = hoveredId ? pacts.find((p) => p.id === hoveredId) ?? null : null;
+
+  // Dev diagnostic: per-frontier-node probability share. Frontier-only so
+  // unlocked/unreachable nodes stay clean.
+  const shares = useMemo(
+    () => (showWeights ? frontierWeightShares(pacts, unlocked) : null),
+    [showWeights, pacts, unlocked],
+  );
 
   // "Eligible" in the new model = adjacent to something already unlocked
   // (the frontier). Non-frontier nodes are still rollable, just with low
@@ -115,6 +124,15 @@ export function PactsTree({ pacts, unlocked, recentId }: Props) {
               >
                 <circle r={r} className="pacts-node-circle" />
                 {renderInner(p, r)}
+                {shares && shares.has(p.id) && (
+                  <text
+                    className="pacts-node-weight"
+                    y={r + 14}
+                    textAnchor="middle"
+                  >
+                    {shares.get(p.id)!.toFixed(2)}
+                  </text>
+                )}
               </g>
             );
           })}

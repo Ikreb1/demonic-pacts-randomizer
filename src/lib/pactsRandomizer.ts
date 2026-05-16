@@ -82,6 +82,35 @@ export function rollNextPact(
   return frontier[frontier.length - 1].id;
 }
 
+/**
+ * Diagnostic helper: returns the normalized weight share each frontier node
+ * would contribute to a roll right now. Mirrors rollNextPact's weighting
+ * verbatim so the numbers shown match real pick probabilities. Returns an
+ * empty map when there's no frontier.
+ */
+export function frontierWeightShares(
+  pacts: readonly Pact[],
+  unlocked: ReadonlySet<string>,
+): Map<string, number> {
+  const frontier = pacts.filter(
+    (p) => !unlocked.has(p.id) && p.prerequisites.some((req) => unlocked.has(req)),
+  );
+  if (frontier.length === 0) return new Map();
+  const capstoneIds = new Set(
+    pacts.filter((p) => p.kind === 'capstone' && !unlocked.has(p.id)).map((p) => p.id),
+  );
+  const remoteness = capstoneRemoteness(pacts);
+  const firstMajors = firstMajorIds(pacts);
+  const weights = frontier.map((p) => weightFor(p, pacts, capstoneIds, remoteness, firstMajors));
+  const total = weights.reduce((a, b) => a + b, 0);
+  if (total === 0) {
+    // Match rollNextPact's uniform fallback when no capstones are reachable.
+    const share = 1 / frontier.length;
+    return new Map(frontier.map((p) => [p.id, share]));
+  }
+  return new Map(frontier.map((p, i) => [p.id, weights[i] / total]));
+}
+
 function weightFor(
   p: Pact,
   pacts: readonly Pact[],

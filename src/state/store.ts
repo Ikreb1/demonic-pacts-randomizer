@@ -537,6 +537,14 @@ export function selectCompleted(state: StoreState): Set<number> {
   return new Set([...state.manualComplete, ...state.syncedComplete]);
 }
 
+// Soft dev mode: triggers when the synced username matches DEV_USERNAME.
+// Lowercase comparison handles OSRS's case-insensitive name matching.
+// Distinct from import.meta.env.DEV (which gates the build-time DevPanel).
+const DEV_USERNAME = 'atvinnugamer';
+export function selectIsDevUser(state: StoreState): boolean {
+  return state.lastSync?.username?.toLowerCase() === DEV_USERNAME;
+}
+
 export function selectActiveTask(state: StoreState): Task | null {
   if (state.activeTask === null) return null;
   return TASKS_BY_ID.get(state.activeTask) ?? null;
