@@ -656,6 +656,8 @@ const EXPLICIT_PARENTS: Readonly<Record<string, string>> = {
   'Equip the Tome of Water': 'Defeat Tempoross 1 time',
   'Obtain the Big Harpoonfish': 'Defeat Tempoross 1 time',
   'Obtain the Fish Barrel': 'Defeat Tempoross 1 time',
+  // Statuette is in Nardah, only accessible via Spirits of the Elid.
+  'Pray at the Elidinis Statuette': 'Complete Spirits of the Elid',
 
   // Sleeping Giants gates Giants' Foundry access. Two chain roots
   // (handins / quality sword) and the standalone reward-shop tasks all

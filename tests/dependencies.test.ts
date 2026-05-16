@@ -670,6 +670,7 @@ describe('hasUnmetDependency — one-off cross-chain dependencies', () => {
       ['Equip the Tome of Water', 'Defeat Tempoross 1 time'],
       ['Obtain the Big Harpoonfish', 'Defeat Tempoross 1 time'],
       ['Obtain the Fish Barrel', 'Defeat Tempoross 1 time'],
+      ['Pray at the Elidinis Statuette', 'Complete Spirits of the Elid'],
     ];
     for (const [child, parent] of pairs) {
       const c = findTask(child);
