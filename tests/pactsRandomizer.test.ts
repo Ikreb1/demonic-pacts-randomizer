@@ -308,4 +308,35 @@ describe('frontierWeightShares', () => {
     const total = [...shares.values()].reduce((a, b) => a + b, 0);
     expect(Math.abs(total - 1)).toBeLessThan(1e-9);
   });
+
+  it('floors first-ring major shares at ≥ 20% on the real graph mid-walk', () => {
+    // Simulate a mid-game state: center + one full melee-branch walk
+    // (so root majors for ranged/magic are still on the frontier but
+    // compete against deep-branch nodes that are much closer to a
+    // capstone). The 3× boost alone leaves the surviving root majors at
+    // ~1% share — the floor must bump each to at least 20%.
+    const all = (pactsFile as { pacts: Pact[] }).pacts;
+    const center = all.find((p) => (p.x ?? 0) === 0 && (p.y ?? 0) === 0)!;
+    const meleeRoot = all.find((p) => p.id === 'node74')!;
+    // Walk the melee branch out 5 hops to push frontier weight toward it.
+    const unlocked = new Set<string>([center.id, meleeRoot.id]);
+    let edge = meleeRoot.id;
+    for (let i = 0; i < 5; i++) {
+      const next = all.find(
+        (p) =>
+          !unlocked.has(p.id) &&
+          p.prerequisites.includes(edge) &&
+          p.kind !== 'minor' &&
+          (p.x ?? 0) > 0,
+      );
+      if (!next) break;
+      unlocked.add(next.id);
+      edge = next.id;
+    }
+    const shares = frontierWeightShares(all, unlocked);
+    // The two remaining first-ring majors (ranged + magic) should each
+    // hold at least the floor share.
+    expect(shares.get('node2')).toBeGreaterThanOrEqual(0.2 - 1e-9);
+    expect(shares.get('node44')).toBeGreaterThanOrEqual(0.2 - 1e-9);
+  });
 });
