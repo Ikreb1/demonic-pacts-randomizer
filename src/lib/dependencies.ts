@@ -522,7 +522,7 @@ const EXPLICIT_PARENTS: Readonly<Record<string, string>> = {
   'Equip an Armadyl Crossbow': 'Defeat Commander Zilyana',
   // General Graardor
   'Equip a Piece of the Bandos Armour Set': 'Defeat General Graardor',
-  'Equip a Full Bandos Armour Set': 'Defeat General Graardor',
+  'Equip a Full Bandos Armour Set': 'Equip a Piece of the Bandos Armour Set',
   // Kree'arra
   'Equip a Piece of the Armadyl Armour Set': "Defeat Kree'arra",
   'Equip a Full Armadyl Armour Set': "Defeat Kree'arra",

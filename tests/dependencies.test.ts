@@ -571,7 +571,7 @@ describe('hasUnmetDependency — one-off cross-chain dependencies', () => {
     const pairs: Array<[string, string]> = [
       ['Equip a Saradomin Sword', 'Defeat Commander Zilyana'],
       ['Equip an Armadyl Crossbow', 'Defeat Commander Zilyana'],
-      ['Equip a Full Bandos Armour Set', 'Defeat General Graardor'],
+      ['Equip a Full Bandos Armour Set', 'Equip a Piece of the Bandos Armour Set'],
       ['Equip a Full Armadyl Armour Set', "Defeat Kree'arra"],
       ['Equip a Full Set of Torva Armour', 'Defeat Nex'],
       ['Equip a Zaryte Crossbow', 'Defeat Nex'],
