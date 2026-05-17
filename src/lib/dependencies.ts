@@ -464,6 +464,13 @@ const COUNT_CHAINS: readonly CountChain[] = [
     chain: [1, 25, 75],
     format: (n) => (n === 1 ? 'Complete 1 Deep delve' : `Complete ${n} Deep delves`),
   },
+
+  // Fight Caves: no first-completion task, only the 5/10 count entries.
+  {
+    re: /^Complete the Fight Caves (\d+) Times$/,
+    chain: [5, 10],
+    format: (n) => `Complete the Fight Caves ${n} Times`,
+  },
 ];
 
 function lookupCountChain(name: string): Task | null {
