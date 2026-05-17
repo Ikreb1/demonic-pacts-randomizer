@@ -7,11 +7,11 @@
 // proxy (see docs/cors-worker.md). Empty proxy = direct fetch (will fail in
 // most browsers; surfaced as a CORS error).
 
-export const WIKISYNC_GAMETYPE = 'DEMONIC_PACTS_LEAGUE';
-export const WIKISYNC_DIRECT = 'https://sync.runescape.wiki';
+const WIKISYNC_GAMETYPE = 'DEMONIC_PACTS_LEAGUE';
+const WIKISYNC_DIRECT = 'https://sync.runescape.wiki';
 const WIKISYNC_PATH = '/runelite/player';
 
-export interface WikiSyncResponse {
+interface WikiSyncResponse {
   league_tasks?: number[];
   levels?: Record<string, number>;
   [key: string]: unknown;
@@ -29,7 +29,7 @@ export class WikiSyncError extends Error {
 
 // Accept either an origin (`https://x.workers.dev`) or a fully-qualified base
 // (`https://x.workers.dev/runelite/player`). Normalize to the latter.
-export function buildPlayerUrl(proxyOrDirect: string, username: string): string {
+function buildPlayerUrl(proxyOrDirect: string, username: string): string {
   const base = (proxyOrDirect || WIKISYNC_DIRECT).replace(/\/+$/, '');
   const withPath = base.includes('/runelite/player') ? base : `${base}${WIKISYNC_PATH}`;
   return `${withPath}/${encodeURIComponent(username)}/${WIKISYNC_GAMETYPE}`;

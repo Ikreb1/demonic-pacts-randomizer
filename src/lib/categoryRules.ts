@@ -1,6 +1,6 @@
 import type { Task } from '../types';
 
-export interface CategoryRule {
+interface CategoryRule {
   id: string;
   label: string;
   emoji?: string;
@@ -139,7 +139,7 @@ function makeSkillRule(skill: Skill, label: string, emoji: string, sortIndex: nu
 
 // Sort indices: top categories (1-50), per-skill sub-bucket (100-199),
 // XP milestones at the very bottom (990), Other (999).
-export const CATEGORY_RULES: CategoryRule[] = [
+const CATEGORY_RULES: CategoryRule[] = [
   {
     id: 'diaries',
     label: 'Achievement Diaries',

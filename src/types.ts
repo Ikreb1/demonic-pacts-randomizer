@@ -31,12 +31,6 @@ export interface Task {
   points: number | null;
 }
 
-export interface TasksFile {
-  generatedAt: string;
-  sourcePage: string;
-  tasks: Task[];
-}
-
 export const TIER_LABELS: Record<Tier, string> = {
   easy: 'Easy',
   medium: 'Medium',
@@ -60,12 +54,6 @@ export interface Relic {
   tier: RelicTier;
   name: string;
   effect: string;
-}
-
-export interface RelicsFile {
-  generatedAt: string;
-  sourcePage: string;
-  relics: Relic[];
 }
 
 export const RELIC_TIER_THRESHOLDS: Record<RelicTier, number> = {
@@ -98,12 +86,6 @@ export interface Pact {
   // Demonic_Pacts_League/Demonic_Pacts wiki page. Used to render the
   // node's icon from /pact-icons/Pact_${iconCode}.png.
   iconCode?: string;
-}
-
-export interface PactsFile {
-  generatedAt: string;
-  sourcePage: string;
-  pacts: Pact[];
 }
 
 export const MAX_PACT_RESETS = 6;

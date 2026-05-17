@@ -40,7 +40,7 @@ export function parseSkillReqs(text: string | null | undefined): SkillReq[] {
   return out;
 }
 
-export type Eligibility =
+type Eligibility =
   | { status: 'eligible' }
   | { status: 'blocked'; missing: SkillReq[] }
   | { status: 'unknown' };
