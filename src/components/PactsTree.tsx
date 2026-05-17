@@ -127,10 +127,10 @@ export function PactsTree({ pacts, unlocked, recentId, showWeights = false }: Pr
                 {shares && shares.has(p.id) && (
                   <text
                     className="pacts-node-weight"
-                    y={r + 14}
+                    y={r + 16}
                     textAnchor="middle"
                   >
-                    {shares.get(p.id)!.toFixed(2)}
+                    {Math.round(shares.get(p.id)! * 100)}%
                   </text>
                 )}
               </g>
