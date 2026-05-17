@@ -583,6 +583,12 @@ const EXPLICIT_PARENTS: Readonly<Record<string, string>> = {
   'Equip Glacial Temotli': 'Defeat Amoxliatl 1 Time',
 
   // ----- Desert Treasure 2 awakened bosses -----
+  // Awakened variants require an Awakener's orb obtained from the regular
+  // boss, so each Awakened kill is gated on the regular first-kill task.
+  'Defeat Awakened Vardorvis': 'Defeat Vardorvis',
+  'Defeat Awakened Duke Sucellus': 'Defeat Duke Sucellus',
+  'Defeat Awakened Whisperer': 'Defeat Whisperer',
+  'Defeat Awakened Leviathan': 'Defeat Leviathan',
   'Equip the Ultor Ring': 'Defeat Vardorvis',
   'Equip the Magus Ring': 'Defeat Duke Sucellus',
   'Equip the Bellator Ring': 'Defeat Whisperer',
@@ -712,6 +718,10 @@ const EXPLICIT_PARENTS: Readonly<Record<string, string>> = {
   "Complete Tzhaar-Ket-Rak's Special challenge": "Complete Tzhaar-Ket-Rak's sixth challenge",
 
   // ----- Misc orphan chains (singular root, no count-chain pattern) -----
+  // Recoloured Graceful sets reuse the base Graceful slots; players
+  // typically obtain the base set first via Marks of Grace before
+  // unlocking any of the recolours.
+  'Equip a set of recoloured Graceful': 'Equip a Full Graceful Outfit',
   'Snare a Bird 20 times': 'Snare a Bird',
   'Room 8 of Pyramid Plunder 25 Times': 'Room 8 of Pyramid Plunder',
   // Constrained Vorkath variants gate on the base first-kill, mirroring
