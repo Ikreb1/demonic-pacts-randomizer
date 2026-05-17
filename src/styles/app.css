@@ -1320,10 +1320,10 @@ input[type='text'] {
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 12px;
-  /* Cap the tree at ~70% of viewport height so it fits a 1080p window
+  /* Cap the tree at ~80% of viewport height so it fits a 1080p window
      without scrolling. The SVG inside scales to fit both dimensions. */
-  height: min(70vh, 720px);
-  min-height: 360px;
+  height: min(80vh, 840px);
+  min-height: 420px;
 }
 
 .pacts-tree-svg {
@@ -1417,11 +1417,11 @@ input[type='text'] {
    distribution against the geometry of the tree at a glance. */
 .pacts-node-weight {
   fill: #ff2bd6;
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 700;
   paint-order: stroke;
   stroke: #000;
-  stroke-width: 4px;
+  stroke-width: 6px;
   stroke-linejoin: round;
   pointer-events: none;
   user-select: none;
