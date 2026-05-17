@@ -675,9 +675,16 @@ const EXPLICIT_PARENTS: Readonly<Record<string, string>> = {
   'Create the long rope shortcut in Darkmeyer': 'Complete Sins of the Father',
   'Create an Amulet of Blood Fury': 'Complete Sins of the Father',
   'Floor 1 of the Hallowed Sepulchre': 'Complete Sins of the Father',
-  // Beneath Cursed Sands gates the Divine Rune pouch and Tombs of Amascut.
+  // Beneath Cursed Sands gates the Divine Rune pouch, Tombs of Amascut,
+  // Necropolis access, the Keris Partisan (quest reward), and the
+  // Menaphite Remedy recipe.
   'Create the Divine Rune pouch': 'Complete Beneath Cursed Sands',
   'Complete Tombs of Amascut': 'Complete Beneath Cursed Sands',
+  "Commune a Pharoah's Sceptre to the Necropolis": 'Complete Beneath Cursed Sands',
+  'Mine 15 Granite in the Necropolis': 'Complete Beneath Cursed Sands',
+  'Defeat a Kalphite with the Keris Partisan': 'Complete Beneath Cursed Sands',
+  'Hit 150 with the Keris Partisan': 'Complete Beneath Cursed Sands',
+  'Make 50 Menaphite Remedies': 'Complete Beneath Cursed Sands',
   // Enhanced crystal weapons require regular Gauntlet completion per the
   // in-game task text.
   'Equip an Enhanced Crystal Weapon': 'Complete the Gauntlet',
