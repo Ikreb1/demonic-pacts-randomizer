@@ -39,6 +39,18 @@ describe('isAlwaysSkippedFromRoll', () => {
     expect(isAlwaysSkippedFromRoll(findTask('Equip a piece of Camouflage outfit'))).toBe(true);
   });
 
+  it('skips every collection-log slot task (both "N Collection log slots" and "Fill N <tier> Clue Collection Log Slots")', () => {
+    // Sample across both shapes.
+    expect(isAlwaysSkippedFromRoll(findTask('5 Collection log slots'))).toBe(true);
+    expect(isAlwaysSkippedFromRoll(findTask('100 Collection log slots'))).toBe(true);
+    expect(isAlwaysSkippedFromRoll(findTask('750 Collection log slots'))).toBe(true);
+    expect(isAlwaysSkippedFromRoll(findTask('Fill 5 Easy Clue Collection Log Slots'))).toBe(true);
+    expect(isAlwaysSkippedFromRoll(findTask('Fill 20 Medium Clue Collection Log Slots'))).toBe(true);
+    expect(isAlwaysSkippedFromRoll(findTask('Fill 30 Hard Clue Collection Log Slots'))).toBe(true);
+    expect(isAlwaysSkippedFromRoll(findTask('Fill 25 Elite Clue Collection Log Slots'))).toBe(true);
+    expect(isAlwaysSkippedFromRoll(findTask('Fill 25 Master Clue Collection Log Slots'))).toBe(true);
+  });
+
   it('does NOT skip the Alchemist\'s outfit (shop/minigame reward, not random event)', () => {
     expect(isAlwaysSkippedFromRoll(findTask('Equip a piece of Alchemists outfit'))).toBe(false);
   });
