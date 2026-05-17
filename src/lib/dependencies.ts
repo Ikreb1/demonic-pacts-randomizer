@@ -759,19 +759,16 @@ const EXPLICIT_PARENTS: Readonly<Record<string, string>> = {
   "TzHaar-Ket-Rak's Combat Achievements": "Complete Tzhaar-Ket-Rak's sixth challenge",
 };
 
-// Collection-log slot tasks are excluded from rolling by user preference —
-// they're long-horizon grinds tied to drop RNG, not the kind of task that
-// fits a single roll slot.
-const COLLECTION_LOG_SKIP_PATTERNS: readonly RegExp[] = [
-  /^\d+ Collection log slots$/,
-  /^Fill \d+ (Easy|Medium|Hard|Elite|Master) Clue Collection Log Slots$/,
-];
+// "N Collection log slots" — the cross-game aggregate tasks — are excluded
+// from rolling by user preference: long-horizon grinds tied to drop RNG
+// that don't fit a single roll slot. The per-tier "Fill N <tier> Clue
+// Collection Log Slots" tasks stay rollable (those are clue-specific and
+// more bounded).
+const COLLECTION_LOG_SKIP_PATTERN = /^\d+ Collection log slots$/;
 
 export function isAlwaysSkippedFromRoll(task: Task): boolean {
   if (ALWAYS_SKIP_TASK_NAMES.has(task.name)) return true;
-  for (const re of COLLECTION_LOG_SKIP_PATTERNS) {
-    if (re.test(task.name)) return true;
-  }
+  if (COLLECTION_LOG_SKIP_PATTERN.test(task.name)) return true;
   return false;
 }
 
