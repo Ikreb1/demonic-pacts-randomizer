@@ -1,7 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import {
   parseSkillReqs,
-  checkEligibility,
   isEligibleOrUnknown,
   normalizeWikiSyncLevels,
 } from '../src/lib/eligibility';
@@ -57,37 +56,6 @@ describe('parseSkillReqs', () => {
       { skill: 'attack', level: 50 },
       { skill: 'defence', level: 50 },
     ]);
-  });
-});
-
-describe('checkEligibility', () => {
-  it('returns unknown when no parseable skill reqs', () => {
-    expect(checkEligibility(t({ requirements: '' }), {})).toEqual({ status: 'unknown' });
-    expect(
-      checkEligibility(t({ requirements: 'Completion of Sins of the Father' }), {}),
-    ).toEqual({ status: 'unknown' });
-  });
-
-  it('eligible when player meets every required level', () => {
-    const task = t({ requirements: '60 Herblore' });
-    expect(checkEligibility(task, { herblore: 75 })).toEqual({ status: 'eligible' });
-    expect(checkEligibility(task, { herblore: 60 })).toEqual({ status: 'eligible' });
-  });
-
-  it('blocked + lists missing reqs when any level is short', () => {
-    const task = t({ requirements: '70 Ranged, 40 Defence' });
-    const res = checkEligibility(task, { ranged: 70, defence: 30 });
-    expect(res).toEqual({
-      status: 'blocked',
-      missing: [{ skill: 'defence', level: 40 }],
-    });
-  });
-
-  it('treats unknown player levels as 0 (so any req blocks)', () => {
-    expect(checkEligibility(t({ requirements: '15 Firemaking' }), {})).toEqual({
-      status: 'blocked',
-      missing: [{ skill: 'firemaking', level: 15 }],
-    });
   });
 });
 

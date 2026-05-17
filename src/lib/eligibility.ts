@@ -40,34 +40,16 @@ export function parseSkillReqs(text: string | null | undefined): SkillReq[] {
   return out;
 }
 
-type Eligibility =
-  | { status: 'eligible' }
-  | { status: 'blocked'; missing: SkillReq[] }
-  | { status: 'unknown' };
-
 /**
- * Compare a task's parsed skill requirements to the player's current levels.
- *
- *   - `eligible`: every parsed skill req is met.
- *   - `blocked`: at least one skill req is unmet; `missing` lists them.
- *   - `unknown`: the task lists no parseable skill reqs (could still be
- *     blocked by a quest/item, but we have no signal). Default to showing
- *     these — false-positives are better than hiding work the player can do.
+ * True when the task is eligible or has no parseable skill reqs.
+ * Unparseable reqs (quest/item gates) default to true — false-positives
+ * are better than hiding work the player can do.
  */
-export function checkEligibility(task: Task, levels: PlayerLevels): Eligibility {
-  const reqs = parseSkillReqs(task.requirements);
-  if (reqs.length === 0) return { status: 'unknown' };
-  const missing: SkillReq[] = [];
-  for (const r of reqs) {
-    const have = levels[r.skill] ?? 0;
-    if (have < r.level) missing.push(r);
-  }
-  return missing.length === 0 ? { status: 'eligible' } : { status: 'blocked', missing };
-}
-
 export function isEligibleOrUnknown(task: Task, levels: PlayerLevels): boolean {
-  const e = checkEligibility(task, levels);
-  return e.status !== 'blocked';
+  for (const r of parseSkillReqs(task.requirements)) {
+    if ((levels[r.skill] ?? 0) < r.level) return false;
+  }
+  return true;
 }
 
 /**

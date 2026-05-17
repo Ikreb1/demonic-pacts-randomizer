@@ -520,14 +520,6 @@ input[type='text'] {
 .lock-icon { font-size: 22px; }
 
 .categories .hint { margin-bottom: 12px; }
-.eligible-toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  margin-left: 6px;
-  cursor: pointer;
-  user-select: none;
-}
 
 /* ----- Similar tasks panel (under the locked task) ----- */
 .similar-tasks {
@@ -605,8 +597,6 @@ input[type='text'] {
   text-align: left;
   border-radius: 0;
 }
-.category-emoji { font-size: 18px; }
-.category-label { font-weight: 600; flex: 1 1 auto; }
 .category-count {
   background: var(--bg-card);
   border-radius: 10px;
