@@ -10,3 +10,6 @@ dist
 
 # TypeScript incremental build cache.
 tsconfig.tsbuildinfo
+
+# Local scratch pad.
+checktasks.md
