@@ -487,6 +487,8 @@ const EXPLICIT_PARENTS: Readonly<Record<string, string>> = {
   'Equip a Full Prospector Outfit': 'Obtain 20 Golden Nuggets',
   // Golden Prospector pieces drop from mining shooting stars.
   'Equip a Full set of Golden Prospector': 'Mine a shooting star',
+  // Celestial ring is bought with stardust earned from mining shooting stars.
+  'Purchase a Celestial ring': 'Mine a shooting star',
   // Landing sites cost 10 quetzal feed; feed drops from the Basic tier of
   // Hunter Rumours upward, so a single rumour is the minimum gate. Twilight's
   // Promise (the other prereq) is auto-completed in Leagues VI.
