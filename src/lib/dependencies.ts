@@ -465,11 +465,22 @@ const COUNT_CHAINS: readonly CountChain[] = [
     format: (n) => (n === 1 ? 'Complete 1 Deep delve' : `Complete ${n} Deep delves`),
   },
 
-  // Fight Caves: no first-completion task, only the 5/10 count entries.
+  // Fight Caves / Inferno / Theatre of Blood: no first-completion task,
+  // only the count entries chain.
   {
     re: /^Complete the Fight Caves (\d+) Times$/,
     chain: [5, 10],
     format: (n) => `Complete the Fight Caves ${n} Times`,
+  },
+  {
+    re: /^Complete the Inferno (\d+) Times$/,
+    chain: [5, 10, 15],
+    format: (n) => `Complete the Inferno ${n} Times`,
+  },
+  {
+    re: /^Complete the Theatre of Blood (\d+) Times$/,
+    chain: [25, 50],
+    format: (n) => `Complete the Theatre of Blood ${n} Times`,
   },
 ];
 
