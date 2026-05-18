@@ -472,6 +472,14 @@ const COUNT_CHAINS: readonly CountChain[] = [
     chain: [5, 10],
     format: (n) => `Complete the Fight Caves ${n} Times`,
   },
+
+  // Guardians of the Rift: 1 / 10 / 25 closures. N=1 uses singular
+  // "Rift closed", higher counts use plural "Rifts closed".
+  {
+    re: /^Guardians of the Rift (\d+) Rifts? closed$/,
+    chain: [1, 10, 25],
+    format: (n) => (n === 1 ? 'Guardians of the Rift 1 Rift closed' : `Guardians of the Rift ${n} Rifts closed`),
+  },
   {
     re: /^Complete the Inferno (\d+) Times$/,
     chain: [5, 10, 15],
