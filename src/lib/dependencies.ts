@@ -684,10 +684,11 @@ const EXPLICIT_PARENTS: Readonly<Record<string, string>> = {
   'Create the long rope shortcut in Darkmeyer': 'Complete Sins of the Father',
   'Create an Amulet of Blood Fury': 'Complete Sins of the Father',
   'Floor 1 of the Hallowed Sepulchre': 'Complete Sins of the Father',
-  // Guardians of the Rift rewards (rune pouch + Raiment) require playing
-  // the minigame at least once.
+  // Guardians of the Rift rewards (rune pouch + Raiment + Lantern) require
+  // playing the minigame at least once.
   'Create the Colossal Rune Pouch': 'Guardians of the Rift 1 Rift closed',
   'Equip a full set of Raiment of the eye': 'Guardians of the Rift 1 Rift closed',
+  'Equip the Abyssal Lantern': 'Guardians of the Rift 1 Rift closed',
 
   // Beneath Cursed Sands gates the Divine Rune pouch, Tombs of Amascut,
   // Necropolis access, the Keris Partisan (quest reward), and the
