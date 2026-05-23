@@ -723,6 +723,10 @@ const EXPLICIT_PARENTS: Readonly<Record<string, string>> = {
   'Defeat the Doom of Mokhiatl': 'Complete the Final Dawn',
   'Equip Earthbound Tecpatl': 'Complete the Final Dawn',
 
+  // 100 Mole Claws averages ~50 mole kills (2 claws/kill); gate on the
+  // 50-kill chain entry so the player has actually farmed enough.
+  'Turn in 100 Mole Claws to Wyson the Gardener': 'Defeat the Giant Mole 50 Times',
+
   // ----- Tombs of Amascut drops + count-chain root -----
   // All unique drops gate on at least one ToA completion (cascades through
   // "Complete Tombs of Amascut" → Beneath Cursed Sands).
