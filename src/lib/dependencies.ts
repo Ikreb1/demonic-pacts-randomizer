@@ -728,6 +728,13 @@ const EXPLICIT_PARENTS: Readonly<Record<string, string>> = {
   // 50-kill chain entry so the player has actually farmed enough.
   'Turn in 100 Mole Claws to Wyson the Gardener': 'Defeat the Giant Mole 50 Times',
 
+  // Sq'irkjuice turn-ins each need their season's sq'irk picked from
+  // Sorceress's Garden. Higher seasons gate on higher Thieving levels.
+  "Turn in a Winter Sq'irkjuice to Osman": "Pick a Winter Sq'irk",
+  "Turn in 10 Spring Sq'irkjuices to Osman": "Pick a Spring Sq'irk",
+  "Turn in 25 Autumn Sq'irkjuices to Osman": "Pick a Autumn Sq'irk",
+  "Turn in 50 Summer Sq'irkjuices to Osman": "Pick a Summer Sq'irk",
+
   // ----- Tombs of Amascut drops + count-chain root -----
   // All unique drops gate on at least one ToA completion (cascades through
   // "Complete Tombs of Amascut" → Beneath Cursed Sands).
