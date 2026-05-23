@@ -652,6 +652,7 @@ const EXPLICIT_PARENTS: Readonly<Record<string, string>> = {
 
   // ----- Shadows of Custodia -----
   'Equip an Antler guard': 'Complete Shadows of Custodia',
+  'Fletch some Atlatl darts': 'Complete Shadows of Custodia',
 
   // ----- Fortis Colosseum content -----
   // All Colosseum-tied tasks gate on the first wave; Sunfire Fanatic
