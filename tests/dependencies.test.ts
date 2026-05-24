@@ -158,45 +158,65 @@ describe('hasUnmetDependency — skill XP milestones', () => {
   });
 });
 
-describe('hasUnmetDependency — collection log slot chains', () => {
-  it('"Fill 5 Medium Clue Collection Log Slots" is the medium chain root', () => {
-    expect(
-      hasUnmetDependency(findTask('Fill 5 Medium Clue Collection Log Slots'), new Set()),
-    ).toBe(false);
+describe('hasUnmetDependency — unique clue reward chain (Fill + Gain interleaved)', () => {
+  it('Fill 5 Medium is gated on the singular "Gain a Unique Item" root', () => {
+    const child = findTask('Fill 5 Medium Clue Collection Log Slots');
+    const root = findTask('Gain a Unique Item From a Medium Clue');
+    expect(hasUnmetDependency(child, new Set())).toBe(true);
+    expect(hasUnmetDependency(child, new Set([root.id]))).toBe(false);
   });
 
-  it('"Fill 20 Medium Clue Collection Log Slots" requires Fill 5', () => {
+  it('"Gain a Unique Item From a/an <Tier> Clue" is the chain root (no parent)', () => {
+    expect(hasUnmetDependency(findTask('Gain a Unique Item From an Easy Clue'), new Set())).toBe(false);
+    expect(hasUnmetDependency(findTask('Gain a Unique Item From a Master Clue'), new Set())).toBe(false);
+  });
+
+  it('Fill 20 Medium is gated on Gain 10 Medium (the next-lower count, regardless of name)', () => {
     const child = findTask('Fill 20 Medium Clue Collection Log Slots');
-    const parent = findTask('Fill 5 Medium Clue Collection Log Slots');
+    const parent = findTask('Gain 10 Unique Items From Medium Clues');
+    const fill5 = findTask('Fill 5 Medium Clue Collection Log Slots');
     expect(hasUnmetDependency(child, new Set())).toBe(true);
+    // Skipping intermediate (Gain 10) by completing only Fill 5 isn't enough.
+    expect(hasUnmetDependency(child, new Set([fill5.id]))).toBe(true);
     expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
   });
 
-  it('"Fill 40 Medium Clue Collection Log Slots" requires Fill 20 (not the root)', () => {
+  it('Fill 40 Medium chains on Gain 25 (immediate parent), not Fill 20 (skipped)', () => {
     const child = findTask('Fill 40 Medium Clue Collection Log Slots');
-    const intermediate = findTask('Fill 20 Medium Clue Collection Log Slots');
-    const root = findTask('Fill 5 Medium Clue Collection Log Slots');
-    expect(hasUnmetDependency(child, new Set())).toBe(true);
-    // Only completing the root isn't enough — need the immediate parent.
-    expect(hasUnmetDependency(child, new Set([root.id]))).toBe(true);
-    expect(hasUnmetDependency(child, new Set([intermediate.id]))).toBe(false);
+    const parent = findTask('Gain 25 Unique Items From Medium Clues');
+    const fill20 = findTask('Fill 20 Medium Clue Collection Log Slots');
+    expect(hasUnmetDependency(child, new Set([fill20.id]))).toBe(true);
+    expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
   });
 
-  it('Hard tier chains through 3 → 15 → 30', () => {
-    const c30 = findTask('Fill 30 Hard Clue Collection Log Slots');
-    const c15 = findTask('Fill 15 Hard Clue Collection Log Slots');
-    const c3 = findTask('Fill 3 Hard Clue Collection Log Slots');
-    expect(hasUnmetDependency(c30, new Set([c3.id]))).toBe(true);
-    expect(hasUnmetDependency(c30, new Set([c15.id]))).toBe(false);
-    expect(hasUnmetDependency(c15, new Set([c3.id]))).toBe(false);
+  it('Hard tier interleaves: Gain 5 → Fill 3, Fill 30 → Gain 20', () => {
+    const gain5 = findTask('Gain 5 Unique Items From Hard Clues');
+    const fill3 = findTask('Fill 3 Hard Clue Collection Log Slots');
+    expect(hasUnmetDependency(gain5, new Set([fill3.id]))).toBe(false);
+
+    const fill30 = findTask('Fill 30 Hard Clue Collection Log Slots');
+    const gain20 = findTask('Gain 20 Unique Items From Hard Clues');
+    expect(hasUnmetDependency(fill30, new Set([gain20.id]))).toBe(false);
   });
 
-  it('Master tier (5 → 25) chains correctly with no third step', () => {
-    const c25 = findTask('Fill 25 Master Clue Collection Log Slots');
-    const c5 = findTask('Fill 5 Master Clue Collection Log Slots');
-    expect(hasUnmetDependency(c25, new Set())).toBe(true);
-    expect(hasUnmetDependency(c25, new Set([c5.id]))).toBe(false);
-    expect(hasUnmetDependency(c5, new Set())).toBe(false);
+  it('tied tasks at the same count share a parent rather than gating each other', () => {
+    // Elite count=10: Fill 10 and Gain 10 are tied. Both must parent on Fill 3 Elite (count=3).
+    const fill10 = findTask('Fill 10 Elite Clue Collection Log Slots');
+    const gain10 = findTask('Gain 10 Unique Items From Elite Clues');
+    const fill3 = findTask('Fill 3 Elite Clue Collection Log Slots');
+    expect(hasUnmetDependency(fill10, new Set([fill3.id]))).toBe(false);
+    expect(hasUnmetDependency(gain10, new Set([fill3.id]))).toBe(false);
+    // Completing one tied task does NOT auto-satisfy the other's gate (data
+    // model is single-parent), but neither is parented on the other.
+  });
+
+  it('Master tier (1 → 5 → 10 → 25) interleaves Gain and Fill', () => {
+    const fill25 = findTask('Fill 25 Master Clue Collection Log Slots');
+    const gain10 = findTask('Gain 10 Unique Items From Master Clues');
+    const fill5 = findTask('Fill 5 Master Clue Collection Log Slots');
+    expect(hasUnmetDependency(fill25, new Set([fill5.id]))).toBe(true);
+    expect(hasUnmetDependency(fill25, new Set([gain10.id]))).toBe(false);
+    expect(hasUnmetDependency(fill5, new Set([findTask('Gain a Unique Item From a Master Clue').id]))).toBe(false);
   });
 });
 
@@ -388,30 +408,26 @@ describe('hasUnmetDependency — extended count chains', () => {
     expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
   });
 
-  it('"5 Unique Items From Hard Clues" requires the singular "Gain a Unique Item From a Hard Clue"', () => {
+  it('Gain 5 Hard chains on Fill 3 Hard (next-lower count), not the singular root', () => {
     const child = findTask('Gain 5 Unique Items From Hard Clues');
-    const parent = findTask('Gain a Unique Item From a Hard Clue');
-    expect(hasUnmetDependency(child, new Set())).toBe(true);
+    const parent = findTask('Fill 3 Hard Clue Collection Log Slots');
+    const root = findTask('Gain a Unique Item From a Hard Clue');
+    expect(hasUnmetDependency(child, new Set([root.id]))).toBe(true);
     expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
   });
 
-  it('"10 Unique Items From an Elite Clue" requires the singular "an Elite Clue" root', () => {
-    // Article-handling sanity: "Elite" gets "an", not "a".
+  it('Gain 10 Elite chains on Fill 3 Elite (the count=3 entry), not the singular root', () => {
     const child = findTask('Gain 10 Unique Items From Elite Clues');
-    const parent = findTask('Gain a Unique Item From an Elite Clue');
+    const parent = findTask('Fill 3 Elite Clue Collection Log Slots');
     expect(hasUnmetDependency(child, new Set())).toBe(true);
     expect(hasUnmetDependency(child, new Set([parent.id]))).toBe(false);
   });
 
-  it('the singular-root tasks themselves have no parent', () => {
-    expect(hasUnmetDependency(findTask('Gain a Unique Item From an Easy Clue'), new Set())).toBe(false);
-    expect(hasUnmetDependency(findTask('Gain a Unique Item From a Master Clue'), new Set())).toBe(false);
-  });
-
-  it('per-tier unique-item chains are independent (Master parent doesn\'t satisfy Easy)', () => {
+  it('per-tier unique-clue chains are independent (Master parent doesn\'t satisfy Easy)', () => {
     const easy35 = findTask('Gain 35 Unique Items From Easy Clues');
+    // Easy 35's direct parent is Fill 20 Easy (next-lower count in unified chain).
+    const easyParent = findTask('Fill 20 Easy Clue Collection Log Slots');
     const masterParent = findTask('Gain 10 Unique Items From Master Clues');
-    const easyParent = findTask('Gain 10 Unique Items From Easy Clues');
     expect(hasUnmetDependency(easy35, new Set([masterParent.id]))).toBe(true);
     expect(hasUnmetDependency(easy35, new Set([easyParent.id]))).toBe(false);
   });

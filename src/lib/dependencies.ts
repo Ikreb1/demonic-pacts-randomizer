@@ -48,12 +48,69 @@ const ALWAYS_SKIP_TASK_NAMES: ReadonlySet<string> = new Set([
 //     directly on Level 99. Not regular count chains because of the
 //     mixed-skill availability.
 const CLUE_CHAIN = [1, 25, 75] as const;
-const COLLECTION_LOG_CHAINS: Record<string, readonly number[]> = {
-  Easy: [5, 20, 50],
-  Medium: [5, 20, 40],
-  Hard: [3, 15, 30],
-  Elite: [3, 10, 25],
-  Master: [5, 25],
+
+// Per-tier ordered milestones of unique clue rewards. "Fill N slots" and
+// "Gain N unique items" track the SAME metric (every unique reward fills
+// exactly one slot), so they share one chain. Each step's `canonical` is
+// the task whose ID acts as the gate for the next step; `aliases` lists
+// tasks at the same count that should not gate each other (Elite-10 has
+// both a Fill and a Gain task tied at count=10, so they share a parent
+// and neither one parents the other).
+interface UniqueClueMilestone {
+  count: number;
+  canonical: string;
+  aliases?: readonly string[];
+}
+const UNIQUE_CLUE_MILESTONES: Record<string, readonly UniqueClueMilestone[]> = {
+  Easy: [
+    { count: 1, canonical: 'Gain a Unique Item From an Easy Clue' },
+    { count: 5, canonical: 'Fill 5 Easy Clue Collection Log Slots' },
+    { count: 10, canonical: 'Gain 10 Unique Items From Easy Clues' },
+    { count: 20, canonical: 'Fill 20 Easy Clue Collection Log Slots' },
+    { count: 35, canonical: 'Gain 35 Unique Items From Easy Clues' },
+    { count: 50, canonical: 'Fill 50 Easy Clue Collection Log Slots' },
+  ],
+  Medium: [
+    { count: 1, canonical: 'Gain a Unique Item From a Medium Clue' },
+    { count: 5, canonical: 'Fill 5 Medium Clue Collection Log Slots' },
+    { count: 10, canonical: 'Gain 10 Unique Items From Medium Clues' },
+    { count: 20, canonical: 'Fill 20 Medium Clue Collection Log Slots' },
+    { count: 25, canonical: 'Gain 25 Unique Items From Medium Clues' },
+    { count: 40, canonical: 'Fill 40 Medium Clue Collection Log Slots' },
+  ],
+  Hard: [
+    { count: 1, canonical: 'Gain a Unique Item From a Hard Clue' },
+    { count: 3, canonical: 'Fill 3 Hard Clue Collection Log Slots' },
+    { count: 5, canonical: 'Gain 5 Unique Items From Hard Clues' },
+    { count: 15, canonical: 'Fill 15 Hard Clue Collection Log Slots' },
+    { count: 20, canonical: 'Gain 20 Unique Items From Hard Clues' },
+    { count: 30, canonical: 'Fill 30 Hard Clue Collection Log Slots' },
+    { count: 50, canonical: 'Gain 50 Unique Items From Hard Clues' },
+  ],
+  Elite: [
+    { count: 1, canonical: 'Gain a Unique Item From an Elite Clue' },
+    { count: 3, canonical: 'Fill 3 Elite Clue Collection Log Slots' },
+    {
+      count: 10,
+      canonical: 'Fill 10 Elite Clue Collection Log Slots',
+      aliases: ['Gain 10 Unique Items From Elite Clues'],
+    },
+    {
+      count: 25,
+      canonical: 'Fill 25 Elite Clue Collection Log Slots',
+      aliases: ['Gain 25 Unique Items From Elite Clues'],
+    },
+  ],
+  Master: [
+    { count: 1, canonical: 'Gain a Unique Item From a Master Clue' },
+    { count: 5, canonical: 'Fill 5 Master Clue Collection Log Slots' },
+    { count: 10, canonical: 'Gain 10 Unique Items From Master Clues' },
+    {
+      count: 25,
+      canonical: 'Fill 25 Master Clue Collection Log Slots',
+      aliases: ['Gain 25 Unique Items From Master Clues'],
+    },
+  ],
 };
 
 const SKILL_NAMES = [
@@ -199,22 +256,9 @@ const COUNT_CHAINS: readonly CountChain[] = [
     chain: [50, 100, 150, 200, 250],
     format: (n) => `${n} Combat Achievements`,
   },
-  // "Gain N Unique Items From <Tier> Clues" — count varies per tier and
-  // each chain roots at the singular "Gain a Unique Item From a/an
-  // <Tier> Clue" task (treated as N=1). Article matches the tier:
-  // "an Easy", "an Elite" — vowel start; "a Medium", "a Hard", "a Master".
-  {
-    re: /^Gain (\d+) Unique Items From Easy Clues$/,
-    chain: [1, 10, 35],
-    format: (n) =>
-      n === 1 ? 'Gain a Unique Item From an Easy Clue' : `Gain ${n} Unique Items From Easy Clues`,
-  },
-  {
-    re: /^Gain (\d+) Unique Items From Medium Clues$/,
-    chain: [1, 10, 25],
-    format: (n) =>
-      n === 1 ? 'Gain a Unique Item From a Medium Clue' : `Gain ${n} Unique Items From Medium Clues`,
-  },
+  // "Gain N Unique Items From <Tier> Clues" and "Fill N <Tier> Clue
+  // Collection Log Slots" track the same metric and are handled together
+  // via UNIQUE_CLUE_MILESTONES, not here.
   {
     re: /^Complete (\d+) Slayer Tasks?$/,
     chain: [1, 200],
@@ -225,24 +269,6 @@ const COUNT_CHAINS: readonly CountChain[] = [
     re: /^Steal (\d+) Valuables$/,
     chain: [25, 100],
     format: (n) => `Steal ${n} Valuables`,
-  },
-  {
-    re: /^Gain (\d+) Unique Items From Hard Clues$/,
-    chain: [1, 5, 20, 50],
-    format: (n) =>
-      n === 1 ? 'Gain a Unique Item From a Hard Clue' : `Gain ${n} Unique Items From Hard Clues`,
-  },
-  {
-    re: /^Gain (\d+) Unique Items From Elite Clues$/,
-    chain: [1, 10, 25],
-    format: (n) =>
-      n === 1 ? 'Gain a Unique Item From an Elite Clue' : `Gain ${n} Unique Items From Elite Clues`,
-  },
-  {
-    re: /^Gain (\d+) Unique Items From Master Clues$/,
-    chain: [1, 10, 25],
-    format: (n) =>
-      n === 1 ? 'Gain a Unique Item From a Master Clue' : `Gain ${n} Unique Items From Master Clues`,
   },
   {
     re: /^(\d+) Collection log slots$/,
@@ -838,6 +864,20 @@ export function isAlwaysSkippedFromRoll(task: Task): boolean {
   return false;
 }
 
+// Parse a unique-clue task name into its tier and milestone count.
+// Recognises three shapes: "Fill N <tier> Clue Collection Log Slots",
+// "Gain N Unique Items From <tier> Clues", and the singular root
+// "Gain a Unique Item From a/an <tier> Clue" (treated as count=1).
+function parseUniqueClueTaskName(name: string): { tier: string; count: number } | null {
+  const fill = /^Fill (\d+) (Easy|Medium|Hard|Elite|Master) Clue Collection Log Slots$/.exec(name);
+  if (fill) return { tier: fill[2], count: parseInt(fill[1], 10) };
+  const gainN = /^Gain (\d+) Unique Items From (Easy|Medium|Hard|Elite|Master) Clues$/.exec(name);
+  if (gainN) return { tier: gainN[2], count: parseInt(gainN[1], 10) };
+  const gain1 = /^Gain a Unique Item From an? (Easy|Medium|Hard|Elite|Master) Clue$/.exec(name);
+  if (gain1) return { tier: gain1[1], count: 1 };
+  return null;
+}
+
 // Returns the parent task whose completion gates the given task, per the
 // rules below. Returns null when the task has no parent rule, or when
 // the rule fires but the parent isn't found in tasks.json (defensive —
@@ -882,21 +922,17 @@ function parentOf(task: Task): Task | null {
     return TASK_BY_NAME.get(`Reach Level 99 ${skill}`) ?? null;
   }
 
-  // Collection log slot chain: "Fill N <tier> Clue Collection Log Slots".
-  // Per-tier chain since slot counts differ; the chain root has no parent.
-  const colMatch = /^Fill (\d+) (Easy|Medium|Hard|Elite|Master) Clue Collection Log Slots$/.exec(
-    name,
-  );
-  if (colMatch) {
-    const count = parseInt(colMatch[1], 10);
-    const tier = colMatch[2];
-    const chain = COLLECTION_LOG_CHAINS[tier];
-    if (!chain) return null;
-    const idx = chain.indexOf(count);
-    if (idx > 0) {
-      const prev = chain[idx - 1];
-      return TASK_BY_NAME.get(`Fill ${prev} ${tier} Clue Collection Log Slots`) ?? null;
-    }
+  // Unique clue rewards: "Fill N <tier> Clue Collection Log Slots" and
+  // "Gain N Unique Items From <tier> Clues" both index into a single
+  // per-tier chain of milestone counts. Parent is the canonical task at
+  // the next-lower count, so tied tasks at the same count share a parent
+  // rather than gating each other.
+  const clueLookup = parseUniqueClueTaskName(name);
+  if (clueLookup) {
+    const milestones = UNIQUE_CLUE_MILESTONES[clueLookup.tier];
+    if (!milestones) return null;
+    const idx = milestones.findIndex((m) => m.count === clueLookup.count);
+    if (idx > 0) return TASK_BY_NAME.get(milestones[idx - 1].canonical) ?? null;
     return null;
   }
 
