@@ -9,11 +9,14 @@ const TASK_BY_NAME: Map<string, Task> = (() => {
   return m;
 })();
 
-// Tasks that should never be rolled. Two reasons a task lives here:
+// Tasks that should never be rolled. Reasons a task lives here:
 //   - Tutorial tasks: assumed already completed in-game.
 //   - Random events: hard time-gated — they can't be farmed on demand,
 //     so rolling one wastes the user's locked-task slot waiting for an
 //     event to spawn.
+//   - Duplicates: Elite/Master have two task names tied to the same
+//     in-game milestone (Fill N slots == Gain N unique items). Skip the
+//     Gain variant so the player only ever sees one task per milestone.
 const ALWAYS_SKIP_TASK_NAMES: ReadonlySet<string> = new Set([
   // Leagues tutorial — auto-completed in-game.
   'Open the Leagues Menu',
@@ -36,6 +39,11 @@ const ALWAYS_SKIP_TASK_NAMES: ReadonlySet<string> = new Set([
   'Equip a piece of Mime Outfit',
   "Equip a piece of Beekeeper's Outfit",
   'Equip a piece of Camouflage outfit',
+  // Duplicate clue milestones — the Fill variant at the same count is
+  // canonical (see UNIQUE_CLUE_MILESTONES below).
+  'Gain 10 Unique Items From Elite Clues',
+  'Gain 25 Unique Items From Elite Clues',
+  'Gain 25 Unique Items From Master Clues',
 ]);
 
 // Count chains that don't fit the simple "single regex + count + naming
@@ -52,14 +60,13 @@ const CLUE_CHAIN = [1, 25, 75] as const;
 // Per-tier ordered milestones of unique clue rewards. "Fill N slots" and
 // "Gain N unique items" track the SAME metric (every unique reward fills
 // exactly one slot), so they share one chain. Each step's `canonical` is
-// the task whose ID acts as the gate for the next step; `aliases` lists
-// tasks at the same count that should not gate each other (Elite-10 has
-// both a Fill and a Gain task tied at count=10, so they share a parent
-// and neither one parents the other).
+// the task whose ID gates the next step. Elite-10 / Elite-25 / Master-25
+// have both a Fill and a Gain task tied to the same milestone — the Gain
+// duplicates are unrolled via ALWAYS_SKIP_TASK_NAMES so only the Fill
+// canonical ever surfaces in a roll.
 interface UniqueClueMilestone {
   count: number;
   canonical: string;
-  aliases?: readonly string[];
 }
 const UNIQUE_CLUE_MILESTONES: Record<string, readonly UniqueClueMilestone[]> = {
   Easy: [
@@ -90,26 +97,14 @@ const UNIQUE_CLUE_MILESTONES: Record<string, readonly UniqueClueMilestone[]> = {
   Elite: [
     { count: 1, canonical: 'Gain a Unique Item From an Elite Clue' },
     { count: 3, canonical: 'Fill 3 Elite Clue Collection Log Slots' },
-    {
-      count: 10,
-      canonical: 'Fill 10 Elite Clue Collection Log Slots',
-      aliases: ['Gain 10 Unique Items From Elite Clues'],
-    },
-    {
-      count: 25,
-      canonical: 'Fill 25 Elite Clue Collection Log Slots',
-      aliases: ['Gain 25 Unique Items From Elite Clues'],
-    },
+    { count: 10, canonical: 'Fill 10 Elite Clue Collection Log Slots' },
+    { count: 25, canonical: 'Fill 25 Elite Clue Collection Log Slots' },
   ],
   Master: [
     { count: 1, canonical: 'Gain a Unique Item From a Master Clue' },
     { count: 5, canonical: 'Fill 5 Master Clue Collection Log Slots' },
     { count: 10, canonical: 'Gain 10 Unique Items From Master Clues' },
-    {
-      count: 25,
-      canonical: 'Fill 25 Master Clue Collection Log Slots',
-      aliases: ['Gain 25 Unique Items From Master Clues'],
-    },
+    { count: 25, canonical: 'Fill 25 Master Clue Collection Log Slots' },
   ],
 };
 

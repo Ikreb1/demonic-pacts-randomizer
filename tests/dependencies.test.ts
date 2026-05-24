@@ -199,15 +199,16 @@ describe('hasUnmetDependency — unique clue reward chain (Fill + Gain interleav
     expect(hasUnmetDependency(fill30, new Set([gain20.id]))).toBe(false);
   });
 
-  it('tied tasks at the same count share a parent rather than gating each other', () => {
-    // Elite count=10: Fill 10 and Gain 10 are tied. Both must parent on Fill 3 Elite (count=3).
-    const fill10 = findTask('Fill 10 Elite Clue Collection Log Slots');
-    const gain10 = findTask('Gain 10 Unique Items From Elite Clues');
-    const fill3 = findTask('Fill 3 Elite Clue Collection Log Slots');
-    expect(hasUnmetDependency(fill10, new Set([fill3.id]))).toBe(false);
-    expect(hasUnmetDependency(gain10, new Set([fill3.id]))).toBe(false);
-    // Completing one tied task does NOT auto-satisfy the other's gate (data
-    // model is single-parent), but neither is parented on the other.
+  it('duplicate Gain variants at Elite-10 / Elite-25 / Master-25 are unrolled', () => {
+    // Fill and Gain at the same count track the same milestone; the Gain
+    // duplicate is skipped from the roll pool so only one task surfaces.
+    expect(isAlwaysSkippedFromRoll(findTask('Gain 10 Unique Items From Elite Clues'))).toBe(true);
+    expect(isAlwaysSkippedFromRoll(findTask('Gain 25 Unique Items From Elite Clues'))).toBe(true);
+    expect(isAlwaysSkippedFromRoll(findTask('Gain 25 Unique Items From Master Clues'))).toBe(true);
+    // The Fill canonicals stay rollable.
+    expect(isAlwaysSkippedFromRoll(findTask('Fill 10 Elite Clue Collection Log Slots'))).toBe(false);
+    expect(isAlwaysSkippedFromRoll(findTask('Fill 25 Elite Clue Collection Log Slots'))).toBe(false);
+    expect(isAlwaysSkippedFromRoll(findTask('Fill 25 Master Clue Collection Log Slots'))).toBe(false);
   });
 
   it('Master tier (1 → 5 → 10 → 25) interleaves Gain and Fill', () => {
