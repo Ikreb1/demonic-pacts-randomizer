@@ -39,6 +39,10 @@ const ALWAYS_SKIP_TASK_NAMES: ReadonlySet<string> = new Set([
   'Equip a piece of Mime Outfit',
   "Equip a piece of Beekeeper's Outfit",
   'Equip a piece of Camouflage outfit',
+  // Imcando Hammer drops from H.A.M. members at a very low base rate that
+  // is NOT boosted by the Leagues drop-rate multiplier — gating it on
+  // anything else would still leave a brutal RNG grind for trivial points.
+  'Equip an Imcando Hammer',
   // Duplicate clue milestones — the Fill variant at the same count is
   // canonical (see UNIQUE_CLUE_MILESTONES below).
   'Gain 10 Unique Items From Elite Clues',
