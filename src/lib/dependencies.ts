@@ -43,6 +43,10 @@ const ALWAYS_SKIP_TASK_NAMES: ReadonlySet<string> = new Set([
   // is NOT boosted by the Leagues drop-rate multiplier — gating it on
   // anything else would still leave a brutal RNG grind for trivial points.
   'Equip an Imcando Hammer',
+  // Pest Control needs a critical mass of players in the lobby to start a
+  // game, and the Leagues VI playerbase isn't running PC at this point.
+  // No amount of solo effort makes this rollable.
+  'Defeat 5 Spinners',
   // Duplicate clue milestones — the Fill variant at the same count is
   // canonical (see UNIQUE_CLUE_MILESTONES below).
   'Gain 10 Unique Items From Elite Clues',
