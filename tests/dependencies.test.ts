@@ -682,7 +682,7 @@ describe('hasUnmetDependency — one-off cross-chain dependencies', () => {
       ["Giants' Foundry 10 handins", 'Complete Sleeping Giants'],
       ["Giants' Foundry 50 quality sword", 'Complete Sleeping Giants'],
       ["Drink Kovac's grog", 'Complete Sleeping Giants'],
-      ["Equip a full set of the Smith's outfit", 'Complete Sleeping Giants'],
+      ["Equip a full set of the Smith's outfit", "Giants' Foundry 10 handins"],
       ['Equip the Colossal Blade', 'Complete Sleeping Giants'],
       ['Equip the Tome of Water', 'Defeat Tempoross 1 time'],
       ['Obtain the Big Harpoonfish', 'Defeat Tempoross 1 time'],

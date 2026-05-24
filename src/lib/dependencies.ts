@@ -716,7 +716,10 @@ const EXPLICIT_PARENTS: Readonly<Record<string, string>> = {
   "Giants' Foundry 10 handins": 'Complete Sleeping Giants',
   "Giants' Foundry 50 quality sword": 'Complete Sleeping Giants',
   "Drink Kovac's grog": 'Complete Sleeping Giants',
-  "Equip a full set of the Smith's outfit": 'Complete Sleeping Giants',
+  // Smith's outfit costs ~25k Foundry rep. With Leagues 8x, 10 handins
+  // gets the player ~65% of the way; the gate transitively requires
+  // Sleeping Giants via the handins entry.
+  "Equip a full set of the Smith's outfit": "Giants' Foundry 10 handins",
   'Equip the Colossal Blade': 'Complete Sleeping Giants',
   // The Final Dawn gates Doom of Mokhaiotl access and the Earthbound
   // Tecpatl unlock (the tecpatl is not a Mokhaiotl drop, it's a separate
