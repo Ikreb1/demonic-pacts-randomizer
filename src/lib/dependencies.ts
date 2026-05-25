@@ -739,10 +739,11 @@ const EXPLICIT_PARENTS: Readonly<Record<string, string>> = {
   // Statuette is in Nardah, only accessible via Spirits of the Elid.
   'Pray at the Elidinis Statuette': 'Complete Spirits of the Elid',
 
-  // Sleeping Giants gates Giants' Foundry access. Two chain roots
-  // (handins / quality sword) and the standalone reward-shop tasks all
-  // need the quest first.
-  "Giants' Foundry 10 handins": 'Complete Sleeping Giants',
+  // Sleeping Giants gates Giants' Foundry access. The quality sword chain
+  // and the standalone reward-shop tasks need the quest first; the 10-handins
+  // entry gates on the 50-quality sword so the player has built up sword
+  // quality before grinding handins (and inherits Sleeping Giants transitively).
+  "Giants' Foundry 10 handins": "Giants' Foundry 50 quality sword",
   "Giants' Foundry 50 quality sword": 'Complete Sleeping Giants',
   "Drink Kovac's grog": 'Complete Sleeping Giants',
   // Smith's outfit costs ~25k Foundry rep. With Leagues 8x, 10 handins
