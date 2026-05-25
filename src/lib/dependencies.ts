@@ -132,6 +132,22 @@ const ALWAYS_SKIP_TASK_NAMES: ReadonlySet<string> = new Set([
   // Motherlode Mine — AFK Prospector + Golden Prospector outfit grinds.
   'Equip a Full Prospector Outfit',
   'Equip a Full set of Golden Prospector',
+  // Clue scroll grinding — drop the 25 and 75 count steps for every tier.
+  // The "1 <Tier> Clue Scroll" roots stay rollable (user already completed
+  // 1 of each non-Master tier, and wants 1 Master rollable). The Fill/Gain
+  // unique-item chains live on a separate set of canonicals, unaffected.
+  '25 Easy Clue Scrolls',
+  '25 Elite Clue Scrolls',
+  '25 Hard Clue Scrolls',
+  '25 Medium Clue Scrolls',
+  '25 Master Clue Scrolls',
+  '75 Easy Clue Scrolls',
+  '75 Medium Clue Scrolls',
+  '75 Elite Clue Scrolls',
+  '75 Hard Clue Scrolls',
+  '75 Master Clue Scrolls',
+  // Bulk runecrafting grind.
+  'Craft 2500 Essence Into Runes',
 ]);
 
 // Count chains that don't fit the simple "single regex + count + naming

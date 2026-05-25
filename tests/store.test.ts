@@ -843,8 +843,8 @@ describe('store roll-and-lock flow', () => {
 
     it('once parent is complete, the child shows up in the eligible bucket', async () => {
       const { eligibleByTier } = await import('../src/lib/filters');
-      const parent = findTask('1 Easy Clue Scroll');
-      const child = findTask('25 Easy Clue Scrolls');
+      const parent = findTask('Complete 1 Slayer Task');
+      const child = findTask('Complete 200 Slayer Tasks');
       const regions = new Set<'General' | 'Varlamore'>(['General', 'Varlamore']);
       // Before completing parent: child is NOT in any tier bucket.
       const beforeBuckets = eligibleByTier(ALL_TASKS_LIST, regions, new Set());
