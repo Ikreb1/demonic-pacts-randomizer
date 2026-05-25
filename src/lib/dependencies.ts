@@ -640,6 +640,8 @@ function lookupCountChain(name: string): Task | null {
 // rooted on a unique-kill task) that don't reduce to a count regex.
 const EXPLICIT_PARENTS: Readonly<Record<string, string>> = {
   // ----- Outfits / capstones gated on grind/quest progression -----
+  // Combat Potion needs goat horn dust; goat horns drop from billy goats.
+  'Make a Combat Potion': 'Defeat a Billy Goat',
   'Equip a Full Prospector Outfit': 'Obtain 20 Golden Nuggets',
   // Golden Prospector pieces drop from mining shooting stars.
   'Equip a Full set of Golden Prospector': 'Mine a shooting star',
