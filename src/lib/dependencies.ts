@@ -153,6 +153,8 @@ const ALWAYS_SKIP_TASK_NAMES: ReadonlySet<string> = new Set([
   'Make 50 Goading Potions',
   // Mole-grinding required for the boots — not worth the RNG.
   'Equip some Holy Moleys',
+  // 25 Autumn Sq'irkjuices in one go is a stockpiling chore.
+  "Turn in 25 Autumn Sq'irkjuices to Osman",
 ]);
 
 // Count chains that don't fit the simple "single regex + count + naming
