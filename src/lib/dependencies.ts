@@ -151,6 +151,8 @@ const ALWAYS_SKIP_TASK_NAMES: ReadonlySet<string> = new Set([
   // Bulk Herblore grinds the user doesn't want to roll.
   'Make 100 Prayer Regeneration Potions',
   'Make 50 Goading Potions',
+  // Mole-grinding required for the boots — not worth the RNG.
+  'Equip some Holy Moleys',
 ]);
 
 // Count chains that don't fit the simple "single regex + count + naming
