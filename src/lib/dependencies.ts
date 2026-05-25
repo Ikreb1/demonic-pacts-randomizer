@@ -781,6 +781,8 @@ const EXPLICIT_PARENTS: Readonly<Record<string, string>> = {
 
   // ----- Abyssal Sire -----
   'Equip an Abyssal Bludgeon': 'Defeat the Abyssal Sire',
+  // CA grandmaster sheet realistically needs the 50-kc fluency.
+  'Abyssal Sire Combat Achievements': 'Defeat the Abyssal Sire 50 Times',
 
   // ----- Shadows of Custodia -----
   'Equip an Antler guard': 'Complete Shadows of Custodia',
