@@ -148,6 +148,9 @@ const ALWAYS_SKIP_TASK_NAMES: ReadonlySet<string> = new Set([
   '75 Master Clue Scrolls',
   // Bulk runecrafting grind.
   'Craft 2500 Essence Into Runes',
+  // Bulk Herblore grinds the user doesn't want to roll.
+  'Make 100 Prayer Regeneration Potions',
+  'Make 50 Goading Potions',
 ]);
 
 // Count chains that don't fit the simple "single regex + count + naming
