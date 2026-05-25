@@ -781,8 +781,6 @@ const EXPLICIT_PARENTS: Readonly<Record<string, string>> = {
 
   // ----- Abyssal Sire -----
   'Equip an Abyssal Bludgeon': 'Defeat the Abyssal Sire',
-  // CA grandmaster sheet realistically needs the 50-kc fluency.
-  'Abyssal Sire Combat Achievements': 'Defeat the Abyssal Sire 50 Times',
 
   // ----- Shadows of Custodia -----
   'Equip an Antler guard': 'Complete Shadows of Custodia',
@@ -933,7 +931,8 @@ const EXPLICIT_PARENTS: Readonly<Record<string, string>> = {
   'Royal Titans Combat Achievements': 'Defeat the Royal Titans',
   'Thermonuclear Smoke Devil Combat Achievements': 'Defeat the Thermonuclear Smoke Devil',
   'Zalcano Combat Achievements': 'Defeat Zalcano',
-  'Abyssal Sire Combat Achievements': 'Defeat the Abyssal Sire',
+  // Sire CA sheet realistically needs the 50-kc fluency, not just one kill.
+  'Abyssal Sire Combat Achievements': 'Defeat the Abyssal Sire 50 Times',
   'Perilous Moons Combat Achievements': 'Defeat the Moons of Peril',
   'Vardorvis Combat Achievements': 'Defeat Vardorvis',
   'Alchemical Hydra Combat Achievements': 'Defeat the Alchemical Hydra 1 Time',
