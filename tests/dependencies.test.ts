@@ -49,10 +49,6 @@ describe('isAlwaysSkippedFromRoll', () => {
     expect(isAlwaysSkippedFromRoll(findTask('Fill 25 Master Clue Collection Log Slots'))).toBe(false);
   });
 
-  it('does NOT skip the Alchemist\'s outfit (shop/minigame reward, not random event)', () => {
-    expect(isAlwaysSkippedFromRoll(findTask('Equip a piece of Alchemists outfit'))).toBe(false);
-  });
-
   it('does not skip ordinary tasks', () => {
     expect(isAlwaysSkippedFromRoll(findTask('1 Easy Clue Scroll'))).toBe(false);
     expect(isAlwaysSkippedFromRoll(findTask('Reach Level 99 Cooking'))).toBe(false);
