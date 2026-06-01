@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-28T20:13:32.680Z",
+  "generatedAt": "2026-06-01T12:44:53.800Z",
   "sourcePage": "Demonic_Pacts_League/Tasks",
   "tasks": [
     {
@@ -197,7 +197,7 @@
       "region": "General",
       "name": "Cook something with an apron",
       "description": "Cook something with an apron equipped.",
-      "requirements": "",
+      "requirements": "A golden apron does not work.",
       "points": null
     },
     {
@@ -287,7 +287,7 @@
       "region": "General",
       "name": "Drink a Strength Potion",
       "description": "Drink a strength potion.",
-      "requirements": "",
+      "requirements": "A moonlight potion will also work.",
       "points": null
     },
     {
@@ -782,7 +782,7 @@
       "region": "Varlamore",
       "name": "Drink a cup of tea in auburn valley",
       "description": "Drink a cup of tea in the Nemus Retreat or the Auburn Valley. NOTE: Drinking in Auburnvale does NOT complete this task.",
-      "requirements": "",
+      "requirements": "Nettle tea does not count.",
       "points": null
     },
     {
@@ -1637,7 +1637,7 @@
       "region": "Kharidian Desert",
       "name": "Pick a Winter Sq'irk",
       "description": "Pick a Winter Sq'irk in the Sorceress's Garden.",
-      "requirements": "",
+      "requirements": "1 Thieving",
       "points": null
     },
     {
@@ -1646,7 +1646,7 @@
       "region": "Fremennik Provinces",
       "name": "Pick up Snapegrass",
       "description": "Pick up Snapegrass from Lunar Isle.",
-      "requirements": "",
+      "requirements": "Despite the task text stating it must be picked up from Lunar Isle, picking up snape grass on Waterbirth Island completes this task.",
       "points": null
     },
     {
@@ -2330,7 +2330,7 @@
       "region": "General",
       "name": "Chop some Rising Roots",
       "description": "Chop some rising roots spawned via Forestry.",
-      "requirements": "",
+      "requirements": "1 Woodcutting",
       "points": null
     },
     {
@@ -2393,7 +2393,7 @@
       "region": "General",
       "name": "Complete the Flowering Bush event",
       "description": "Complete the Flowering Bush event spawned via Forestry.",
-      "requirements": "",
+      "requirements": "1 Woodcutting",
       "points": null
     },
     {
@@ -2411,7 +2411,7 @@
       "region": "General",
       "name": "Complete the Pheasant Forestry Event",
       "description": "Complete the Pheasant event spawned via Forestry.",
-      "requirements": "",
+      "requirements": "1 Woodcutting",
       "points": null
     },
     {
@@ -2456,7 +2456,7 @@
       "region": "General",
       "name": "Complete the Ritual Forestry Event",
       "description": "Complete the Ritual event spawned via Forestry.",
-      "requirements": "",
+      "requirements": "1 Woodcutting",
       "points": null
     },
     {
@@ -2465,7 +2465,7 @@
       "region": "General",
       "name": "Complete the Struggling Sapling event",
       "description": "Complete the Struggling Sapling event spawned via Forestry.",
-      "requirements": "",
+      "requirements": "1 Woodcutting",
       "points": null
     },
     {
@@ -2798,7 +2798,7 @@
       "region": "General",
       "name": "Equip the Forestry Basket",
       "description": "Equip the Forestry Basket.",
-      "requirements": "75 Woodcutting, 75 Smithing",
+      "requirements": "75 Woodcutting, 75 Smithing; Log basket: * 5,000 Anima-infused bark * 300 Oak logs * 300 Willow logs Log brace: * 3,000 Anima-infused bark * 300 Maple logs * 300 Yew logs",
       "points": null
     },
     {
@@ -3041,7 +3041,7 @@
       "region": "General",
       "name": "Get a Gem from a Gorak",
       "description": "Obtain a gem drop from a Gorak.",
-      "requirements": "",
+      "requirements": "Actually requires any roll on the gem drop table, not necessarily specifically a gem.",
       "points": null
     },
     {
@@ -3050,7 +3050,7 @@
       "region": "General",
       "name": "Give an Entling a haircut",
       "description": "Give an entling a haircut via Forestry.",
-      "requirements": "",
+      "requirements": "1 Woodcutting",
       "points": null
     },
     {
@@ -3068,7 +3068,7 @@
       "region": "General",
       "name": "Have a Leprechaun send something to the bank",
       "description": "Have the Forestry leprechaun send something to your bank.",
-      "requirements": "Use the right-click deposit option. Using items on the leprechaun to deposit will not count.",
+      "requirements": "1 Woodcutting; Use the right-click deposit option. Using items on the leprechaun to deposit will not count.",
       "points": null
     },
     {
@@ -3086,7 +3086,7 @@
       "region": "General",
       "name": "Make 20 Stamina Potions",
       "description": "Make 20 Stamina Potions.",
-      "requirements": "77 Herblore",
+      "requirements": "77 Herblore; Can be done with any dose amounts",
       "points": null
     },
     {
@@ -3689,7 +3689,7 @@
       "region": "Varlamore",
       "name": "Defeat a Jaguar without taking any damage from it",
       "description": "Defeat a fully grown jaguar without taking any damage from it.",
-      "requirements": "the task only checks for full health when the jaguar dies. any jaguar, including jaguar warrior will count",
+      "requirements": "Jaguar warrior will count. If the jaguar has damaged ANY player (not just you) since it has respawned, it will not count. If it does not work, kill the same jaguar when it respawns.",
       "points": null
     },
     {
@@ -3761,7 +3761,7 @@
       "region": "Varlamore",
       "name": "Equip Pendant of Ates",
       "description": "Equip the Pendant of ates.",
-      "requirements": "48 Slayer",
+      "requirements": "48 Slayer; Pendant must be charged first.",
       "points": null
     },
     {
@@ -4111,7 +4111,7 @@
       "tier": "medium",
       "region": "Kharidian Desert",
       "name": "Catch 30 Orange Salamanders",
-      "description": "Catch 30 Orange Salamanders at Uzer.",
+      "description": "Catch 30 Orange Salamanders in the Kharidian Desert.",
       "requirements": "47 Hunter",
       "points": null
     },
@@ -4309,7 +4309,7 @@
       "tier": "medium",
       "region": "Morytania",
       "name": "Complete His Faithful Servants",
-      "description": "Complete the miniquest His Faithful Servants (Currently does not complete when picking desert before morytania).",
+      "description": "Complete the miniquest His Faithful Servants",
       "requirements": "",
       "points": null
     },
@@ -4454,7 +4454,7 @@
       "region": "Kandarin",
       "name": "Complete the Barbarian Outpost Agility Course",
       "description": "Complete a lap of the Barbarian Outpost Agility Course.",
-      "requirements": "35 Agility",
+      "requirements": "35 Agility; completion of Alfred Grimhand's Barcrawl",
       "points": null
     },
     {
@@ -4931,7 +4931,7 @@
       "region": "Kandarin",
       "name": "Defeat a Frogeel",
       "description": "Defeat a Frogeel underneath the Tower of Life.",
-      "requirements": "Completion of Tower of LifeNote: Automatically completed on Kandarin region unlock.",
+      "requirements": "Completion of Tower of Life Note: Automatically completed on Kandarin region unlock.",
       "points": null
     },
     {
@@ -5137,7 +5137,7 @@
       "tier": "medium",
       "region": "Fremennik Provinces",
       "name": "Defeat a Wallasalki",
-      "description": "Defeat a wallasaki.",
+      "description": "Defeat a Wallasalki on the first sublevel of the Waterbirth Island Dungeon.",
       "requirements": "",
       "points": null
     },
@@ -5444,7 +5444,7 @@
       "region": "Kandarin",
       "name": "Equip a Marksman Chompy Hat",
       "description": "Equip a Marksman Chompy Hat.",
-      "requirements": "5 Fletching, 30 Cooking, 30 Ranged, 5 Crafting; Completion of Big Chompy Bird Hunting",
+      "requirements": "5 Fletching, 30 Cooking, 30 Ranged, 5 Crafting; Completion of Big Chompy Bird Hunting, 125 chompy bird kills",
       "points": null
     },
     {
@@ -5570,7 +5570,7 @@
       "region": "Kandarin",
       "name": "Equip an Ogre Forester Chompy Hat",
       "description": "Equip an Ogre Forester Chompy Hat.",
-      "requirements": "5 Fletching, 30 Cooking, 30 Ranged, 5 Crafting; Completion of Big Chompy Bird Hunting",
+      "requirements": "5 Fletching, 30 Cooking, 30 Ranged, 5 Crafting; Completion of Big Chompy Bird Hunting, 300 chompy bird kills",
       "points": null
     },
     {
@@ -5587,7 +5587,7 @@
       "tier": "medium",
       "region": "Kharidian Desert",
       "name": "Equip the Colossal Blade",
-      "description": "Equip the Colossal Blade from Giant's Foundry.",
+      "description": "Equip the Colossal Blade from Giants' Foundry.",
       "requirements": "15 Smithing, 60 Attack",
       "points": null
     },
@@ -5830,7 +5830,7 @@
       "tier": "medium",
       "region": "Kharidian Desert",
       "name": "Mine 30 Chunks of Granite",
-      "description": "Mine 30 chunks of Granite at the Kharidian Desert Quarry.",
+      "description": "Mine 30 chunks of Granite in the Kharidian Desert.",
       "requirements": "45 Mining",
       "points": null
     },
@@ -6200,7 +6200,7 @@
       "region": "Morytania",
       "name": "Smelt a Steel Bar in Port Phasmatys",
       "description": "Smelt a Steel Bar in Port Phasmatys.",
-      "requirements": "30 Smithing",
+      "requirements": "30 Smithing; Note: Task is to smelt a steel bar in a furnace in Port Phasmatys, Superheat Item does not work.",
       "points": null
     },
     {
@@ -6443,7 +6443,7 @@
       "region": "Kharidian Desert",
       "name": "Turn in a Winter Sq'irkjuice to Osman",
       "description": "Turn in a Winter Sq'irkjuice to Osman in Al Kharid.",
-      "requirements": "",
+      "requirements": "1 Thieving",
       "points": null
     },
     {
@@ -6785,7 +6785,7 @@
       "region": "General",
       "name": "Cook 100 pies",
       "description": "Cook 100 pies.",
-      "requirements": "10 Cooking; NOTE: using the Bake Pie spell does not count towards the task.",
+      "requirements": "10 Cooking",
       "points": null
     },
     {
@@ -6794,7 +6794,7 @@
       "region": "General",
       "name": "Cook 25 Meat Pies",
       "description": "Cook 25 Meat pies.",
-      "requirements": "20 Cooking; NOTE: using the Bake Pie spell does not count towards the task.",
+      "requirements": "20 Cooking",
       "points": null
     },
     {
@@ -6812,7 +6812,7 @@
       "region": "General",
       "name": "Craft 2500 Essence Into Runes",
       "description": "Use Runecrafting Altars to craft 2500 essence into runes of any type.",
-      "requirements": "",
+      "requirements": "Aether runes do not work",
       "points": null
     },
     {
@@ -6982,7 +6982,7 @@
       "tier": "hard",
       "region": "General",
       "name": "Equip a Full God Rune Set",
-      "description": "Equip a full set of God Rune Armour with all pieces aligned to the same god.",
+      "description": "Equip a full set of God Rune Armour (Full helm, platebody, and platelegs or plateskirt) with all pieces aligned to the same god.",
       "requirements": "40 Defence",
       "points": null
     },
@@ -7046,7 +7046,7 @@
       "region": "General",
       "name": "Equip a two-handed Axe",
       "description": "Equip a Felling axe.",
-      "requirements": "",
+      "requirements": "1 Woodcutting; Felling axe handle: * 10,000 Anima-infused bark *500 Oak logs",
       "points": null
     },
     {
@@ -7082,7 +7082,7 @@
       "region": "General",
       "name": "Ferment 100 Jugs of Wine",
       "description": "Successfully ferment 100 Jugs of Wine.",
-      "requirements": "35 Cooking",
+      "requirements": "35 Cooking Note: Fermenting Wines of Zamorak does not count.",
       "points": null
     },
     {
@@ -7145,7 +7145,7 @@
       "region": "General",
       "name": "Fill a Giant Pouch",
       "description": "Fill a Giant Pouch with Essence.",
-      "requirements": "75 Runecraft",
+      "requirements": "75 Runecraft(cannot be boosted)",
       "points": null
     },
     {
@@ -7406,7 +7406,7 @@
       "region": "General",
       "name": "Smelt a Runite Bar",
       "description": "Use a furnace to smelt a runite bar.",
-      "requirements": "85 Smithing",
+      "requirements": "85 Smithing or 85 Mining with Hotfoot",
       "points": null
     },
     {
@@ -7415,7 +7415,7 @@
       "region": "General",
       "name": "Smith a Rune Item",
       "description": "Smith a Runite Item.",
-      "requirements": "85 Smithing; rune dart tips, rune arrowtips, and rune javelin tips do not count towards this task",
+      "requirements": "85 Smithing; rune dart tips, rune arrowtips, rune nails, runite bolts (unf), and rune javelin tips do not count towards this task",
       "points": null
     },
     {
@@ -7442,7 +7442,7 @@
       "region": "Varlamore",
       "name": "Build all Quetzal landing sites",
       "description": "Build all quetzal landing sites.",
-      "requirements": "",
+      "requirements": "46 Hunter",
       "points": null
     },
     {
@@ -7703,7 +7703,7 @@
       "region": "Varlamore",
       "name": "Fletch some Atlatl darts",
       "description": "Fletch some Atlatl darts.",
-      "requirements": "74 Fletching",
+      "requirements": "74 Fletching, 54 Slayer; Completion of Shadows of Custodia",
       "points": null
     },
     {
@@ -7730,7 +7730,7 @@
       "region": "Varlamore",
       "name": "Hueycoatl Combat Achievements",
       "description": "Complete all of the Combat Achievements for Hueycoatl.",
-      "requirements": "",
+      "requirements": "See Hueycoatl#Combat Achievements",
       "points": null
     },
     {
@@ -8324,7 +8324,7 @@
       "region": "Karamja",
       "name": "Cook 100 Karambwans",
       "description": "Cook 100 Karambwan.",
-      "requirements": "30 Fishing; Completion of Tai Bwo Wannai Trio",
+      "requirements": "30 Cooking; Completion of Tai Bwo Wannai Trio or partial completion with Hotfoot Relic.",
       "points": null
     },
     {
@@ -8333,7 +8333,7 @@
       "region": "Karamja",
       "name": "Cook 20 Karambwans in a row",
       "description": "Cook 20 Karambwans in a row without burning them.",
-      "requirements": "30 Cooking; Completion of Tai Bwo Wannai Trio",
+      "requirements": "30 Cooking; Completion of Tai Bwo Wannai Trio or partial completion with Hotfoot Relic.",
       "points": null
     },
     {
@@ -8360,7 +8360,7 @@
       "region": "Tirannwn",
       "name": "Craft 50 Death Runes",
       "description": "Craft 50 Death Runes from Essence at the Death Altar.",
-      "requirements": "65 Runecraft",
+      "requirements": "65 RunecraftNote: Soul shards count as essence.",
       "points": null
     },
     {
@@ -8414,7 +8414,7 @@
       "region": "Tirannwn",
       "name": "Create 25 Divine Super Attack Potions",
       "description": "Create 25 Divine Super Attack Potions.",
-      "requirements": "70 Herblore",
+      "requirements": "70 Herblore; Can be completed with any dosage of potion.",
       "points": null
     },
     {
@@ -8423,7 +8423,7 @@
       "region": "Tirannwn",
       "name": "Create 25 Divine Super Strength Potions",
       "description": "Create 25 Divine Super Strength Potions.",
-      "requirements": "70 Herblore",
+      "requirements": "70 Herblore; Can be completed with any dosage of potion.",
       "points": null
     },
     {
@@ -8557,7 +8557,7 @@
       "tier": "hard",
       "region": "Wilderness",
       "name": "Defeat Callisto",
-      "description": "Defeat Callisto in the Wilderness.",
+      "description": "Defeat Callisto or Artio in the Wilderness.",
       "requirements": "",
       "points": null
     },
@@ -8845,7 +8845,7 @@
       "tier": "hard",
       "region": "Wilderness",
       "name": "Defeat Venenatis",
-      "description": "Defeat Venenatis in the Wilderness.",
+      "description": "Defeat Venenatis or Spindel in the Wilderness.",
       "requirements": "",
       "points": null
     },
@@ -8881,7 +8881,7 @@
       "tier": "hard",
       "region": "Wilderness",
       "name": "Defeat Vet'ion",
-      "description": "Defeat Vet'ion in the Wilderness.",
+      "description": "Defeat Vet'ion or Calvar'ion in the Wilderness.",
       "requirements": "",
       "points": null
     },
@@ -9089,7 +9089,7 @@
       "region": "Kandarin",
       "name": "Defeat a Mithril Dragon",
       "description": "Defeat a mithril dragon in the Ancient Cavern.",
-      "requirements": "",
+      "requirements": "Partial completion of Barbarian Training",
       "points": null
     },
     {
@@ -9808,7 +9808,7 @@
       "tier": "hard",
       "region": "Kharidian Desert",
       "name": "Equip a full set of the Smith's outfit",
-      "description": "Equip a full set of the Smith's outfit, purchased from the Giant's Foundry minigame.",
+      "description": "Equip a full set of the Smith's outfit, purchased from the Giants' Foundry minigame.",
       "requirements": "15 Smithing; Completion of Sleeping Giants",
       "points": null
     },
@@ -9872,7 +9872,7 @@
       "region": "Kandarin",
       "name": "Equip an Ogre Expert Chompy Hat",
       "description": "Equip an Ogre Expert Chompy Hat.",
-      "requirements": "5 Fletching, 30 Cooking, 30 Ranged, 5 Crafting; Completion of Big Chompy Bird Hunting",
+      "requirements": "5 Fletching, 30 Cooking, 30 Ranged, 5 Crafting; Completion of Big Chompy Bird Hunting, 1,000 chompy bird kills",
       "points": null
     },
     {
@@ -9953,7 +9953,7 @@
       "region": "Kandarin",
       "name": "Feed Longramble",
       "description": "Deliver some Tangled Toads Legs to Longramble.",
-      "requirements": "40 Cooking",
+      "requirements": "40 Cooking; Partial completion of The Path of Glouphrie",
       "points": null
     },
     {
@@ -10087,7 +10087,7 @@
       "tier": "hard",
       "region": "Kharidian Desert",
       "name": "Have Drew create 500 buckets",
-      "description": "Create 500 buckets of sand at Drew's sandstorm machine.",
+      "description": "Create 500 buckets of sand at Drew's sandstorm machine at one time.",
       "requirements": "35 Mining",
       "points": null
     },
@@ -10565,7 +10565,7 @@
       "region": "Kandarin",
       "name": "Use the Chivalry Prayer",
       "description": "Use the Chivalry Prayer.",
-      "requirements": "60 Prayer, 65 Defence; Completion of Knight Waves or the Grimoire (Demonic Pacts League) relic",
+      "requirements": "60 Prayer, 65 Defence; Completion of Knight Waves or the Grimoire relic",
       "points": null
     },
     {
@@ -10574,7 +10574,7 @@
       "region": "Tirannwn",
       "name": "Zalcano Combat Achievements",
       "description": "Complete all of the Combat Achievements for Zalcano.",
-      "requirements": "",
+      "requirements": "See Zalcano#Combat Achievements",
       "points": null
     },
     {
@@ -10655,7 +10655,7 @@
       "region": "General",
       "name": "Abyssal Sire Combat Achievements",
       "description": "Complete all of the Combat Achievements for Abyssal Sire.",
-      "requirements": "See",
+      "requirements": "See Abyssal Sire#Combat Achievements",
       "points": null
     },
     {
@@ -10691,7 +10691,7 @@
       "region": "General",
       "name": "Add a Jar to a Display Case",
       "description": "Add a Jar to a Display Case in your Player Owned House Achievement Gallery.",
-      "requirements": "Check associated bosses",
+      "requirements": "87 Construction; Check associated bosses",
       "points": null
     },
     {
@@ -11149,7 +11149,7 @@
       "tier": "elite",
       "region": "General",
       "name": "Obtain 25 Million XP in 5 non-combat skills",
-      "description": "Obtain 25 million experience in 5 different skills excluding Attack, Strength, Defence, Magic, Ranged & Hitpoints.",
+      "description": "Obtain 25 million experience in 5 different skills excluding Attack, Strength, Defence, Magic, Ranged, Hitpoints, and Prayer.",
       "requirements": "",
       "points": null
     },
@@ -11158,7 +11158,7 @@
       "tier": "elite",
       "region": "General",
       "name": "Obtain 25 Million XP in a combat skill",
-      "description": "Obtain 25 million experience in either Attack, Strength, Defence, Magic, Ranged or Hitpoints.",
+      "description": "Obtain 25 million experience in either Attack, Strength, Defence, Magic, Ranged, Hitpoints, or Prayer.",
       "requirements": "",
       "points": null
     },
@@ -11320,7 +11320,7 @@
       "tier": "elite",
       "region": "General",
       "name": "Obtain 35 Million XP in 3 non-combat skills",
-      "description": "Obtain 35 million experience in 3 different skills excluding Attack, Strength, Defence, Magic, Ranged and Hitpoints.",
+      "description": "Obtain 35 million experience in 3 different skills excluding Attack, Strength, Defence, Magic, Ranged, Hitpoints, and Prayer.",
       "requirements": "",
       "points": null
     },
@@ -12014,7 +12014,7 @@
       "region": "Varlamore",
       "name": "Perilous Moons Combat Achievements",
       "description": "Complete all of the Combat Achievements for Perilous Moons.",
-      "requirements": "",
+      "requirements": "See Moons of Peril#Combat Achievements",
       "points": null
     },
     {
@@ -12041,7 +12041,7 @@
       "region": "Varlamore",
       "name": "Vardorvis Combat Achievements",
       "description": "Complete all of the Combat Achievements for Vardorvis.",
-      "requirements": "",
+      "requirements": "See Vardorvis#Combat Achievements",
       "points": null
     },
     {
@@ -12428,7 +12428,7 @@
       "region": "Tirannwn",
       "name": "Create 100 Divine Ranging Potions",
       "description": "Create 100 Divine Ranging Potions.",
-      "requirements": "74 Herblore",
+      "requirements": "74 Herblore; Can be completed with any dosage of potion.",
       "points": null
     },
     {
@@ -12437,7 +12437,7 @@
       "region": "Tirannwn",
       "name": "Create 100 Divine Super Combat Potions",
       "description": "Create 100 Divine Super Combat Potions.",
-      "requirements": "97 Herblore",
+      "requirements": "97 Herblore; Can be completed with any dosage of potion.",
       "points": null
     },
     {
@@ -12869,7 +12869,7 @@
       "region": "Kandarin",
       "name": "Equip a Dragon Archer Chompy Hat",
       "description": "Equip a dragon archer chompy hat.",
-      "requirements": "5 Fletching, 30 Ranged; 2,250 chompy bird kills",
+      "requirements": "5 Fletching, 30 Cooking, 30 Ranged, 5 Crafting; Completion of Big Chompy Bird Hunting, 2,250 chompy bird kills",
       "points": null
     },
     {
@@ -12879,15 +12879,6 @@
       "name": "Equip a Dragon Chainbody in the Kharidian Desert",
       "description": "Equip a dragon chainbody in the Kharidian Desert.",
       "requirements": "60 Defence",
-      "points": null
-    },
-    {
-      "id": 1431,
-      "tier": "elite",
-      "region": "Fremennik Provinces",
-      "name": "Defeat Vorkath 15 Times Without Leaving",
-      "description": "Defeat Vorkath on Ungael 15 times without leaving his area.",
-      "requirements": "",
       "points": null
     },
     {
@@ -12905,7 +12896,7 @@
       "region": "Kourend",
       "name": "Equip a Dragon Hunter Lance",
       "description": "Equip a dragon hunter lance.",
-      "requirements": "95 Slayer, 78 Attack",
+      "requirements": "95 Slayer, 78 Attack; Unlocking Kandarin is not required, as the Dragon Hunter Lance is dropped in lieu of Hydra's claw from the Alchemical Hydra.",
       "points": null
     },
     {
@@ -13463,7 +13454,7 @@
       "region": "Wilderness",
       "name": "Equip the Accursed Sceptre",
       "description": "Equip the Accursed Sceptre.",
-      "requirements": "70 Magic",
+      "requirements": "70 Magic; Note: Must be in powered staff mode.",
       "points": null
     },
     {
@@ -13598,7 +13589,7 @@
       "region": "Tirannwn",
       "name": "Gauntlet Combat Achievements",
       "description": "Complete all of the Combat Achievements for the Gauntlet & Corrupted Gauntlet.",
-      "requirements": "",
+      "requirements": "See Gauntlet#Combat Achievements and Corrupted Gauntlet#Combat Achievements",
       "points": null
     },
     {
@@ -13616,7 +13607,7 @@
       "region": "Morytania",
       "name": "Grotesque Guardians Combat Achievements",
       "description": "Complete all of the Combat Achievements for Grotesque Guardians.",
-      "requirements": "",
+      "requirements": "See Grotesque Guardians#Combat Achievements",
       "points": null
     },
     {
@@ -13778,7 +13769,7 @@
       "region": "Morytania",
       "name": "Phosani's Nightmare Combat Achievements",
       "description": "Complete all of the Combat Achievements for Phosani's Nightmare.",
-      "requirements": "",
+      "requirements": "See Phosani's Nightmare#Combat Achievements",
       "points": null
     },
     {
@@ -13850,7 +13841,7 @@
       "region": "Morytania",
       "name": "The Nightmare Combat Achievements",
       "description": "Complete all of the Combat Achievements for The Nightmare.",
-      "requirements": "",
+      "requirements": "See The Nightmare#Combat Achievements",
       "points": null
     },
     {
@@ -13913,7 +13904,7 @@
       "region": "Tirannwn",
       "name": "Zulrah Combat Achievements",
       "description": "Complete all of the Combat Achievements for Zulrah.",
-      "requirements": "",
+      "requirements": "See Zulrah#Combat Achievements",
       "points": null
     },
     {
@@ -14101,7 +14092,7 @@
       "tier": "master",
       "region": "Karamja",
       "name": "Defeat 6,6,6 Unbound Jal-tok Jad",
-      "description": "Defeat 18 Unbound JalTok-Jad's in the infinite Jad challenge.",
+      "description": "Defeat 18 JalTok-Jad's in the infinite Jad challenge.",
       "requirements": "",
       "points": null
     },
@@ -14328,6 +14319,15 @@
       "name": "TzHaar-Ket-Rak's Combat Achievements",
       "description": "Complete all of the Combat Achievements for TzHaar-Ket-Rak's Challenges.",
       "requirements": "See TzHaar-Ket-Rak's Challenges#Combat Achievements",
+      "points": null
+    },
+    {
+      "id": 1592,
+      "tier": "elite",
+      "region": "Fremennik Provinces",
+      "name": "Defeat Vorkath 15 Times Without Leaving",
+      "description": "Defeat Vorkath on Ungael 15 times without leaving his area.",
+      "requirements": "",
       "points": null
     }
   ]
